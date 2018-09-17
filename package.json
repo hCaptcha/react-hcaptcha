@@ -15,7 +15,7 @@
     "babel-loader": "^7.1.5",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
-    "react-hot-loader": "^4.3.3",
+    "react-hot-loader": "^4.3.8",
     "webpack": "^4.15.1",
     "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.1.4"
