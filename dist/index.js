@@ -1,9 +1,5 @@
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -58,7 +54,6 @@ var HCaptcha = function (_React$Component) {
   _createClass(HCaptcha, [{
     key: "onloadScript",
     value: function onloadScript() {
-      console.log("hcaptcha: " + (typeof hcaptcha === "undefined" ? "undefined" : _typeof(hcaptcha)));
       if ((typeof hcaptcha === "undefined" ? "undefined" : _typeof(hcaptcha)) !== undefined) {
         //Render hCaptcha widget and provide neccessary callbacks - hCaptcha
         this._id = hcaptcha.render(hCaptchaVars.element_id, _extends({}, this.props, {
@@ -159,4 +154,4 @@ var HCaptcha = function (_React$Component) {
   return HCaptcha;
 }(React.Component);
 
-exports.default = HCaptcha;
+module.exports = HCaptcha;

@@ -32,15 +32,13 @@ class HCaptcha extends React.Component {
     }
   
     onloadScript() {
-        console.log("hcaptcha: " + typeof hcaptcha)
       if (typeof hcaptcha !== undefined) { //Render hCaptcha widget and provide neccessary callbacks - hCaptcha
         this._id = hcaptcha.render(hCaptchaVars.element_id, 
           {           
-            //"sitekey"         : this.props.sitekey,
             ...this.props, 
             "error-callback"  : this.onerrorCaptcha, 
             "expired-callback": this.onerrorCaptcha, 
-            "callback"        : this.onsubmitCaptcha 
+            "callback"        : this.onsubmitCaptcha
           })
       } 
     }
@@ -118,4 +116,4 @@ class HCaptcha extends React.Component {
     }
   }
 
-export default HCaptcha;
+module.exports = HCaptcha;
