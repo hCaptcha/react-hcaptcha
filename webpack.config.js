@@ -26,13 +26,10 @@ module.exports = {
     filename: 'bundle.js'
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
     htmlWebpackPlugin
   ],
   devServer: {
     contentBase: './dist',
-    hot: true,
-    inline: true,
     port: 9000
   }
 };

@@ -24,7 +24,7 @@ _reactDom2.default.render(_react2.default.createElement(
   ),
   _react2.default.createElement(
     'div',
-    null,
+    { id: 'captcha' },
     _react2.default.createElement(_HCaptcha2.default, null)
   )
 ), document.getElementById('app'));
