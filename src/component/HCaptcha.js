@@ -32,6 +32,7 @@ const hCaptchaVars = {
     }
   
     onloadScript() {
+        console.log("hcaptcha: " + typeof hcaptcha)
       if (typeof hcaptcha !== undefined) { //Render hCaptcha widget and provide neccessary callbacks - hCaptcha
         this._id = hcaptcha.render(hCaptchaVars.element_id, 
           {           
@@ -45,7 +46,6 @@ const hCaptchaVars = {
     }
   
     componentDidMount () { //Once captcha is mounted intialize hCaptcha - hCaptcha
-        console.log("mounted")
       if (typeof hcaptcha === 'undefined') {  //Check if hCaptcha has already been loaded, if not create script tag and wait to render captcha element - hCaptcha
         let script = CaptchaScript(this.onloadScript);
         document.getElementById(hCaptchaVars.element_id).appendChild(script);
@@ -55,7 +55,6 @@ const hCaptchaVars = {
     }
   
     componentWillUnmount() { //If captcha gets removed for timeout or error check to make sure iframe is also removed - hCaptcha
-        console.log("unmounted")
         if(typeof hcaptcha === 'undefined') return 
         if (this._removed === false) this.removeFrame()
     }

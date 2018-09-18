@@ -62,6 +62,7 @@ var HCaptcha = function (_React$Component) {
   _createClass(HCaptcha, [{
     key: "onloadScript",
     value: function onloadScript() {
+      console.log("hcaptcha: " + (typeof hcaptcha === "undefined" ? "undefined" : _typeof(hcaptcha)));
       if ((typeof hcaptcha === "undefined" ? "undefined" : _typeof(hcaptcha)) !== undefined) {
         //Render hCaptcha widget and provide neccessary callbacks - hCaptcha
         this._id = hcaptcha.render(hCaptchaVars.element_id, _extends({}, this.props, {
@@ -87,6 +88,7 @@ var HCaptcha = function (_React$Component) {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
       //If captcha gets removed for timeout or error check to make sure iframe is also removed - hCaptcha
+      if (typeof hcaptcha === 'undefined') return;
       if (this._removed === false) this.removeFrame();
     }
   }, {
@@ -152,7 +154,7 @@ var HCaptcha = function (_React$Component) {
 
       return _react2.default.createElement(
         "div",
-        { id: "captcha" },
+        null,
         _react2.default.createElement("div", { id: hCaptchaVars.element_id })
       );
     }
