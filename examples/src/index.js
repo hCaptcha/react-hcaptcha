@@ -1,6 +1,6 @@
-import React from 'react';
-import { render } from 'react-dom';
-import HCaptcha from '../../src/';
+const React = require('react');
+const {render} = require('react-dom');
+const HCaptcha = require('../../src/');
 
 class ReactDemo extends React.Component {
   
@@ -29,7 +29,7 @@ class ReactDemo extends React.Component {
   }
 
   render() {
-    let respnseParagraph;
+    let responseParagraph;
     if(this.state.isVerified) {
       respnseParagraph = <p> Open your console to see the Verified response.</p>
     }
@@ -39,7 +39,7 @@ class ReactDemo extends React.Component {
         <p>
           Set your sitekey and onVerify callback as props, and drop into your form. From here, we'll take care of the rest.
         </p>
-        {respnseParagraph}
+        {responseParagraph}
         <form>
           <HCaptcha onVerify={this.onVerifyCaptcha}
           sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
