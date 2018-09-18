@@ -1,13 +1,17 @@
-const webpack = require('webpack');
-const path = require('path');
+// NPM Modules
+const Webpack = require('webpack');
+const Path = require('path');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const htmlWebpackPlugin = new HtmlWebpackPlugin({
-    template: path.join(__dirname, "./examples/src/index.html"),
+
+// Webpack Plugins
+const htmlPlugin = new HtmlWebpackPlugin({
+    template: Path.join(__dirname, "./examples/src/index.html"),
     filename: "./index.html"
 }); 
 
 module.exports = {
-  entry: path.join(__dirname, "./examples/src/index.js"),
+  entry: Path.join(__dirname, "./examples/src/index.js"),
+
   module: {
     rules: [
       {
@@ -17,17 +21,21 @@ module.exports = {
       }
     ]
   },
+
   resolve: {
     extensions: ['*', '.js', '.jsx']
   },
+
   output: {
     path: __dirname + '/dist',
     publicPath: '/',
     filename: 'bundle.js'
   },
+
   plugins: [
-    htmlWebpackPlugin
+    htmlPlugin
   ],
+
   devServer: {
     port: 9000
   }

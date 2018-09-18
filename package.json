@@ -1,7 +1,7 @@
 {
   "name": "react-hcaptcha",
   "version": "0.1.0",
-  "description": "",
+  "description": "A React library for hCaptcha",
   "main": "dist/index.js",
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.config.js --mode development",
@@ -13,7 +13,12 @@
     "react": "^16.4.1",
     "react-dom": "^16.4.1"
   },
-  "keywords": [],
+  "keywords": [
+    "hcaptcha",
+    "hcaptcha-react",
+    "react",
+    "captcha"
+  ],
   "author": "Ali Neer, Brad Peters",
   "license": "ISC",
   "devDependencies": {
