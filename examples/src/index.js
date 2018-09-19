@@ -31,7 +31,7 @@ class ReactDemo extends React.Component {
   render() {
     let responseParagraph;
     if(this.state.isVerified) {
-      respnseParagraph = <p> Open your console to see the Verified response.</p>
+      responseParagraph = <p> Open your console to see the Verified response.</p>
     }
     return (
       <div>
@@ -44,7 +44,6 @@ class ReactDemo extends React.Component {
           <HCaptcha onVerify={this.onVerifyCaptcha}
           sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
           theme="dark"
-          ref={instance => {this.child = instance}}
           />
         </form>
         <h2>Bound to button</h2>
