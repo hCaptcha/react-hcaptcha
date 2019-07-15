@@ -15,7 +15,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var React = require('react');
 
 var CaptchaScript = function CaptchaScript(cb) {
-  // Create script to intialize hCaptcha tool - hCaptcha
+  // Create script to initialize hCaptcha tool - hCaptcha
   var script = document.createElement("script");
 
   script.src = "https://hcaptcha.com/1/api.js?render=explicit";
@@ -129,7 +129,7 @@ var HCaptcha = function (_React$Component) {
             src = frames[k].getAttribute("src");
             title = frames[k].getAttribute("title");
 
-            if (src.includes(hCaptchaVars.domain) && title.includes(hCaptchaVars.iframe_title)) foundFrame = nodes[i]; //Compare iframe source and title to find correct iframe appeneded to body - hCaptcha
+            if (src.includes(hCaptchaVars.domain) && title.includes(hCaptchaVars.iframe_title)) foundFrame = nodes[i]; //Compare iframe source and title to find correct iframe appended to body - hCaptcha
           }
         }
       }
