@@ -40,4 +40,4 @@ The component emits events related to verification and expiration. Simply catch 
 
 **NOTE**: Make sure to reset the hCaptcha state when you submit your form! Passcodes are one-time use, so if your user submits the same passcode twice then it will be rejected by the server the second time.
 
-Please refer to the demo for examples of basic usage and an invisible Captcha.
+Please refer to the demo for examples of basic usage and an invisible hCaptcha.
