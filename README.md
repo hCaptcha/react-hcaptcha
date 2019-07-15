@@ -26,9 +26,9 @@ The two required props are the sitekey and root component. The component will au
 hCaptcha API library and append it to the root component. This is designed for ease of use with the hCaptcha API!
 
 Props include:
-- sitekey: String, **Required** 
+- sitekey: String, **Required**
     - This is your sitekey. It allows you to load hCaptcha, and to configure options like difficulty on the hCaptcha dashboard.
-- size: String (normal, compact, invisible) 
+- size: String (normal, compact, invisible)
     - This specifies the "size" of the component. hCaptcha allows you to decide how big the component will appear on render. Defaults to normal.
       Want a smaller checkbox? Use compact! Invisible does not show a hCaptcha button, and instead pops up on form submit.
 - theme: String (light, dark)
@@ -38,6 +38,6 @@ Props include:
 
 The component emits events related to verification and expiration. Simply catch these events in the parent component: `onVerify`, `onExpire`, `onError` and handle the events as you choose. The captcha will automatically reset on error, but still emits an error.
 
-**NOTE**: Make sure to reset the hCaptcha state when you submit your form! Passcodes are one-time use, so if your user submits the same passcode twice then it will be rejected by the server the second time.
+**NOTE**: Make sure to reset the hCaptcha state when you submit your form by calling the method `.resetCaptcha` on your hCaptcha React Component! Passcodes are one-time use, so if your user submits the same passcode twice then it will be rejected by the server the second time.
 
 Please refer to the demo for examples of basic usage and an invisible hCaptcha.
