@@ -61,8 +61,12 @@ class HCaptcha extends React.Component {
       if (typeof hcaptcha === 'undefined') return
 
       let token = hcaptcha.getResponse(this._id) //Get response token from hCaptcha widget - hCaptcha
-      hcaptcha.reset(this._id) // Reset response to prevent storing
       this.props.onVerify(token) //Dispatch event to verify user response
+    }
+
+    resetCaptcha() {
+      // Reset captcha state, removes stored token and unticks checkbox
+      hcaptcha.reset(this._id)
     }
 
     closeCaptcha () {

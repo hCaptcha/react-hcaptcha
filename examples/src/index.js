@@ -3,14 +3,16 @@ const {render} = require('react-dom');
 const HCaptcha = require('../../src/');
 
 class ReactDemo extends React.Component {
-  
+
   constructor(props) {
     super(props);
 
     this.state = {isVerified: false};
+    this.captcha = React.createRef();
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleReset  = this.handleReset.bind(this);
+    this.onVerifyCaptcha = this.onVerifyCaptcha.bind(this);
     this.onVerifyCaptcha = this.onVerifyCaptcha.bind(this);
   }
 
@@ -28,40 +30,34 @@ class ReactDemo extends React.Component {
     this.child.execute()
   }
 
+  handleReset(event) {
+    event.preventDefault()
+    this.captcha.current.resetCaptcha()
+    this.setState({isVerified: false})
+  }
+
   render() {
-    let responseParagraph;
-    if(this.state.isVerified) {
-      responseParagraph = <p> Open your console to see the Verified response.</p>
-    }
+    const { isVerified } = this.state;
+
     return (
       <div>
-        <h2>HCaptcha Quickstart</h2>
         <p>
           Set your sitekey and onVerify callback as props, and drop into your form. From here, we'll take care of the rest.
         </p>
-        {responseParagraph}
         <form>
-          <HCaptcha onVerify={this.onVerifyCaptcha}
+          <HCaptcha ref={this.captcha} onVerify={this.onVerifyCaptcha}
           sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
           theme="dark"
           />
         </form>
-        <h2>Bound to button</h2>
-        <p>
-          Set your sitekey, the size to invisible, and onVerify callback as props. 
-        </p>
-        <p>
-          Create a button, and set handleSubmit callback and bind it to the parent. The handleSubmit callback should prevent default on the event, and then call this.child.execute().
-          This will execute the captcha. 
-        </p>
-        <form>
-          <HCaptcha onVerify={this.onVerifyCaptcha}
-          sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
-          size="invisible"
-          ref={instance => {this.child = instance}}
-          />
-        </form>
-        <button onClick={this.handleSubmit}>Click</button>
+
+        {isVerified &&
+          <div>
+            <p>Open your console to see the Verified response.</p>
+            <button onClick={this.handleReset}>Reset Captcha</button>
+          </div>
+        }
+
       </div>
     );
   }
