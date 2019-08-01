@@ -7,9 +7,9 @@ const CaptchaScript = (cb, hl) => { // Create script to init hCaptcha
     script.src = "https://hcaptcha.com/1/api.js?render=explicit&onload=hcaptchaOnLoad";
     script.async = true
 
-  	if (typeof hl != "undefined" && hl != null) {
-  	   script.src += "&hl=" + hl
-  	}
+    if (typeof hl != "undefined" && hl != null) {
+       script.src += "&hl=" + hl
+    }
 
     return script;
 }
