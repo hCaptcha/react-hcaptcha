@@ -15,7 +15,7 @@ class ReactDemo extends React.Component {
     this.onVerifyCaptcha = this.onVerifyCaptcha.bind(this);
     // Leave languageOverride unset or null for browser autodetection.
     // To force a language, use the code: https://hcaptcha.com/docs/languages
-    this.languageOverride = "fr"; 
+    this.languageOverride = null; // "fr"; 
   }
 
   handleChange(event) {
