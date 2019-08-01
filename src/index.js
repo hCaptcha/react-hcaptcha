@@ -1,11 +1,15 @@
 const React = require('react');
 
-const CaptchaScript = (cb) => { // Create script to intialize hCaptcha tool - hCaptcha
+const CaptchaScript = (cb, hl) => { // Create script to init hCaptcha
     let script = document.createElement("script")
 
     window.hcaptchaOnLoad = cb;
     script.src = "https://hcaptcha.com/1/api.js?render=explicit&onload=hcaptchaOnLoad";
     script.async = true
+
+    if (typeof hl != "undefined" && hl != null) {
+       script.src += `&hl=${hl}`
+    }
 
     return script;
 }
@@ -26,6 +30,9 @@ class HCaptcha extends React.Component {
       this.onsubmitCaptcha = this.onsubmitCaptcha.bind(this)
       this.closeCaptcha    = this.closeCaptcha.bind(this)
 
+      // https://hcaptcha.com/docs/languages lists available codes.
+      this.languageOverride = props.languageOverride
+
       this._id = null
       this._removed = false;
     }
@@ -44,7 +51,7 @@ class HCaptcha extends React.Component {
 
     componentDidMount () { //Once captcha is mounted intialize hCaptcha - hCaptcha
       if (typeof hcaptcha === 'undefined') {  //Check if hCaptcha has already been loaded, if not create script tag and wait to render captcha element - hCaptcha
-        let script = CaptchaScript(this.onloadScript);
+        let script = CaptchaScript(this.onloadScript, this.languageOverride);
         document.getElementById(hCaptchaVars.element_id).appendChild(script);
       } else {
         this.onloadScript();
