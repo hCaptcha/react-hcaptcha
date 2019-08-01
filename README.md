@@ -43,3 +43,14 @@ The component emits events related to verification and expiration. Simply catch 
 **NOTE**: Make sure to reset the hCaptcha state when you submit your form by calling the method `.resetCaptcha` on your hCaptcha React Component! Passcodes are one-time use, so if your user submits the same passcode twice then it will be rejected by the server the second time.
 
 Please refer to the demo for examples of basic usage and an invisible hCaptcha.
+
+## Notes to Maintainers
+This repository can be found on **npm** at  [@hcaptcha/react-hcaptcha](https://www.npmjs.com/package/@hcaptcha/react-hcaptcha). If any updates are committed to master the **npm** registery should be updated to reflect these changes. See steps below to update the package on **npm**:
+
+#### Requirements
+- NPM Account
+- Set as a `Maintainer` of [@hcaptcha/react-hcaptcha](https://www.npmjs.com/package/@hcaptcha/react-hcaptcha)
+
+#### Publishing
+- Always update package version
+- Run `npm publish` from inside the current repository
