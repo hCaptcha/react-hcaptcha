@@ -8,7 +8,7 @@ const CaptchaScript = (cb, hl) => { // Create script to init hCaptcha
     script.async = true
 
     if (typeof hl != "undefined" && hl != null) {
-       script.src += "&hl=" + hl
+       script.src += `&hl=${hl}`
     }
 
     return script;
@@ -44,8 +44,7 @@ class HCaptcha extends React.Component {
             ...this.props,
             "error-callback"  : this.onerrorCaptcha,
             "expired-callback": this.onerrorCaptcha,
-            "callback"        : this.onsubmitCaptcha,
-            "hl"              : this.languageOverride
+            "callback"        : this.onsubmitCaptcha
           })
       }
     }
