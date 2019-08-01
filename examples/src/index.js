@@ -13,7 +13,9 @@ class ReactDemo extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleReset  = this.handleReset.bind(this);
     this.onVerifyCaptcha = this.onVerifyCaptcha.bind(this);
-    this.onVerifyCaptcha = this.onVerifyCaptcha.bind(this);
+    // Leave languageOverride unset or null for browser autodetection.
+    // To force a language, use the code: https://hcaptcha.com/docs/languages
+    this.languageOverride = "fr"; 
   }
 
   handleChange(event) {
@@ -45,7 +47,7 @@ class ReactDemo extends React.Component {
           Set your sitekey and onVerify callback as props, and drop into your form. From here, we'll take care of the rest.
         </p>
         <form>
-          <HCaptcha ref={this.captcha} onVerify={this.onVerifyCaptcha}
+          <HCaptcha ref={this.captcha} onVerify={this.onVerifyCaptcha} languageOverride={this.languageOverride}
           sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
           theme="dark"
           />
