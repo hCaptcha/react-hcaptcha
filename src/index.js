@@ -3,14 +3,13 @@ const React = require('react');
 const CaptchaScript = (cb, hl) => { // Create script to init hCaptcha
     let script = document.createElement("script")
 
-    script.src = "https://hcaptcha.com/1/api.js?render=explicit"
+    window.hcaptchaOnLoad = cb;
+    script.src = "https://hcaptcha.com/1/api.js?render=explicit&onload=hcaptchaOnLoad";
     script.async = true
 
   	if (typeof hl != "undefined" && hl != null) {
   	   script.src += "&hl=" + hl
   	}
-
-    script.addEventListener('load', cb, true)
 
     return script;
 }
