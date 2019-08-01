@@ -45,7 +45,7 @@ The component emits events related to verification and expiration. Simply catch 
 Please refer to the demo for examples of basic usage and an invisible hCaptcha.
 
 ## Notes to Maintainers
-This repository can be found on **npm** at  [@hcaptcha/react-hcaptcha](https://www.npmjs.com/package/@hcaptcha/react-hcaptcha). If any updates are committed to master the **npm** registery should be updated to reflect these changes. See steps below to update the package on **npm**:
+This repository can be found on **npm** at  [@hcaptcha/react-hcaptcha](https://www.npmjs.com/package/@hcaptcha/react-hcaptcha). If any updates are committed to master the **npm** registry should be updated to reflect these changes. See steps below to update the package on **npm**:
 
 #### Requirements
 - NPM Account
