@@ -36,7 +36,7 @@ Props include:
 - tabindex: Integer
     - Set the tabindex of the widget and popup. When appropriate, this can make navigation of your site more intuitive. This always defaults to 0.
 - languageOverride: String
-    - Manually set the language used to render text in the hCaptcha API. See [langauge codes](https://hcaptcha.com/docs/languages).
+    - Manually set the language used to render text in the hCaptcha API. See [language codes](https://hcaptcha.com/docs/languages).
 
 The component emits events related to verification and expiration. Simply catch these events in the parent component: `onVerify`, `onExpire`, `onError` and handle the events as you choose. The captcha will automatically reset on error, but still emits an error.
 
