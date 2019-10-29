@@ -40,9 +40,6 @@ class HCaptcha extends React.Component {
       // custom endpoint
       this.endpoint = props.endpoint
 
-      // https://hcaptcha.com/docs/languages lists available codes.
-      this.languageOverride = props.languageOverride
-
       this._id = null
       this._removed = false;
     }

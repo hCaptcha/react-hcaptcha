@@ -22,12 +22,12 @@ var CaptchaScript = function CaptchaScript(cb, hl, endpoint) {
   script.src = "https://hcaptcha.com/1/api.js?render=explicit&onload=hcaptchaOnLoad";
   script.async = true;
 
-  if (typeof hl != "undefined" && hl != null) {
+  if (hl) {
     script.src += "&hl=" + hl;
   }
 
-  if (typeof endpoint != "undefined" && endpoint != null) {
-    script.src += "&endpoint=" + endpoint;
+  if (endpoint) {
+    script.src += "&endpoint=" + encodeURIComponent(endpoint);
   }
 
   return script;
@@ -58,9 +58,6 @@ var HCaptcha = function (_React$Component) {
     _this.languageOverride = props.languageOverride;
     // custom endpoint
     _this.endpoint = props.endpoint;
-
-    // https://hcaptcha.com/docs/languages lists available codes.
-    _this.languageOverride = props.languageOverride;
 
     _this._id = null;
     _this._removed = false;
