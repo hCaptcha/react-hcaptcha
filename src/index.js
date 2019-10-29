@@ -7,12 +7,12 @@ const CaptchaScript = (cb, hl, endpoint) => { // Create script to init hCaptcha
     script.src = "https://hcaptcha.com/1/api.js?render=explicit&onload=hcaptchaOnLoad";
     script.async = true
 
-    if (typeof hl != "undefined" && hl != null) {
-       script.src += `&hl=${hl}`
+    if (hl) {
+      script.src += `&hl=${hl}`
     }
 
-    if (typeof endpoint != "undefined" && endpoint != null) {
-      script.src += `&endpoint=${endpoint}`
+    if (endpoint) {
+      script.src += `&endpoint=${encodeURIComponent(endpoint)}`;
     }
 
     return script;
