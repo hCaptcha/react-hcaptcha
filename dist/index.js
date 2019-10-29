@@ -14,7 +14,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var React = require('react');
 
-var CaptchaScript = function CaptchaScript(cb, hl) {
+var CaptchaScript = function CaptchaScript(cb, hl, endpoint) {
   // Create script to init hCaptcha
   var script = document.createElement("script");
 
@@ -22,8 +22,12 @@ var CaptchaScript = function CaptchaScript(cb, hl) {
   script.src = "https://hcaptcha.com/1/api.js?render=explicit&onload=hcaptchaOnLoad";
   script.async = true;
 
-  if (typeof hl != "undefined" && hl != null) {
+  if (hl) {
     script.src += "&hl=" + hl;
+  }
+
+  if (endpoint) {
+    script.src += "&endpoint=" + encodeURIComponent(endpoint);
   }
 
   return script;
@@ -48,9 +52,12 @@ var HCaptcha = function (_React$Component) {
     _this.onerrorCaptcha = _this.onerrorCaptcha.bind(_this);
     _this.onsubmitCaptcha = _this.onsubmitCaptcha.bind(_this);
     _this.closeCaptcha = _this.closeCaptcha.bind(_this);
+    _this.resetCaptcha = _this.resetCaptcha.bind(_this);
 
     // https://hcaptcha.com/docs/languages lists available codes.
     _this.languageOverride = props.languageOverride;
+    // custom endpoint
+    _this.endpoint = props.endpoint;
 
     _this._id = null;
     _this._removed = false;
@@ -75,7 +82,7 @@ var HCaptcha = function (_React$Component) {
       //Once captcha is mounted intialize hCaptcha - hCaptcha
       if (typeof hcaptcha === 'undefined') {
         //Check if hCaptcha has already been loaded, if not create script tag and wait to render captcha element - hCaptcha
-        var script = CaptchaScript(this.onloadScript, this.languageOverride);
+        var script = CaptchaScript(this.onloadScript, this.languageOverride, this.endpoint);
         document.getElementById(hCaptchaVars.element_id).appendChild(script);
       } else {
         this.onloadScript();

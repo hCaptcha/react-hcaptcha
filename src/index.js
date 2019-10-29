@@ -1,14 +1,18 @@
 const React = require('react');
 
-const CaptchaScript = (cb, hl) => { // Create script to init hCaptcha
+const CaptchaScript = (cb, hl, endpoint) => { // Create script to init hCaptcha
     let script = document.createElement("script")
 
     window.hcaptchaOnLoad = cb;
     script.src = "https://hcaptcha.com/1/api.js?render=explicit&onload=hcaptchaOnLoad";
     script.async = true
 
-    if (typeof hl != "undefined" && hl != null) {
-       script.src += `&hl=${hl}`
+    if (hl) {
+      script.src += `&hl=${hl}`
+    }
+
+    if (endpoint) {
+      script.src += `&endpoint=${encodeURIComponent(endpoint)}`;
     }
 
     return script;
@@ -29,9 +33,12 @@ class HCaptcha extends React.Component {
       this.onerrorCaptcha  = this.onerrorCaptcha.bind(this)
       this.onsubmitCaptcha = this.onsubmitCaptcha.bind(this)
       this.closeCaptcha    = this.closeCaptcha.bind(this)
+      this.resetCaptcha    = this.resetCaptcha.bind(this)
 
       // https://hcaptcha.com/docs/languages lists available codes.
       this.languageOverride = props.languageOverride
+      // custom endpoint
+      this.endpoint = props.endpoint
 
       this._id = null
       this._removed = false;
@@ -51,7 +58,7 @@ class HCaptcha extends React.Component {
 
     componentDidMount () { //Once captcha is mounted intialize hCaptcha - hCaptcha
       if (typeof hcaptcha === 'undefined') {  //Check if hCaptcha has already been loaded, if not create script tag and wait to render captcha element - hCaptcha
-        let script = CaptchaScript(this.onloadScript, this.languageOverride);
+        let script = CaptchaScript(this.onloadScript, this.languageOverride, this.endpoint);
         document.getElementById(hCaptchaVars.element_id).appendChild(script);
       } else {
         this.onloadScript();
