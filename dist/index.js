@@ -14,14 +14,17 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var React = require('react');
 
-var CaptchaScript = function CaptchaScript(cb) {
-  // Create script to initialize hCaptcha tool - hCaptcha
+var CaptchaScript = function CaptchaScript(cb, hl) {
+  // Create script to init hCaptcha
   var script = document.createElement("script");
 
-  script.src = "https://hcaptcha.com/1/api.js?render=explicit";
+  window.hcaptchaOnLoad = cb;
+  script.src = "https://hcaptcha.com/1/api.js?render=explicit&onload=hcaptchaOnLoad";
   script.async = true;
 
-  script.addEventListener('load', cb, true);
+  if (typeof hl != "undefined" && hl != null) {
+    script.src += "&hl=" + hl;
+  }
 
   return script;
 };
@@ -46,6 +49,9 @@ var HCaptcha = function (_React$Component) {
     _this.onsubmitCaptcha = _this.onsubmitCaptcha.bind(_this);
     _this.closeCaptcha = _this.closeCaptcha.bind(_this);
 
+    // https://hcaptcha.com/docs/languages lists available codes.
+    _this.languageOverride = props.languageOverride;
+
     _this._id = null;
     _this._removed = false;
     return _this;
@@ -69,7 +75,7 @@ var HCaptcha = function (_React$Component) {
       //Once captcha is mounted intialize hCaptcha - hCaptcha
       if (typeof hcaptcha === 'undefined') {
         //Check if hCaptcha has already been loaded, if not create script tag and wait to render captcha element - hCaptcha
-        var script = CaptchaScript(this.onloadScript);
+        var script = CaptchaScript(this.onloadScript, this.languageOverride);
         document.getElementById(hCaptchaVars.element_id).appendChild(script);
       } else {
         this.onloadScript();
@@ -81,6 +87,9 @@ var HCaptcha = function (_React$Component) {
       //If captcha gets removed for timeout or error check to make sure iframe is also removed - hCaptcha
       if (typeof hcaptcha === 'undefined') return;
       if (this._removed === false) this.removeFrame();
+
+      // Reset any stored variables / timers when unmounting
+      hcaptcha.reset(this._id);
     }
   }, {
     key: "onsubmitCaptcha",
@@ -89,6 +98,12 @@ var HCaptcha = function (_React$Component) {
 
       var token = hcaptcha.getResponse(this._id); //Get response token from hCaptcha widget - hCaptcha
       this.props.onVerify(token); //Dispatch event to verify user response
+    }
+  }, {
+    key: "resetCaptcha",
+    value: function resetCaptcha() {
+      // Reset captcha state, removes stored token and unticks checkbox
+      hcaptcha.reset(this._id);
     }
   }, {
     key: "closeCaptcha",
@@ -129,7 +144,7 @@ var HCaptcha = function (_React$Component) {
             src = frames[k].getAttribute("src");
             title = frames[k].getAttribute("title");
 
-            if (src.includes(hCaptchaVars.domain) && title.includes(hCaptchaVars.iframe_title)) foundFrame = nodes[i]; //Compare iframe source and title to find correct iframe appended to body - hCaptcha
+            if (src.includes(hCaptchaVars.domain) && title.includes(hCaptchaVars.iframe_title)) foundFrame = nodes[i]; //Compare iframe source and title to find correct iframe appeneded to body - hCaptcha
           }
         }
       }
