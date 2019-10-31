@@ -94,6 +94,9 @@ var HCaptcha = function (_React$Component) {
       //If captcha gets removed for timeout or error check to make sure iframe is also removed - hCaptcha
       if (typeof hcaptcha === 'undefined') return;
       if (this._removed === false) this.removeFrame();
+
+      // Reset any stored variables / timers when unmounting
+      hcaptcha.reset(this._id);
     }
   }, {
     key: "onsubmitCaptcha",
