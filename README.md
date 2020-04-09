@@ -18,7 +18,7 @@ npm install react-hcaptcha --save
 #### Basic Usage
 ```
 <your-cool-form>
-    <hCaptcha :sitekey="**Your sitekey here**" onVerify={this.onVerifyCaptcha}></hCaptcha>
+    <hCaptcha sitekey="**Your sitekey here**" onVerify={this.onVerifyCaptcha}></hCaptcha>
 </your-cool-form>
 ```
 
