@@ -107,7 +107,7 @@ class HCaptcha extends React.Component {
     resetCaptcha() {
       const { isApiReady, isRemoved, captchaId } = this.state;
 
-      if (isApiReady || isRemoved) return
+      if (!isApiReady || isRemoved) return
       // Reset captcha state, removes stored token and unticks checkbox
       hcaptcha.reset(captchaId)
     }
