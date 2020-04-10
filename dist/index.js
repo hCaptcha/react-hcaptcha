@@ -2,8 +2,6 @@
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -14,8 +12,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var React = require('react');
 
-var CaptchaScript = function CaptchaScript(cb, hl, endpoint) {
-  // Create script to init hCaptcha
+// Create random ID
+var randomID = function randomID() {
+  return "" + (Number(String(Math.random()).slice(2)) + Date.now() + Math.round(performance.now())).toString(36);
+};
+
+// Create script to init hCaptcha
+var CaptchaScript = function CaptchaScript(cb, hl) {
   var script = document.createElement("script");
 
   window.hcaptchaOnLoad = cb;
@@ -26,17 +29,7 @@ var CaptchaScript = function CaptchaScript(cb, hl, endpoint) {
     script.src += "&hl=" + hl;
   }
 
-  if (endpoint) {
-    script.src += "&endpoint=" + encodeURIComponent(endpoint);
-  }
-
   return script;
-};
-
-var hCaptchaVars = {
-  domain: 'hcaptcha.com',
-  element_id: 'h-captcha',
-  iframe_title: 'hCaptcha human verification' //iframe title reference
 };
 
 var HCaptcha = function (_React$Component) {
@@ -45,131 +38,205 @@ var HCaptcha = function (_React$Component) {
   function HCaptcha(props) {
     _classCallCheck(this, HCaptcha);
 
+    // API Methods
     var _this = _possibleConstructorReturn(this, (HCaptcha.__proto__ || Object.getPrototypeOf(HCaptcha)).call(this, props));
 
-    _this.removeFrame = _this.removeFrame.bind(_this);
-    _this.onloadScript = _this.onloadScript.bind(_this);
-    _this.onerrorCaptcha = _this.onerrorCaptcha.bind(_this);
-    _this.onsubmitCaptcha = _this.onsubmitCaptcha.bind(_this);
-    _this.closeCaptcha = _this.closeCaptcha.bind(_this);
+    _this.renderCaptcha = _this.renderCaptcha.bind(_this);
     _this.resetCaptcha = _this.resetCaptcha.bind(_this);
+    _this.removeCaptcha = _this.removeCaptcha.bind(_this);
 
-    // https://hcaptcha.com/docs/languages lists available codes.
-    _this.languageOverride = props.languageOverride;
-    // custom endpoint
-    _this.endpoint = props.endpoint;
+    // Event Handlers
+    _this.handleOnLoad = _this.handleOnLoad.bind(_this);
+    _this.handleSubmit = _this.handleSubmit.bind(_this);
+    _this.handleExpire = _this.handleExpire.bind(_this);
+    _this.handleError = _this.handleError.bind(_this);
 
-    _this._id = null;
-    _this._removed = false;
+    _this.state = {
+      isApiReady: typeof hcaptcha !== 'undefined',
+      isRemoved: false,
+      elementId: "hcaptcha-" + randomID(),
+      captchaId: ''
+    };
     return _this;
   }
 
   _createClass(HCaptcha, [{
-    key: "onloadScript",
-    value: function onloadScript() {
-      if ((typeof hcaptcha === "undefined" ? "undefined" : _typeof(hcaptcha)) !== undefined) {
-        //Render hCaptcha widget and provide neccessary callbacks - hCaptcha
-        this._id = hcaptcha.render(hCaptchaVars.element_id, _extends({}, this.props, {
-          "error-callback": this.onerrorCaptcha,
-          "expired-callback": this.onerrorCaptcha,
-          "callback": this.onsubmitCaptcha
-        }));
-      }
-    }
-  }, {
     key: "componentDidMount",
     value: function componentDidMount() {
       //Once captcha is mounted intialize hCaptcha - hCaptcha
-      if (typeof hcaptcha === 'undefined') {
-        //Check if hCaptcha has already been loaded, if not create script tag and wait to render captcha element - hCaptcha
-        var script = CaptchaScript(this.onloadScript, this.languageOverride, this.endpoint);
-        document.getElementById(hCaptchaVars.element_id).appendChild(script);
+      var languageOverride = this.props.languageOverride;
+      var _state = this.state,
+          isApiReady = _state.isApiReady,
+          elementId = _state.elementId;
+
+
+      if (!isApiReady) {
+        //Check if hCaptcha has already been loaded, if not create script tag and wait to render captcha elementID - hCaptcha
+        var script = CaptchaScript(this.handleOnLoad, languageOverride);
+        document.getElementById(elementId).appendChild(script);
       } else {
-        this.onloadScript();
+        this.renderCaptcha();
       }
     }
   }, {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
-      //If captcha gets removed for timeout or error check to make sure iframe is also removed - hCaptcha
-      if (typeof hcaptcha === 'undefined') return;
-      if (this._removed === false) this.removeFrame();
+      var _state2 = this.state,
+          isApiReady = _state2.isApiReady,
+          isRemoved = _state2.isRemoved,
+          captchaId = _state2.captchaId;
+
+      if (!isApiReady || isRemoved) return;
 
       // Reset any stored variables / timers when unmounting
-      hcaptcha.reset(this._id);
+      hcaptcha.reset(captchaId);
+      hcaptcha.remove(captchaId);
     }
   }, {
-    key: "onsubmitCaptcha",
-    value: function onsubmitCaptcha(event) {
-      if (typeof hcaptcha === 'undefined') return;
+    key: "shouldComponentUpdate",
+    value: function shouldComponentUpdate(nextProps, nextState) {
+      // Prevent component re-rendering when these internal state variables are updated
+      if (this.state.isApiReady !== nextState.isApiReady || this.state.isRemoved !== nextState.isRemoved) {
+        return false;
+      }
 
-      var token = hcaptcha.getResponse(this._id); //Get response token from hCaptcha widget - hCaptcha
-      this.props.onVerify(token); //Dispatch event to verify user response
+      return true;
+    }
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps) {
+      var _this2 = this;
+
+      var endpoint = this.props.endpoint;
+
+      // Prop Keys that could change
+
+      var keys = ['sitekey', 'size', 'theme', 'tabindex', 'languageOverride', 'endpoint'];
+      // See if any props changed during component update
+      var match = keys.every(function (key) {
+        return prevProps[key] === _this2.props[key];
+      });
+
+      // If they have changed, remove current captcha and render a new one
+      if (!match) {
+        this.removeCaptcha();
+        this.renderCaptcha();
+      }
+    }
+  }, {
+    key: "renderCaptcha",
+    value: function renderCaptcha() {
+      var _state3 = this.state,
+          isApiReady = _state3.isApiReady,
+          elementId = _state3.elementId;
+
+      if (!isApiReady) return;
+
+      //Render hCaptcha widget and provide neccessary callbacks - hCaptcha
+      var captchaId = hcaptcha.render(document.getElementById(elementId), _extends({}, this.props, {
+        "error-callback": this.handleError,
+        "expired-callback": this.handleExpire,
+        "callback": this.handleSubmit
+      }));
+
+      this.setState({ isRemoved: false, captchaId: captchaId });
     }
   }, {
     key: "resetCaptcha",
     value: function resetCaptcha() {
+      var _state4 = this.state,
+          isApiReady = _state4.isApiReady,
+          isRemoved = _state4.isRemoved,
+          captchaId = _state4.captchaId;
+
+
+      if (!isApiReady || isRemoved) return;
       // Reset captcha state, removes stored token and unticks checkbox
-      hcaptcha.reset(this._id);
+      hcaptcha.reset(captchaId);
     }
   }, {
-    key: "closeCaptcha",
-    value: function closeCaptcha() {
-      this.removeFrame();
-      appActions.onCaptchaClose();
+    key: "removeCaptcha",
+    value: function removeCaptcha() {
+      var _state5 = this.state,
+          isApiReady = _state5.isApiReady,
+          isRemoved = _state5.isRemoved,
+          captchaId = _state5.captchaId;
+
+
+      if (!isApiReady || isRemoved) return;
+
+      this.setState({ isRemoved: true });
+      hcaptcha.remove(captchaId);
     }
   }, {
-    key: "onerrorCaptcha",
-    value: function onerrorCaptcha(e) {
-      if (typeof hcaptcha === 'undefined') return;
-      hcaptcha.reset(this._id); // If hCaptcha runs into error, reset captcha - hCaptcha
+    key: "handleOnLoad",
+    value: function handleOnLoad() {
+      this.setState({ isApiReady: true });
+      this.renderCaptcha();
+    }
+  }, {
+    key: "handleSubmit",
+    value: function handleSubmit(event) {
+      var onVerify = this.props.onVerify;
+      var _state6 = this.state,
+          isRemoved = _state6.isRemoved,
+          captchaId = _state6.captchaId;
+
+
+      if (typeof hcaptcha === 'undefined' || isRemoved) return;
+
+      var token = hcaptcha.getResponse(captchaId); //Get response token from hCaptcha widget - hCaptcha
+      onVerify(token); //Dispatch event to verify user response
+    }
+  }, {
+    key: "handleExpire",
+    value: function handleExpire() {
+      var onExpire = this.props.onExpire;
+      var _state7 = this.state,
+          isApiReady = _state7.isApiReady,
+          isRemoved = _state7.isRemoved,
+          captchaId = _state7.captchaId;
+
+
+      if (!isApiReady || isRemoved) return;
+      hcaptcha.reset(captchaId); // If hCaptcha runs into error, reset captcha - hCaptcha
+
+      if (onExpire) onExpire();
+    }
+  }, {
+    key: "handleError",
+    value: function handleError(event) {
+      var onError = this.props.onError;
+      var _state8 = this.state,
+          isApiReady = _state8.isApiReady,
+          isRemoved = _state8.isRemoved,
+          captchaId = _state8.captchaId;
+
+
+      if (!isApiReady || isRemoved) return;
+
+      hcaptcha.reset(captchaId); // If hCaptcha runs into error, reset captcha - hCaptcha
+      if (onError) onError(event);
     }
   }, {
     key: "execute",
     value: function execute() {
-      if (typeof hcaptcha === 'undefined') return;
-      hcaptcha.execute(this._id);
-    }
-  }, {
-    key: "removeFrame",
-    value: function removeFrame() {
-      var nodes = document.body.childNodes; //Get top level dom elements - hCaptcha
-      var foundFrame = false;
+      var _state9 = this.state,
+          isApiReady = _state9.isApiReady,
+          isRemoved = _state9.isRemoved,
+          captchaId = _state9.captchaId;
 
-      var i = nodes.length;
-      var k = void 0,
-          src = void 0,
-          title = void 0,
-          frames = void 0;
 
-      while (--i > -1 && foundFrame === false) {
-        //Look for hCaptcha verification iframe appended at document body - hCaptcha
-        frames = nodes[i].getElementsByTagName('iframe');
+      if (!isApiReady || isRemoved) return;
 
-        if (frames.length > 0) {
-          for (k = 0; k < frames.length; k++) {
-            src = frames[k].getAttribute("src");
-            title = frames[k].getAttribute("title");
-
-            if (src.includes(hCaptchaVars.domain) && title.includes(hCaptchaVars.iframe_title)) foundFrame = nodes[i]; //Compare iframe source and title to find correct iframe appeneded to body - hCaptcha
-          }
-        }
-      }
-
-      if (foundFrame) {
-        document.body.removeChild(foundFrame);
-        this._removed = true;
-      }
+      hcaptcha.execute(captchaId);
     }
   }, {
     key: "render",
     value: function render() {
+      var elementId = this.state.elementId;
 
-      return React.createElement(
-        "div",
-        null,
-        React.createElement("div", { id: hCaptchaVars.element_id })
-      );
+      return React.createElement("div", { id: elementId });
     }
   }]);
 
