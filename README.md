@@ -17,21 +17,48 @@ npm install @hcaptcha/react-hcaptcha --save
 ```
 
 ### Usage
+The two requirements for usage are the `sitekey` [prop](#props) and a `parent component` such as a `<form />`. The component will automatically include and load the
+hCaptcha API library and append it to the parent component. This is designed for ease of use with the hCaptcha API!
 
 #### Basic Usage
 
-```
-import hCaptcha from '@hcaptcha/react-hcaptcha';
+```js
+import HCaptcha from '@hcaptcha/react-hcaptcha';
 
 <FormComponent>
-    <hCaptcha sitekey="**Your sitekey here**" onVerify={token => handleVerificationSuccess(token)}/>
+    <HCaptcha 
+      sitekey="your-sitekey" 
+      onVerify={token => handleVerificationSuccess(token)}
+    />
 </FormComponent>
 ```
 
-The two required props are the sitekey and root component. The component will automatically include and load the
-hCaptcha API library and append it to the root component. This is designed for ease of use with the hCaptcha API!
+#### Usage with TypeScript
+Add the types from DefinitelyTyped
 
-Props include:
+```
+npm i -D @types/hcaptcha__react-hcaptcha
+```
+
+**A note about TypeScript usage:** If you want to reassign the component name, you could consider making a util that imports the component, then re-exports it as a default. Example:
+
+```ts
+// utils/captcha.ts
+import HCaptcha from '@hcaptcha/react-hcaptcha';
+export default HCaptcha;
+
+// MyFormComponent.tsx
+import { default as RenamedCaptcha } from '../utils/captcha';
+<FormComponent>
+  <RenamedCaptcha sitekey="your-sitekey" />
+</FormComponent>
+```
+
+#### Advanced usage
+
+In most real-world implementations, you'll probably be using a form library such as [Formik](https://github.com/jaredpalmer/formik) or [React Hook Form](https://github.com/react-hook-form/react-hook-form). In these instances, you'll most likely want to use `forwardRef` to handle the callbacks as well as handle field-level validation of a `captcha` field. For an example of this, you can view this [CodeSandbox](https://codesandbox.io/s/react-hcaptcha-formik-example-2u5ut)
+
+### Props
 
 - sitekey: String, **Required**
   - This is your sitekey. It allows you to load hCaptcha, and to configure options like difficulty on the hCaptcha dashboard.
