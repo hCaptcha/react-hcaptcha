@@ -4,7 +4,7 @@
 
 hCaptcha Component Library for ReactJS.
 
-[hCaptcha](https://www.hcaptcha.com) is an easy to use replacement for reCAPTCHA that helps monetize your website.
+[hCaptcha](https://www.hcaptcha.com) is a drop-replacement for reCAPTCHA that protects user privacy, rewards websites, and helps companies get their data labeled.
 
 Sign up at [hCaptcha](https://wwww.hcaptcha.com) to get your sitekey today. **You need a sitekey to use this captcha solution.**
 
