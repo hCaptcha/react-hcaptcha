@@ -1,7 +1,21 @@
 const React = require('react');
 
-// Create random ID
-const randomID = () => `${(Number(String(Math.random()).slice(2)) + Date.now() + Math.round(performance.now())).toString(36)}`;
+// Borrowed from https://github.com/ai/nanoid/blob/3.0.2/non-secure/index.js
+// This alphabet uses `A-Za-z0-9_-` symbols. A genetic algorithm helped
+// optimize the gzip compression for this alphabet.
+const urlAlphabet =
+  'ModuleSymbhasOwnPr-0123456789ABCDEFGHNRVfgctiUvz_KqYTJkLxpZXIjQW'
+
+const nanoid = (size = 21) => {
+  let id = ''
+  // A compact alternative for `for (var i = 0; i < step; i++)`.
+  let i = size
+  while (i--) {
+    // `| 0` is more compact and faster than `Math.floor()`.
+    id += urlAlphabet[(Math.random() * 64) | 0]
+  }
+  return id
+}
 
  // Create script to init hCaptcha
 const CaptchaScript = (cb, hl) => {
@@ -37,7 +51,7 @@ class HCaptcha extends React.Component {
       this.state = {
         isApiReady: typeof hcaptcha !== 'undefined',
         isRemoved: false,
-        elementId: `hcaptcha-${randomID()}`,
+        elementId: `hcaptcha-${nanoid()}`,
         captchaId: ''
       }
     }
