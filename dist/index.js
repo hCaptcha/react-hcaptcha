@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -12,9 +12,22 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var React = require('react');
 
-// Create random ID
-var randomID = function randomID() {
-  return "" + (Number(String(Math.random()).slice(2)) + Date.now() + Math.round(performance.now())).toString(36);
+// Borrowed from https://github.com/ai/nanoid/blob/3.0.2/non-secure/index.js
+// This alphabet uses `A-Za-z0-9_-` symbols. A genetic algorithm helped
+// optimize the gzip compression for this alphabet.
+var urlAlphabet = 'ModuleSymbhasOwnPr-0123456789ABCDEFGHNRVfgctiUvz_KqYTJkLxpZXIjQW';
+
+var nanoid = function nanoid() {
+  var size = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 21;
+
+  var id = '';
+  // A compact alternative for `for (var i = 0; i < step; i++)`.
+  var i = size;
+  while (i--) {
+    // `| 0` is more compact and faster than `Math.floor()`.
+    id += urlAlphabet[Math.random() * 64 | 0];
+  }
+  return id;
 };
 
 // Create script to init hCaptcha
@@ -26,7 +39,7 @@ var CaptchaScript = function CaptchaScript(cb, hl) {
   script.async = true;
 
   if (hl) {
-    script.src += "&hl=" + hl;
+    script.src += '&hl=' + hl;
   }
 
   return script;
@@ -54,14 +67,14 @@ var HCaptcha = function (_React$Component) {
     _this.state = {
       isApiReady: typeof hcaptcha !== 'undefined',
       isRemoved: false,
-      elementId: "hcaptcha-" + randomID(),
+      elementId: 'hcaptcha-' + nanoid(),
       captchaId: ''
     };
     return _this;
   }
 
   _createClass(HCaptcha, [{
-    key: "componentDidMount",
+    key: 'componentDidMount',
     value: function componentDidMount() {
       //Once captcha is mounted intialize hCaptcha - hCaptcha
       var languageOverride = this.props.languageOverride;
@@ -79,7 +92,7 @@ var HCaptcha = function (_React$Component) {
       }
     }
   }, {
-    key: "componentWillUnmount",
+    key: 'componentWillUnmount',
     value: function componentWillUnmount() {
       var _state2 = this.state,
           isApiReady = _state2.isApiReady,
@@ -93,7 +106,7 @@ var HCaptcha = function (_React$Component) {
       hcaptcha.remove(captchaId);
     }
   }, {
-    key: "shouldComponentUpdate",
+    key: 'shouldComponentUpdate',
     value: function shouldComponentUpdate(nextProps, nextState) {
       // Prevent component re-rendering when these internal state variables are updated
       if (this.state.isApiReady !== nextState.isApiReady || this.state.isRemoved !== nextState.isRemoved) {
@@ -103,7 +116,7 @@ var HCaptcha = function (_React$Component) {
       return true;
     }
   }, {
-    key: "componentDidUpdate",
+    key: 'componentDidUpdate',
     value: function componentDidUpdate(prevProps) {
       var _this2 = this;
 
@@ -124,7 +137,7 @@ var HCaptcha = function (_React$Component) {
       }
     }
   }, {
-    key: "renderCaptcha",
+    key: 'renderCaptcha',
     value: function renderCaptcha() {
       var _state3 = this.state,
           isApiReady = _state3.isApiReady,
@@ -142,7 +155,7 @@ var HCaptcha = function (_React$Component) {
       this.setState({ isRemoved: false, captchaId: captchaId });
     }
   }, {
-    key: "resetCaptcha",
+    key: 'resetCaptcha',
     value: function resetCaptcha() {
       var _state4 = this.state,
           isApiReady = _state4.isApiReady,
@@ -155,7 +168,7 @@ var HCaptcha = function (_React$Component) {
       hcaptcha.reset(captchaId);
     }
   }, {
-    key: "removeCaptcha",
+    key: 'removeCaptcha',
     value: function removeCaptcha() {
       var _state5 = this.state,
           isApiReady = _state5.isApiReady,
@@ -169,13 +182,13 @@ var HCaptcha = function (_React$Component) {
       hcaptcha.remove(captchaId);
     }
   }, {
-    key: "handleOnLoad",
+    key: 'handleOnLoad',
     value: function handleOnLoad() {
       this.setState({ isApiReady: true });
       this.renderCaptcha();
     }
   }, {
-    key: "handleSubmit",
+    key: 'handleSubmit',
     value: function handleSubmit(event) {
       var onVerify = this.props.onVerify;
       var _state6 = this.state,
@@ -189,7 +202,7 @@ var HCaptcha = function (_React$Component) {
       onVerify(token); //Dispatch event to verify user response
     }
   }, {
-    key: "handleExpire",
+    key: 'handleExpire',
     value: function handleExpire() {
       var onExpire = this.props.onExpire;
       var _state7 = this.state,
@@ -204,7 +217,7 @@ var HCaptcha = function (_React$Component) {
       if (onExpire) onExpire();
     }
   }, {
-    key: "handleError",
+    key: 'handleError',
     value: function handleError(event) {
       var onError = this.props.onError;
       var _state8 = this.state,
@@ -219,7 +232,7 @@ var HCaptcha = function (_React$Component) {
       if (onError) onError(event);
     }
   }, {
-    key: "execute",
+    key: 'execute',
     value: function execute() {
       var _state9 = this.state,
           isApiReady = _state9.isApiReady,
@@ -232,11 +245,11 @@ var HCaptcha = function (_React$Component) {
       hcaptcha.execute(captchaId);
     }
   }, {
-    key: "render",
+    key: 'render',
     value: function render() {
       var elementId = this.state.elementId;
 
-      return React.createElement("div", { id: elementId });
+      return React.createElement('div', { id: elementId });
     }
   }]);
 
