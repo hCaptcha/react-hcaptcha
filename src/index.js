@@ -36,6 +36,7 @@ const CaptchaScript = (cb, hl) => {
 class HCaptcha extends React.Component {
     constructor (props) {
       super(props);
+      const { id=null } = props;
 
       // API Methods
       this.renderCaptcha = this.renderCaptcha.bind(this);
@@ -51,7 +52,7 @@ class HCaptcha extends React.Component {
       this.state = {
         isApiReady: typeof hcaptcha !== 'undefined',
         isRemoved: false,
-        elementId: `hcaptcha-${nanoid()}`,
+        elementId: id || `hcaptcha-${nanoid()}`,
         captchaId: ''
       }
     }
