@@ -51,7 +51,7 @@ class HCaptcha extends React.Component {
       this.state = {
         isApiReady: typeof hcaptcha !== 'undefined',
         isRemoved: false,
-        elementId: `hcaptcha-${nanoid()}`,
+        elementId: this.props.id || `hcaptcha-${nanoid()}`,
         captchaId: ''
       }
     }
