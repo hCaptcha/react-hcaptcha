@@ -51,8 +51,12 @@ var HCaptcha = function (_React$Component) {
   function HCaptcha(props) {
     _classCallCheck(this, HCaptcha);
 
-    // API Methods
     var _this = _possibleConstructorReturn(this, (HCaptcha.__proto__ || Object.getPrototypeOf(HCaptcha)).call(this, props));
+
+    var _props$id = props.id,
+        id = _props$id === undefined ? null : _props$id;
+
+    // API Methods
 
     _this.renderCaptcha = _this.renderCaptcha.bind(_this);
     _this.resetCaptcha = _this.resetCaptcha.bind(_this);
@@ -67,7 +71,7 @@ var HCaptcha = function (_React$Component) {
     _this.state = {
       isApiReady: typeof hcaptcha !== 'undefined',
       isRemoved: false,
-      elementId: 'hcaptcha-' + nanoid(),
+      elementId: id || 'hcaptcha-' + nanoid(),
       captchaId: ''
     };
     return _this;
