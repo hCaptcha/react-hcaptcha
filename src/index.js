@@ -21,7 +21,13 @@ const nanoid = (size = 21) => {
 const CaptchaScript = (cb, hl) => {
     let script = document.createElement("script")
 
-    window.hcaptchaOnLoad = cb;
+    const before = window.hcaptchaOnLoad;
+    window.hcaptchaOnLoad = () => {
+      if (before) {
+        before();
+      }
+      cb();
+    };
     script.src = "https://hcaptcha.com/1/api.js?render=explicit&onload=hcaptchaOnLoad";
     script.async = true
 

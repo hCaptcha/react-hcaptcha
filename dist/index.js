@@ -34,7 +34,13 @@ var nanoid = function nanoid() {
 var CaptchaScript = function CaptchaScript(cb, hl) {
   var script = document.createElement("script");
 
-  window.hcaptchaOnLoad = cb;
+  var before = window.hcaptchaOnLoad;
+  window.hcaptchaOnLoad = function () {
+    if (before) {
+      before();
+    }
+    cb();
+  };
   script.src = "https://hcaptcha.com/1/api.js?render=explicit&onload=hcaptchaOnLoad";
   script.async = true;
 
