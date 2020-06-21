@@ -132,13 +132,15 @@ class HCaptcha extends React.Component {
 
       if (!isApiReady || isRemoved) return
 
-      this.setState({ isRemoved: true });
-      hcaptcha.remove(captchaId);
+      this.setState({ isRemoved: true }, () => {
+        hcaptcha.remove(captchaId);
+      });
     }
 
     handleOnLoad () {
-      this.setState({ isApiReady: true });
-      this.renderCaptcha();
+      this.setState({ isApiReady: true }, () => {
+        this.renderCaptcha();
+      });
     }
 
     handleSubmit (event) {
