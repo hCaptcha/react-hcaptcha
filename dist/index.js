@@ -34,6 +34,7 @@ var nanoid = function nanoid() {
 var CaptchaScript = function CaptchaScript(cb, hl) {
   var script = document.createElement("script");
 
+  // run all callbacks when multiple hcaptchas present
   var before = window.hcaptchaOnLoad;
   window.hcaptchaOnLoad = function () {
     if (before) {

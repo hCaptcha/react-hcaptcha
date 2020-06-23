@@ -21,6 +21,7 @@ const nanoid = (size = 21) => {
 const CaptchaScript = (cb, hl) => {
     let script = document.createElement("script")
 
+    // run all callbacks when multiple hcaptchas present
     const before = window.hcaptchaOnLoad;
     window.hcaptchaOnLoad = () => {
       if (before) {
