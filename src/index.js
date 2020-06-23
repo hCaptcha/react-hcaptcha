@@ -18,18 +18,27 @@ const nanoid = (size = 21) => {
 }
 
  // Create script to init hCaptcha
-const CaptchaScript = (cb, hl) => {
-    let script = document.createElement("script")
+let onLoadListeners = [];
+let captchaScriptCreated = false;
 
-    window.hcaptchaOnLoad = cb;
+// Create global onload callback
+window.hcaptchaOnLoad = () => {
+  // Iterate over onload listeners, call each listener
+  onLoadListeners = onLoadListeners.filter(listener => {
+    listener();
+    return false;
+  });
+};
+
+// Generate hCaptcha API Script
+const CaptchaScript = (hl) => {
+    let script = document.createElement("script");
     script.src = "https://hcaptcha.com/1/api.js?render=explicit&onload=hcaptchaOnLoad";
     script.async = true
-
     if (hl) {
       script.src += `&hl=${hl}`
     }
-
-    return script;
+    document.head.appendChild(script);
 }
 
 
@@ -49,8 +58,13 @@ class HCaptcha extends React.Component {
       this.handleExpire = this.handleExpire.bind(this);
       this.handleError  = this.handleError.bind(this);
 
+      const isApiReady = typeof hcaptcha !== 'undefined';
+
+      if (!isApiReady)
+        captchaScriptCreated = false;
+
       this.state = {
-        isApiReady: typeof hcaptcha !== 'undefined',
+        isApiReady,
         isRemoved: false,
         elementId: id || `hcaptcha-${nanoid()}`,
         captchaId: ''
@@ -63,8 +77,15 @@ class HCaptcha extends React.Component {
 
 
       if (!isApiReady) {  //Check if hCaptcha has already been loaded, if not create script tag and wait to render captcha elementID - hCaptcha
-        let script = CaptchaScript(this.handleOnLoad, languageOverride);
-        document.getElementById(elementId).appendChild(script);
+
+        if (!captchaScriptCreated) {
+            // Only create the script tag once, use a global variable to track
+            captchaScriptCreated = true;
+            CaptchaScript(languageOverride);
+        }
+
+        // Add onload callback to global onload listeners
+        onLoadListeners.push(this.handleOnLoad);
       } else {
         this.renderCaptcha();
       }

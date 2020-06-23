@@ -46,12 +46,27 @@ class ReactDemo extends React.Component {
         <p>
           Set your sitekey and onVerify callback as props, and drop into your form. From here, we'll take care of the rest.
         </p>
-        <form>
+        <div>
+          <HCaptcha ref={this.captcha} onVerify={this.onVerifyCaptcha} languageOverride={this.languageOverride}
+          sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
+          theme="light"
+          />
+        </div>
+
+        <div>
           <HCaptcha ref={this.captcha} onVerify={this.onVerifyCaptcha} languageOverride={this.languageOverride}
           sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
           theme="dark"
           />
-        </form>
+        </div>
+
+        <div>
+          <HCaptcha ref={this.captcha} onVerify={this.onVerifyCaptcha} languageOverride={this.languageOverride}
+          sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
+          size="compact"
+          theme="dark"
+          />
+        </div>
 
         {isVerified &&
           <div>
