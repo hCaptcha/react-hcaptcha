@@ -34,23 +34,24 @@ var nanoid = function nanoid() {
 var onLoadListeners = [];
 var captchaScriptCreated = false;
 
-// Create global onload callback
-window.hcaptchaOnLoad = function () {
-  // Iterate over onload listeners, call each listener
-  onLoadListeners = onLoadListeners.filter(function (listener) {
-    listener();
-    return false;
-  });
-};
-
 // Generate hCaptcha API Script
 var CaptchaScript = function CaptchaScript(hl) {
+  // Create global onload callback
+  window.hcaptchaOnLoad = function () {
+    // Iterate over onload listeners, call each listener
+    onLoadListeners = onLoadListeners.filter(function (listener) {
+      listener();
+      return false;
+    });
+  };
+
   var script = document.createElement("script");
   script.src = "https://hcaptcha.com/1/api.js?render=explicit&onload=hcaptchaOnLoad";
   script.async = true;
   if (hl) {
     script.src += '&hl=' + hl;
   }
+
   document.head.appendChild(script);
 };
 

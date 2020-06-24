@@ -21,24 +21,25 @@ const nanoid = (size = 21) => {
 let onLoadListeners = [];
 let captchaScriptCreated = false;
 
-// Create global onload callback
-window.hcaptchaOnLoad = () => {
-  // Iterate over onload listeners, call each listener
-  onLoadListeners = onLoadListeners.filter(listener => {
-    listener();
-    return false;
-  });
-};
-
 // Generate hCaptcha API Script
 const CaptchaScript = (hl) => {
-    let script = document.createElement("script");
-    script.src = "https://hcaptcha.com/1/api.js?render=explicit&onload=hcaptchaOnLoad";
-    script.async = true
-    if (hl) {
-      script.src += `&hl=${hl}`
-    }
-    document.head.appendChild(script);
+  // Create global onload callback
+  window.hcaptchaOnLoad = () => {
+    // Iterate over onload listeners, call each listener
+    onLoadListeners = onLoadListeners.filter(listener => {
+      listener();
+      return false;
+    });
+  };
+
+  let script = document.createElement("script");
+  script.src = "https://hcaptcha.com/1/api.js?render=explicit&onload=hcaptchaOnLoad";
+  script.async = true
+  if (hl) {
+    script.src += `&hl=${hl}`
+  }
+
+  document.head.appendChild(script);
 }
 
 
