@@ -31,18 +31,28 @@ var nanoid = function nanoid() {
 };
 
 // Create script to init hCaptcha
-var CaptchaScript = function CaptchaScript(cb, hl) {
-  var script = document.createElement("script");
+var onLoadListeners = [];
+var captchaScriptCreated = false;
 
-  window.hcaptchaOnLoad = cb;
+// Generate hCaptcha API Script
+var CaptchaScript = function CaptchaScript(hl) {
+  // Create global onload callback
+  window.hcaptchaOnLoad = function () {
+    // Iterate over onload listeners, call each listener
+    onLoadListeners = onLoadListeners.filter(function (listener) {
+      listener();
+      return false;
+    });
+  };
+
+  var script = document.createElement("script");
   script.src = "https://hcaptcha.com/1/api.js?render=explicit&onload=hcaptchaOnLoad";
   script.async = true;
-
   if (hl) {
     script.src += '&hl=' + hl;
   }
 
-  return script;
+  document.head.appendChild(script);
 };
 
 var HCaptcha = function (_React$Component) {
@@ -68,8 +78,12 @@ var HCaptcha = function (_React$Component) {
     _this.handleExpire = _this.handleExpire.bind(_this);
     _this.handleError = _this.handleError.bind(_this);
 
+    var isApiReady = typeof hcaptcha !== 'undefined';
+
+    if (!isApiReady) captchaScriptCreated = false;
+
     _this.state = {
-      isApiReady: typeof hcaptcha !== 'undefined',
+      isApiReady: isApiReady,
       isRemoved: false,
       elementId: id || 'hcaptcha-' + nanoid(),
       captchaId: ''
@@ -89,8 +103,15 @@ var HCaptcha = function (_React$Component) {
 
       if (!isApiReady) {
         //Check if hCaptcha has already been loaded, if not create script tag and wait to render captcha elementID - hCaptcha
-        var script = CaptchaScript(this.handleOnLoad, languageOverride);
-        document.getElementById(elementId).appendChild(script);
+
+        if (!captchaScriptCreated) {
+          // Only create the script tag once, use a global variable to track
+          captchaScriptCreated = true;
+          CaptchaScript(languageOverride);
+        }
+
+        // Add onload callback to global onload listeners
+        onLoadListeners.push(this.handleOnLoad);
       } else {
         this.renderCaptcha();
       }
@@ -182,14 +203,18 @@ var HCaptcha = function (_React$Component) {
 
       if (!isApiReady || isRemoved) return;
 
-      this.setState({ isRemoved: true });
-      hcaptcha.remove(captchaId);
+      this.setState({ isRemoved: true }, function () {
+        hcaptcha.remove(captchaId);
+      });
     }
   }, {
     key: 'handleOnLoad',
     value: function handleOnLoad() {
-      this.setState({ isApiReady: true });
-      this.renderCaptcha();
+      var _this3 = this;
+
+      this.setState({ isApiReady: true }, function () {
+        _this3.renderCaptcha();
+      });
     }
   }, {
     key: 'handleSubmit',
