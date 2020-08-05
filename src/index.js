@@ -22,7 +22,7 @@ let onLoadListeners = [];
 let captchaScriptCreated = false;
 
 // Generate hCaptcha API Script
-const CaptchaScript = (hl) => {
+const CaptchaScript = (hl, reCaptchaCompat) => {
   // Create global onload callback
   window.hcaptchaOnLoad = () => {
     // Iterate over onload listeners, call each listener
@@ -37,6 +37,9 @@ const CaptchaScript = (hl) => {
   script.async = true
   if (hl) {
     script.src += `&hl=${hl}`
+  }
+  if (reCaptchaCompat === false) {
+    script.src += '&recaptchacompat=off'
   }
 
   document.head.appendChild(script);
@@ -73,7 +76,7 @@ class HCaptcha extends React.Component {
     }
 
     componentDidMount () { //Once captcha is mounted intialize hCaptcha - hCaptcha
-      const { languageOverride } = this.props;
+      const { languageOverride, reCaptchaCompat } = this.props;
       const { isApiReady, elementId } = this.state;
 
 
@@ -82,7 +85,7 @@ class HCaptcha extends React.Component {
         if (!captchaScriptCreated) {
             // Only create the script tag once, use a global variable to track
             captchaScriptCreated = true;
-            CaptchaScript(languageOverride);
+            CaptchaScript(languageOverride, reCaptchaCompat);
         }
 
         // Add onload callback to global onload listeners
