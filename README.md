@@ -73,6 +73,8 @@ In most real-world implementations, you'll probably be using a form library such
   - Manually set the language used to render text in the hCaptcha API. See [language codes](https://hcaptcha.com/docs/languages).
 - id: String
   - Manually set the ID of the hCaptcha component. Make sure each hCaptcha component generated on a single page has its own unique ID when using this prop.
+- reCaptchaCompat: Boolean
+  - Disable drop-in replacement for reCAPTCHA with `false` to prevent hCaptcha from injecting into `window.grecaptcha`. Enabled by default.
 
 The component emits events related to verification and expiration. Simply catch these events in the parent component: `onVerify`, `onExpire`, `onError` and handle the events as you choose. The captcha will automatically reset on error, but still emits an error.
 
