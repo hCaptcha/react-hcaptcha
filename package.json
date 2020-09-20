@@ -1,6 +1,6 @@
 {
   "name": "@hcaptcha/react-hcaptcha",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "description": "A React library for hCaptcha",
   "main": "dist/index.js",
   "scripts": {
@@ -10,8 +10,8 @@
     "prepublishOnly": "npm run transpile"
   },
   "peerDependencies": {
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1"
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
   },
   "keywords": [
     "hcaptcha",
@@ -19,7 +19,7 @@
     "react",
     "captcha"
   ],
-  "author": "Ali Neer, Brad Peters",
+  "author": "Ali Neer, Brad Peters, Carlos Azuaje",
   "license": "ISC",
   "devDependencies": {
     "babel-cli": "^6.26.0",
