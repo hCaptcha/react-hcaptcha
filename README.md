@@ -84,6 +84,18 @@ The component emits events related to verification and expiration. Simply catch 
 
 Please refer to the demo for examples of basic usage and an invisible hCaptcha.
 
+## Running locally for development
+
+Please see: [Local Development Notes](https://docs.hcaptcha.com/#localdev).
+
+Summary:
+
+`sudo echo "127.0.0.1 fakelocal.com" >> /private/etc/hosts`
+
+`npm start -- --disable-host-check`
+
+open [http://fakelocal.com:9000](http://fakelocal.com:9000) to start the example.
+
 ## Notes to Maintainers
 
 This repository can be found on **npm** at [@hcaptcha/react-hcaptcha](https://www.npmjs.com/package/@hcaptcha/react-hcaptcha). If any updates are committed to master the **npm** registry should be updated to reflect these changes. See steps below to update the package on **npm**:
@@ -97,3 +109,4 @@ This repository can be found on **npm** at [@hcaptcha/react-hcaptcha](https://ww
 
 - Always update package version
 - Run `npm publish` from inside the current repository
+
