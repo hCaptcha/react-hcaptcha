@@ -84,6 +84,10 @@ The component emits events related to verification and expiration. Simply catch 
 
 Please refer to the demo for examples of basic usage and an invisible hCaptcha.
 
+Alternatively, see [this sandbox code](https://codesandbox.io/s/react-hcaptchaform-example-invisible-f7ekt) for a quick form example of invisible hCaptcha on a form submit button.
+
+Please note that "invisible" simply means that no hCaptcha button will be rendered. Whether a challenge shows up will depend on the sitekey difficulty level.
+
 ## Running locally for development
 
 Please see: [Local Development Notes](https://docs.hcaptcha.com/#localdev).
