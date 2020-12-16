@@ -1,6 +1,6 @@
 {
   "name": "@hcaptcha/react-hcaptcha",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A React library for hCaptcha",
   "main": "dist/index.js",
   "scripts": {
