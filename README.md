@@ -28,7 +28,7 @@ import HCaptcha from '@hcaptcha/react-hcaptcha';
 <FormComponent>
     <HCaptcha
       sitekey="your-sitekey"
-      onVerify={token => handleVerificationSuccess(token, ekey)}
+      onVerify={(token,ekey) => handleVerificationSuccess(token, ekey)}
     />
 </FormComponent>
 ```
