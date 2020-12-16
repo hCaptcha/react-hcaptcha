@@ -232,8 +232,9 @@ var HCaptcha = function (_React$Component) {
 
       if (typeof hcaptcha === 'undefined' || isRemoved) return;
 
-      var token = hcaptcha.getResponse(captchaId); //Get response token from hCaptcha widget - hCaptcha
-      onVerify(token); //Dispatch event to verify user response
+      var token = hcaptcha.getResponse(captchaId); //Get response token from hCaptcha widget
+      var ekey = hcaptcha.getRespKey(captchaId); //Get current challenge session id from hCaptcha widget
+      onVerify(token, ekey); //Dispatch event to verify user response
     }
   }, {
     key: 'handleExpire',
