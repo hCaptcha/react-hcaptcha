@@ -123,8 +123,9 @@ class HCaptcha extends React.Component {
 
       // If they have changed, remove current captcha and render a new one
       if (!match) {
-        this.removeCaptcha();
-        this.renderCaptcha();
+        this.removeCaptcha(() => {
+          this.renderCaptcha();
+        });
       }
     }
 
@@ -152,13 +153,14 @@ class HCaptcha extends React.Component {
       hcaptcha.reset(captchaId)
     }
 
-    removeCaptcha() {
+    removeCaptcha(callback) {
       const { isApiReady, isRemoved, captchaId } = this.state;
 
       if (!isApiReady || isRemoved) return
 
       this.setState({ isRemoved: true }, () => {
         hcaptcha.remove(captchaId);
+        callback && callback()
       });
     }
 
