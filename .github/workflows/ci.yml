@@ -2,6 +2,7 @@ name: CI
 on: push
 jobs:
   build:
+    name: Build & Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -13,4 +14,5 @@ jobs:
       - name: Check versions
         if: github.ref != 'refs/heads/master'
         run: node ./.github/workflows/version-check.js
+      - run: npm run transpile
       - run: npm run test
