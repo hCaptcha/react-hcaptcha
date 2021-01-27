@@ -1,6 +1,6 @@
 {
   "name": "@hcaptcha/react-hcaptcha",
-  "version": "0.3.0-alpha",
+  "version": "0.3.0",
   "description": "A React library for hCaptcha",
   "main": "dist/index.js",
   "scripts": {
@@ -11,8 +11,8 @@
     "prepublishOnly": "npm run transpile"
   },
   "peerDependencies": {
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1"
+    "react": ">= 16",
+    "react-dom": ">= 16"
   },
   "keywords": [
     "hcaptcha",
