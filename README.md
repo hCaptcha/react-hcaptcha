@@ -62,25 +62,31 @@ In these instances, you'll most likely want to use `ref` to handle the callbacks
 
 ### Props
 
-- sitekey: String, **Required**
-  - This is your sitekey. It allows you to load hCaptcha, and to configure options like difficulty on the hCaptcha dashboard.
-- size: String (normal, compact, invisible)
-  - This specifies the "size" of the component. hCaptcha allows you to decide how big the component will appear on render. Defaults to normal.
-    Want a smaller checkbox? Use compact! Invisible does not show a hCaptcha button, and instead pops up on form submit.
-- theme: String (light, dark)
-  - hCaptcha supports both a light and dark theme. If no theme is inherently set, the captcha will always default to light.
-- tabindex: Integer
-  - Set the tabindex of the widget and popup. When appropriate, this can make navigation of your site more intuitive. This always defaults to 0.
-- languageOverride: String
-  - Manually set the language used to render text in the hCaptcha API. See [language codes](https://hcaptcha.com/docs/languages).
-- id: String
-  - Manually set the ID of the hCaptcha component. Make sure each hCaptcha component generated on a single page has its own unique ID when using this prop.
-- reCaptchaCompat: Boolean
-  - Disable drop-in replacement for reCAPTCHA with `false` to prevent hCaptcha from injecting into `window.grecaptcha`. Enabled by default.
-- onVerify: Function
-  - On success callback that returns two parameters: A hCaptcha response token and challenge session ID called an ekey.
+|Name|Values/Type|Required|Default|Description|
+|---|---|---|---|---|
+|`sitekey`|String|**Yes**|`-`|This is your sitekey, this allows you to load captcha. If you need a sitekey, please visit [hCaptcha](https://www.hcaptcha.com), and sign up to get your sitekey.|
+|`size`|String (normal, compact, invisible)|No|`normal`|This specifies the "size" of the component. hCaptcha allows you to decide how big the component will appear on render, this always defaults to normal.|
+|`theme`|String (light, dark)|No|`light`|hCaptcha supports both a light and dark theme. If no theme is inherently set, the captcha will always default to light.|
+|`tabindex`|Integer|No|`0`|Set the tabindex of the widget and popup. When appropriate, this can make navigation of your site more intuitive.|
+|`languageOverride`|String (ISO 639-2 code)|No|`auto`|hCaptcha auto-detects language via the user's browser. This overrides that to set a default UI language. See [language codes](https://hcaptcha.com/docs/languages).|
+|`reCaptchaCompat`|Boolean|No|`true`|Disable drop-in replacement for reCAPTCHA with `false` to prevent hCaptcha from injecting into `window.grecaptcha`.|
+|`id`|String|No|`random id`|Manually set the ID of the hCaptcha component. Make sure each hCaptcha component generated on a single page has its own unique ID when using this prop.|
 
-The component emits events related to verification and expiration. Simply catch these events in the parent component: `onVerify`, `onExpire`, `onError` and handle the events as you choose. The captcha will automatically reset on error, but still emits an error.
+### Events
+
+|Event|Params|Description|
+|---|---|---|
+|`onError`|`err`|When an error occurs. Component will reset immediately after an error.|
+|`onVerify`|`token, eKey`|When challenge is completed. The response `token` and an `eKey` (session id) are passed along.|
+|`onExpire`|-|When the current token expires.|
+
+### Methods
+
+|Method|Description|
+|---|---|
+|`execute()`|Programmatically trigger a challenge request|
+|`resetCaptcha()`|Reset the current challenge|
+
 
 **NOTE**: Make sure to reset the hCaptcha state when you submit your form by calling the method `.resetCaptcha` on your hCaptcha React Component! Passcodes are one-time use, so if your user submits the same passcode twice then it will be rejected by the server the second time.
 
@@ -90,7 +96,26 @@ Alternatively, see [this sandbox code](https://codesandbox.io/s/react-hcaptchafo
 
 Please note that "invisible" simply means that no hCaptcha button will be rendered. Whether a challenge shows up will depend on the sitekey difficulty level.
 
-## Running locally for development
+---
+
+### Note for maintainers
+
+#### Scripts
+
+* `npm run start` - will start the demo app with hot reload
+* `npm run test` - will test the library: unit tests
+* `npm run build` - will build the production version
+
+
+#### Publishing
+
+To publish a new version, follow the next steps:
+1. Bump the version in `package.json`
+2. Create a [Github Release](https://docs.github.com/en/free-pro-team@latest/github/administering-a-repository/managing-releases-in-a-repository#creating-a-release) with version from step 1 **without** a prefix such as `v` (e.g. `1.0.3`)
+  * `publish` workflow will be triggered which will: build, test and deploy the package to the [npm @hcaptcha/react-hcaptcha](https://www.npmjs.com/package/@hcaptcha/react-hcaptcha).
+
+
+#### Running locally for development
 
 Please see: [Local Development Notes](https://docs.hcaptcha.com/#localdev).
 
@@ -101,18 +126,3 @@ Summary:
 `npm start -- --disable-host-check`
 
 open [http://fakelocal.com:9000](http://fakelocal.com:9000) to start the example.
-
-## Notes to Maintainers
-
-This repository can be found on **npm** at [@hcaptcha/react-hcaptcha](https://www.npmjs.com/package/@hcaptcha/react-hcaptcha). If any updates are committed to master the **npm** registry should be updated to reflect these changes. See steps below to update the package on **npm**:
-
-#### Requirements
-
-- NPM Account
-- Set as a `Maintainer` of [@hcaptcha/react-hcaptcha](https://www.npmjs.com/package/@hcaptcha/react-hcaptcha)
-
-#### Publishing
-
-- Always update package version
-- Run `npm publish` from inside the current repository
-
