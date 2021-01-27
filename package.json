@@ -1,12 +1,13 @@
 {
   "name": "@hcaptcha/react-hcaptcha",
-  "version": "0.2.3",
+  "version": "0.3.0-alpha",
   "description": "A React library for hCaptcha",
   "main": "dist/index.js",
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.config.js --mode development",
     "test": "jest",
     "transpile": "babel src -d dist --copy-files",
+    "build": "npm run transpile",
     "prepublishOnly": "npm run transpile"
   },
   "peerDependencies": {
@@ -19,20 +20,16 @@
     "react",
     "captcha"
   ],
-  "author": "Ali Neer, Brad Peters",
-  "license": "ISC",
+  "author": "hCaptcha team and contributors",
+  "license": "MIT",
   "devDependencies": {
-    "@actions/core": "^1.2.6",
     "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.12.10",
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
     "babel-loader": "^8.2.2",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^26.6.3",
-    "node-fetch": "^2.6.1",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "webpack": "^4.44.2",
