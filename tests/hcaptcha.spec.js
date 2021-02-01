@@ -105,4 +105,26 @@ describe('hCaptcha', () => {
         });
     });
 
+    it('should set id if id prop is passed', () => {
+        instance = ReactTestUtils.renderIntoDocument(
+            <HCaptcha
+                sitekey={TEST_PROPS.sitekey}
+                id="test-id-1"
+            />,
+        );
+        const node = ReactDOM.findDOMNode(instance);
+        expect(node.getAttribute("id")).toBe("test-id-1");
+    });
+
+    it('should not set id if no id prop is passed', () => {
+        process.env.NODE_ENV = 'development';
+        instance = ReactTestUtils.renderIntoDocument(
+            <HCaptcha
+                sitekey={TEST_PROPS.sitekey}
+            />,
+        );
+        const node = ReactDOM.findDOMNode(instance);
+        expect(node.getAttribute("id")).toBe(null);
+    });
+
 });
