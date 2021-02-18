@@ -158,8 +158,8 @@ describe("hCaptcha", () => {
                 />);
 
             const script = document.querySelector("head > script");
-            expect(script.src).toEqual(expect.stringContaining(ExpectHost));
-            expect(script.src).not.toEqual(expect.stringContaining(`apihost=${encodeURIComponent(ExpectHost)}`));
+            expect(script.src).toContain(ExpectHost);
+            expect(script.src).not.toContain(`apihost=${encodeURIComponent(ExpectHost)}`);
         });
 
         it("assethost should be found when prop is set", () => {
@@ -171,7 +171,7 @@ describe("hCaptcha", () => {
                 />);
 
             const script = document.querySelector("head > script");
-            expect(script.src).toEqual(expect.stringContaining(`assethost=${encodeURIComponent(ExpectHost)}`));
+            expect(script.src).toContain(`assethost=${encodeURIComponent(ExpectHost)}`);
         });
 
         it("endpoint should be found when prop is set", () => {
@@ -183,7 +183,7 @@ describe("hCaptcha", () => {
                 />);
 
             const script = document.querySelector("head > script");
-            expect(script.src).toEqual(expect.stringContaining(`endpoint=${encodeURIComponent(ExpectHost)}`));
+            expect(script.src).toContain(`endpoint=${encodeURIComponent(ExpectHost)}`);
         });
 
         it("imghost should be found when prop is set", () => {
@@ -195,7 +195,7 @@ describe("hCaptcha", () => {
                 />);
 
             const script = document.querySelector("head > script");
-            expect(script.src).toEqual(expect.stringContaining(`imghost=${encodeURIComponent(ExpectHost)}`));
+            expect(script.src).toContain(`imghost=${encodeURIComponent(ExpectHost)}`);
         });
 
         it("reportapi should be found when prop is set", () => {
@@ -207,7 +207,7 @@ describe("hCaptcha", () => {
                 />);
 
             const script = document.querySelector("head > script");
-            expect(script.src).toEqual(expect.stringContaining(`reportapi=${encodeURIComponent(ExpectHost)}`));
+            expect(script.src).toContain(`reportapi=${encodeURIComponent(ExpectHost)}`);
         });
 
         it("hl should be found when prop languageOverride is set", () => {
@@ -217,7 +217,7 @@ describe("hCaptcha", () => {
                 />);
 
             const script = document.querySelector("head > script");
-            expect(script.src).toEqual(expect.stringContaining("hl=fr"));
+            expect(script.src).toContain("hl=fr");
         });
 
         it("reCaptchaCompat should be found when prop is set to false", () => {
@@ -227,7 +227,7 @@ describe("hCaptcha", () => {
                 />);
 
             const script = document.querySelector("head > script");
-            expect(script.src).toEqual(expect.stringContaining("recaptchacompat=off"));
+            expect(script.src).toContain("recaptchacompat=off");
         });
 
         it("reCaptchaCompat should not be found when prop is set to anything except false", () => {
@@ -237,7 +237,7 @@ describe("hCaptcha", () => {
                 />);
 
             const script = document.querySelector("head > script");
-            expect(script.src).not.toEqual(expect.stringContaining("recaptchacompat"));
+            expect(script.src).not.toContain("recaptchacompat");
         });
 
         it("sentry should be found when prop is set", () => {
@@ -247,7 +247,7 @@ describe("hCaptcha", () => {
                 />);
 
             const script = document.querySelector("head > script");
-            expect(script.src).toEqual(expect.stringContaining("sentry=true"));
+            expect(script.src).toContain("sentry=true");
         });
     });
 });
