@@ -76,6 +76,7 @@ In these instances, you'll most likely want to use `ref` to handle the callbacks
 |`endpoint`|String|No|`-`|See enterprise docs.|
 |`imghost`|String|No|`-`|See enterprise docs.|
 |`reportapi`|String|No|`-`|See enterprise docs.|
+|`sentry`|String|No|`-`|See enterprise docs.|
 
 ### Events
 

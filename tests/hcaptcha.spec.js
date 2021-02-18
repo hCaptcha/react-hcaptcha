@@ -239,5 +239,15 @@ describe("hCaptcha", () => {
             const script = document.querySelector("head > script");
             expect(script.src).not.toEqual(expect.stringContaining("recaptchacompat"));
         });
+
+        it("sentry should be found when prop is set", () => {
+            instance = ReactTestUtils.renderIntoDocument(<HCaptcha
+                    sentry={true}
+                    sitekey={TEST_PROPS.sitekey}
+                />);
+
+            const script = document.querySelector("head > script");
+            expect(script.src).toEqual(expect.stringContaining("sentry=true"));
+        });
     });
 });
