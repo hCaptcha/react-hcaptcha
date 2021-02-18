@@ -141,8 +141,6 @@ describe("hCaptcha", () => {
         });
 
         it("validate src without", () => {
-            const ExpectHost = "https://test.com";
-
             instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     sitekey={TEST_PROPS.sitekey}
                 />);
@@ -201,8 +199,6 @@ describe("hCaptcha", () => {
         });
 
         it("hl should be found when prop languageOverride is set", () => {
-            const ExpectHost = "https://test.com";
-
             instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     languageOverride="fr"
                     sitekey={TEST_PROPS.sitekey}
@@ -213,8 +209,6 @@ describe("hCaptcha", () => {
         });
 
         it("reCaptchaCompat should be found when prop is set to false", () => {
-            const ExpectHost = "https://test.com";
-
             instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     reCaptchaCompat={false}
                     sitekey={TEST_PROPS.sitekey}
@@ -225,8 +219,6 @@ describe("hCaptcha", () => {
         });
 
         it("reCaptchaCompat should not be found when prop is set to anything except false", () => {
-            const ExpectHost = "https://test.com";
-
             instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     reCaptchaCompat={true}
                     sitekey={TEST_PROPS.sitekey}
