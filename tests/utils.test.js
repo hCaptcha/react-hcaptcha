@@ -24,7 +24,7 @@ describe("Encode query", () => {
         expect(generateQuery(params)).toBe("foo=bar&baz=true");
     });
 
-    it("false should be a valid query parameter", () => {
+    it("false should be a valid query value", () => {
         const params = {
             foo: false
         };
