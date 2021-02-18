@@ -174,6 +174,18 @@ describe("hCaptcha", () => {
             expect(script.src).toEqual(expect.stringContaining(`assethost=${encodeURIComponent(ExpectHost)}`));
         });
 
+        it("endpoint should be found when prop is set", () => {
+            const ExpectHost = "https://test.com";
+
+            instance = ReactTestUtils.renderIntoDocument(<HCaptcha
+                    endpoint={ExpectHost}
+                    sitekey={TEST_PROPS.sitekey}
+                />);
+
+            const script = document.querySelector("head > script");
+            expect(script.src).toEqual(expect.stringContaining(`endpoint=${encodeURIComponent(ExpectHost)}`));
+        });
+
         it("imghost should be found when prop is set", () => {
             const ExpectHost = "https://test.com";
 

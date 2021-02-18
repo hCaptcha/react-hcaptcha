@@ -73,6 +73,7 @@ In these instances, you'll most likely want to use `ref` to handle the callbacks
 |`id`|String|No|`random id`|Manually set the ID of the hCaptcha component. Make sure each hCaptcha component generated on a single page has its own unique ID when using this prop.|
 |`apihost`|String|No|`-`|See enterprise docs.|
 |`assethost`|String|No|`-`|See enterprise docs.|
+|`endpoint`|String|No|`-`|See enterprise docs.|
 |`imghost`|String|No|`-`|See enterprise docs.|
 |`reportapi`|String|No|`-`|See enterprise docs.|
 

@@ -61,7 +61,7 @@ class HCaptcha extends React.Component {
     }
 
     componentDidMount () { //Once captcha is mounted intialize hCaptcha - hCaptcha
-      const { languageOverride:hl, reCaptchaCompat, apihost, assethost, imghost, reportapi } = this.props;
+      const { apihost, assethost, endpoint, imghost, languageOverride:hl, reCaptchaCompat, reportapi } = this.props;
       const { isApiReady } = this.state;
 
       if (!isApiReady) {  //Check if hCaptcha has already been loaded, if not create script tag and wait to render captcha
@@ -70,9 +70,10 @@ class HCaptcha extends React.Component {
             // Only create the script tag once, use a global variable to track
             captchaScriptCreated = true;
             CaptchaScript({
-              hl,
               apihost,
               assethost,
+              endpoint,
+              hl,
               imghost,
               recaptchacompat: reCaptchaCompat === false? "off" : null,
               reportapi
