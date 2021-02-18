@@ -1,11 +1,12 @@
 const React = require('react');
+const { generateQuery } = require("./utils.js");
 
  // Create script to init hCaptcha
 let onLoadListeners = [];
 let captchaScriptCreated = false;
 
 // Generate hCaptcha API Script
-const CaptchaScript = (hl, reCaptchaCompat) => {
+const CaptchaScript = (params={}) => {
   // Create global onload callback
   window.hcaptchaOnLoad = () => {
     // Iterate over onload listeners, call each listener
@@ -15,15 +16,15 @@ const CaptchaScript = (hl, reCaptchaCompat) => {
     });
   };
 
-  let script = document.createElement("script");
-  script.src = "https://hcaptcha.com/1/api.js?render=explicit&onload=hcaptchaOnLoad";
-  script.async = true
-  if (hl) {
-    script.src += `&hl=${hl}`
-  }
-  if (reCaptchaCompat === false) {
-    script.src += '&recaptchacompat=off'
-  }
+  const domain = params.apihost || "https://hcaptcha.com";
+  delete params.apihost;
+
+  const script = document.createElement("script");
+  script.src = `${domain}/1/api.js?render=explicit&onload=hcaptchaOnLoad`;
+  script.async = true;
+
+  const query = generateQuery(params);
+  script.src += query !== ""? `&${query}` : "";
 
   document.head.appendChild(script);
 }
@@ -60,16 +61,22 @@ class HCaptcha extends React.Component {
     }
 
     componentDidMount () { //Once captcha is mounted intialize hCaptcha - hCaptcha
-      const { languageOverride, reCaptchaCompat } = this.props;
+      const { languageOverride:hl, reCaptchaCompat, apihost, assethost, imghost, reportapi } = this.props;
       const { isApiReady } = this.state;
-
 
       if (!isApiReady) {  //Check if hCaptcha has already been loaded, if not create script tag and wait to render captcha
 
         if (!captchaScriptCreated) {
             // Only create the script tag once, use a global variable to track
             captchaScriptCreated = true;
-            CaptchaScript(languageOverride, reCaptchaCompat);
+            CaptchaScript({
+              hl,
+              apihost,
+              assethost,
+              imghost,
+              recaptchacompat: reCaptchaCompat === false? "off" : null,
+              reportapi
+            });
         }
 
         // Add onload callback to global onload listeners
