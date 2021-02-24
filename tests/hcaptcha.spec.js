@@ -249,5 +249,15 @@ describe("hCaptcha", () => {
             const script = document.querySelector("head > script");
             expect(script.src).toContain("sentry=true");
         });
+
+        it("host should be found when prop is set", () => {
+            instance = ReactTestUtils.renderIntoDocument(<HCaptcha
+                    host="test.com"
+                    sitekey={TEST_PROPS.sitekey}
+                />);
+
+            const script = document.querySelector("head > script");
+            expect(script.src).toContain("host=test.com");
+        });
     });
 });
