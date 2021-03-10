@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactTestUtils, { act } from "react-dom/test-utils";
-import HCaptcha from "../src/index";
 import {getMockedHcaptcha, MOCK_EKEY, MOCK_TOKEN, MOCK_WIDGET_ID} from "./hcaptcha.mock";
 
+let HCaptcha;
 
 const TEST_PROPS = {
     sitekey: "10000000-ffff-ffff-ffff-000000000001",
@@ -17,6 +17,11 @@ describe("hCaptcha", () => {
     let mockFns;
 
     beforeEach(() => {
+        jest.isolateModules(() => {
+            // Use node's `require` because `jest.isolateModules` cannot be async to use it with `await import()`
+            HCaptcha = require('../src/index');
+        });
+
         mockFns = {
             onChange: jest.fn(),
             onVerify: jest.fn(),
@@ -259,5 +264,18 @@ describe("hCaptcha", () => {
             const script = document.querySelector("head > script");
             expect(script.src).toContain("host=test.com");
         });
+
+        it("shouldn't create multiple scripts for multiple captchas", () => {
+            ReactTestUtils.renderIntoDocument(<HCaptcha
+                sitekey={TEST_PROPS.sitekey}
+            />);
+            ReactTestUtils.renderIntoDocument(<HCaptcha
+                sitekey={TEST_PROPS.sitekey}
+            />);
+
+            const scripts = document.querySelectorAll("head > script");
+
+            expect(scripts.length).toBe(1);
+        })
     });
 });

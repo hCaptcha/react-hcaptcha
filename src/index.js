@@ -3,10 +3,11 @@ const { generateQuery } = require("./utils.js");
 
  // Create script to init hCaptcha
 let onLoadListeners = [];
-let captchaScriptCreated = false;
+let apiScriptRequested = false;
 
 // Generate hCaptcha API Script
-const CaptchaScript = (params={}) => {
+const mountCaptchaScript = (params={}) => {
+  apiScriptRequested = true;
   // Create global onload callback
   window.hcaptchaOnLoad = () => {
     // Iterate over onload listeners, call each listener
@@ -47,9 +48,6 @@ class HCaptcha extends React.Component {
 
       const isApiReady = typeof hcaptcha !== 'undefined';
 
-      if (!isApiReady)
-        captchaScriptCreated = false;
-
       this.ref = React.createRef();
 
       this.state = {
@@ -66,10 +64,9 @@ class HCaptcha extends React.Component {
 
       if (!isApiReady) {  //Check if hCaptcha has already been loaded, if not create script tag and wait to render captcha
 
-        if (!captchaScriptCreated) {
+        if (!apiScriptRequested) {
             // Only create the script tag once, use a global variable to track
-            captchaScriptCreated = true;
-            CaptchaScript({
+            mountCaptchaScript({
               apihost,
               assethost,
               endpoint,
