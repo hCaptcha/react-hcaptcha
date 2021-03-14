@@ -69,7 +69,7 @@ In these instances, you'll most likely want to use `ref` to handle the callbacks
 |`theme`|String (light, dark)|No|`light`|hCaptcha supports both a light and dark theme. If no theme is inherently set, the captcha will always default to light.|
 |`tabindex`|Integer|No|`0`|Set the tabindex of the widget and popup. When appropriate, this can make navigation of your site more intuitive.|
 |`languageOverride`|String (ISO 639-2 code)|No|`auto`|hCaptcha auto-detects language via the user's browser. This overrides that to set a default UI language. See [language codes](https://hcaptcha.com/docs/languages).|
-|`reCaptchaCompat`|Boolean|No|`on`|Disable drop-in replacement for reCAPTCHA with `off` to prevent hCaptcha from injecting into `window.grecaptcha`.|
+|`reCaptchaCompat`|String|No|`on`|Disable drop-in replacement for reCAPTCHA with `off` to prevent hCaptcha from injecting into `window.grecaptcha`.|
 |`id`|String|No|`random id`|Manually set the ID of the hCaptcha component. Make sure each hCaptcha component generated on a single page has its own unique ID when using this prop.|
 |`apihost`|String|No|`-`|See enterprise docs.|
 |`assethost`|String|No|`-`|See enterprise docs.|
