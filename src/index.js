@@ -155,6 +155,11 @@ class HCaptcha extends React.Component {
 
     handleOnLoad () {
       this.setState({ isApiReady: true }, () => {
+        // trigger onLoad if it exists
+        const { onLoad } = this.props;
+        if (onLoad) onLoad();
+
+        // render captcha
         this.renderCaptcha();
       });
     }
