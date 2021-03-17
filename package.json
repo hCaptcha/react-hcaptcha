@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "files": [
     "src",
+    "dist",
     "types/index.d.ts"
   ],
   "description": "A React library for hCaptcha",
