@@ -27,6 +27,7 @@ describe("hCaptcha", () => {
             onVerify: jest.fn(),
             onError: jest.fn(),
             onExpire: jest.fn(),
+            onLoad: jest.fn(),
         };
         window.hcaptcha = getMockedHcaptcha();
         instance = ReactTestUtils.renderIntoDocument(
@@ -39,6 +40,7 @@ describe("hCaptcha", () => {
                 onVerify={mockFns.onVerify}
                 onError={mockFns.onError}
                 onExpire={mockFns.onExpire}
+                onLoad={mockFns.onLoad}
             />,
         );
     });
@@ -73,6 +75,12 @@ describe("hCaptcha", () => {
         instance.removeCaptcha();
         expect(window.hcaptcha.remove.mock.calls.length).toBe(1);
         expect(window.hcaptcha.remove.mock.calls[0][0]).toBe(MOCK_WIDGET_ID);
+    });
+
+    it("emits onLoad event", () => {
+        expect(mockFns.onLoad.mock.calls.length).toBe(0);
+        instance.handleOnLoad();
+        expect(mockFns.onLoad.mock.calls.length).toBe(1);
     });
 
     it("emits verify with token and eKey", () => {

@@ -33,13 +33,6 @@ import HCaptcha from '@hcaptcha/react-hcaptcha';
 </FormComponent>
 ```
 
-#### Usage with TypeScript
-Add the types from DefinitelyTyped
-
-```
-npm i -D @types/hcaptcha__react-hcaptcha
-```
-
 **A note about TypeScript usage:** If you want to reassign the component name, you could consider making a util that imports the component, then re-exports it as a default. Example:
 
 ```ts
@@ -86,6 +79,7 @@ In these instances, you'll most likely want to use `ref` to handle the callbacks
 |`onError`|`err`|When an error occurs. Component will reset immediately after an error.|
 |`onVerify`|`token, eKey`|When challenge is completed. The response `token` and an `eKey` (session id) are passed along.|
 |`onExpire`|-|When the current token expires.|
+|`onLoad`|-|When the hCaptcha API loads.|
 
 ### Methods
 
