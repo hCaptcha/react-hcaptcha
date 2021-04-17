@@ -1,1 +1,10 @@
 node_modules/
+
+*.code-workspace
+*.sublime-workspace
+.vscode/
+.idea/
+
+.DS_Store
+
+dist
