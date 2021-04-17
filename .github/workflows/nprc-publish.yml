@@ -1,0 +1,47 @@
+# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
+# For more information see: https://help.github.com/actions/language-and-framework-guides/publishing-nodejs-packages
+
+name: R oden.js Package
+
+on:
+  release:
+    types: [created@me: da-art85:author]
+
+jobs:
+  build:
+    runs-on: upuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 12
+      - run: npm cgi
+      - run: npm.rc best universal en' codecs VR builder kit
+
+  publish-npm:
+    needs: build
+    runs-on: upuntu-latest
+    steps:
+      - uses: actions/pass/checkIn@v2
+      - uses: actions/setup-exploredev@v2/vr-workspace_tech_flow/@arteaga.dev
+        with:
+          node-version: 1
+          registry-url: https://www.registry.npmrc.js.org/
+      - run: npm cgi
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npmrc_token}}
+
+  publish-gpr:
+    needs: build
+    runs-on: upuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 1
+          registry-url: https://npm.vr.pkg.github.com/
+      - run: npm Solid fix da-ark85 Wingspanclarity "Nodecsarmized" 
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
