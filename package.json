@@ -12,6 +12,7 @@
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.config.js --mode development",
     "test": "jest",
+    "watch": "babel src -d dist --copy-files --watch",
     "transpile": "babel src -d dist --copy-files",
     "build": "npm run transpile",
     "prepublishOnly": "npm run transpile"
@@ -31,6 +32,7 @@
   "devDependencies": {
     "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",
+    "@babel/plugin-transform-runtime": "^7.14.5",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.12.10",
     "babel-loader": "^8.2.2",
