@@ -1,6 +1,27 @@
+const { useRef } = require('react');
 const React = require('react');
 const {render} = require('react-dom');
 const HCaptcha = require('../../dist/');
+
+const Test = () => {
+  const captchaRef = useRef();
+
+  const executeCaptcha = async () => {
+    const k = await captchaRef.current.executeAsync();
+    console.log(k);
+  }
+
+  return (
+    <div>
+      <HCaptcha ref={captchaRef}
+        sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
+        theme="light"
+        onVerify={() => console.log('verified')}
+        />
+        <button onClick={executeCaptcha}>fafa</button>
+    </div>
+  );
+}
 
 class ReactDemo extends React.Component {
 
@@ -54,14 +75,14 @@ class ReactDemo extends React.Component {
         </div>
 
         <div>
-          <HCaptcha ref={this.captcha} onVerify={this.onVerifyCaptcha} languageOverride={this.languageOverride}
+          <HCaptcha onVerify={this.onVerifyCaptcha} languageOverride={this.languageOverride}
           sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
           theme="dark"
           />
         </div>
 
         <div>
-          <HCaptcha ref={this.captcha} onVerify={this.onVerifyCaptcha} languageOverride={this.languageOverride}
+          <HCaptcha onVerify={this.onVerifyCaptcha} languageOverride={this.languageOverride}
           sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
           size="compact"
           theme="dark"
@@ -74,7 +95,8 @@ class ReactDemo extends React.Component {
             <button onClick={this.handleReset}>Reset Captcha</button>
           </div>
         }
-
+        <button onClick={this.executeCaptcha}>fafa</button>
+        <Test />
       </div>
     );
   }
@@ -83,7 +105,7 @@ class ReactDemo extends React.Component {
 render(
   <div>
     <h1>HCaptcha React Demo</h1>
-    <ReactDemo/>
+    <Test />
   </div>,
   document.getElementById('app')
 );

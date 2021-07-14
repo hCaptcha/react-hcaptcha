@@ -56,6 +56,11 @@ class HCaptcha extends React.Component {
         elementId: props.id,
         captchaId: ''
       }
+
+      this.resolver;
+      this.promise = new Promise((resolve, reject) => {
+        this.resolver = resolve;
+      });
     }
 
     componentDidMount () { //Once captcha is mounted intialize hCaptcha - hCaptcha
@@ -128,7 +133,10 @@ class HCaptcha extends React.Component {
           ...this.props,
           "error-callback"  : this.handleError,
           "expired-callback": this.handleExpire,
-          "callback"        : this.handleSubmit
+          "callback"        : (event) => {
+            this.handleSubmit(event);
+            this.resolver();
+          }
         });
 
       this.setState({ isRemoved: false, captchaId });
@@ -201,6 +209,24 @@ class HCaptcha extends React.Component {
       if (!isApiReady || isRemoved) return
 
       hcaptcha.execute(captchaId)
+    }
+
+    async executeAsync () {
+      // Execute hCaptcha and wait for the callback
+      hcaptcha.execute();
+      
+      await this.promise;
+
+      // @todo error & close handling
+
+      // As done in handleSubmit
+      const { isRemoved, captchaId } = this.state;
+
+      if (typeof hcaptcha === 'undefined' || isRemoved) return
+
+      const token = hcaptcha.getResponse(captchaId) // Get response token from hCaptcha widget
+      const ekey  = hcaptcha.getRespKey(captchaId)  // Get current challenge session id from hCaptcha widget
+      return {token, ekey};
     }
 
     render () {
