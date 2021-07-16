@@ -182,7 +182,7 @@ class HCaptcha extends React.Component {
       // Resolve promise if exists
       if (typeof this.resolve !== "undefined") {
         this.resolve({token, ekey});
-        this.resolve = undefined;
+        this.resetPromise();
       }
     }
 
@@ -196,9 +196,9 @@ class HCaptcha extends React.Component {
       if (onExpire) onExpire();
 
       // Reject promise if exists
-      if (typeof this.reject !== undefined) {
+      if (typeof this.reject !== "undefined") {
         this.reject(new Error("hCaptcha expired"));
-        this.reject = undefined;
+        this.resetPromise();
       }
     }
 
@@ -212,9 +212,9 @@ class HCaptcha extends React.Component {
       if (onError) onError(event);
 
       // Reject promise if exists
-      if (typeof this.reject !== undefined) {
+      if (typeof this.reject !== "undefined") {
         this.reject(new Error(event));
-        this.reject = undefined;
+        this.resetPromise();
       }
     }
 
@@ -236,6 +236,12 @@ class HCaptcha extends React.Component {
       });
 
       return this.promise;
+    }
+
+    resetPromise() {
+      this.promise = undefined;
+      this.resolve = undefined;
+      this.reject = undefined;
     }
 
     render () {
