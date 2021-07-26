@@ -56,11 +56,15 @@ describe("hCaptcha", () => {
         expect(instance.resetCaptcha).toBeDefined();
     });
 
-    it("can execute", () => {
-        expect(window.hcaptcha.execute.mock.calls.length).toBe(0);
-        instance.execute();
-        expect(window.hcaptcha.execute.mock.calls.length).toBe(1);
-        expect(window.hcaptcha.execute.mock.calls[0][0]).toBe(MOCK_WIDGET_ID);
+    // it("can execute", () => {
+    //     expect(window.hcaptcha.execute.mock.calls.length).toBe(0);
+    //     instance.execute();
+    //     expect(window.hcaptcha.execute.mock.calls.length).toBe(1);
+    //     expect(window.hcaptcha.execute.mock.calls[0][0]).toBe(MOCK_WIDGET_ID);
+    // });
+    it("Async execute should return token with test sitekey", async () => {
+      const { token } = await instance.execute();
+      expect(token).toBe("10000000-aaaa-bbbb-cccc-000000000001");
     });
 
     it("can reset", () => {
