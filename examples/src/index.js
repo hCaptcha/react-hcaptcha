@@ -7,8 +7,13 @@ const AsyncDemo = () => {
   const captchaRef = useRef();
 
   const executeCaptcha = async () => {
-    const { token, ekey } = await captchaRef.current.executeAsync();
-    console.log("Verified asyncronously: ", { token, ekey });
+    try {
+      const { token, ekey } = await captchaRef.current.execute();
+      console.log("Verified asyncronously: ", { token, ekey });
+
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
