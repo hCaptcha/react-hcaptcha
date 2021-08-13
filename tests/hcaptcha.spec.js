@@ -284,6 +284,16 @@ describe("hCaptcha", () => {
             const scripts = document.querySelectorAll("head > script");
 
             expect(scripts.length).toBe(1);
-        })
+        });
+
+        it("custom parameter should be in script query", () => {
+            instance = ReactTestUtils.renderIntoDocument(<HCaptcha
+                    custom={true}
+                    sitekey={TEST_PROPS.sitekey}
+                />);
+
+            const script = document.querySelector("head > script");
+            expect(script.src).toContain("custom=true");
+        });
     });
 });

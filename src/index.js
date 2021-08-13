@@ -59,7 +59,7 @@ class HCaptcha extends React.Component {
     }
 
     componentDidMount () { //Once captcha is mounted intialize hCaptcha - hCaptcha
-      const { apihost, assethost, endpoint, host, imghost, languageOverride:hl, reCaptchaCompat, reportapi, sentry } = this.props;
+      const { apihost, assethost, endpoint, host, imghost, languageOverride:hl, reCaptchaCompat, reportapi, sentry, custom } = this.props;
       const { isApiReady } = this.state;
 
       if (!isApiReady) {  //Check if hCaptcha has already been loaded, if not create script tag and wait to render captcha
@@ -75,7 +75,8 @@ class HCaptcha extends React.Component {
               imghost,
               recaptchacompat: reCaptchaCompat === false? "off" : null,
               reportapi,
-              sentry
+              sentry,
+              custom
             });
         }
 
