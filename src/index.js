@@ -162,6 +162,10 @@ class HCaptcha extends React.Component {
 
         // render captcha
         this.renderCaptcha();
+
+        if (this.executeOnLoad) {
+          this.execute();
+        }
       });
     }
 
@@ -199,7 +203,14 @@ class HCaptcha extends React.Component {
     execute () {
       const { isApiReady, isRemoved, captchaId } = this.state;
 
-      if (!isApiReady || isRemoved) return
+      if (!isApiReady) {
+        this.executeOnLoad = true;
+        return;
+      }
+
+      if (isRemoved) {
+        return;
+      }
 
       hcaptcha.execute(captchaId)
     }
