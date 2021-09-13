@@ -140,6 +140,31 @@ describe("hCaptcha", () => {
         expect(node.getAttribute("id")).toBe(null);
     });
 
+    it("correctly executes even if execute() was called before load", () => {
+        const hcaptchaGlobal = window.hcaptcha;
+        delete window.hcaptcha;
+
+        instance = ReactTestUtils.renderIntoDocument(
+            <HCaptcha
+                sitekey={TEST_PROPS.sitekey}
+                theme={TEST_PROPS.theme}
+                size={TEST_PROPS.size}
+                tabindex={TEST_PROPS.tabindex}
+                onChange={mockFns.onChange}
+                onVerify={mockFns.onVerify}
+                onError={mockFns.onError}
+                onExpire={mockFns.onExpire}
+                onLoad={mockFns.onLoad}
+            />,
+        );
+
+        instance.execute();
+        expect(hcaptchaGlobal.execute.mock.calls.length).toBe(0);
+        window.hcaptcha = hcaptchaGlobal;
+        instance.handleOnLoad();
+        expect(hcaptchaGlobal.execute.mock.calls.length).toBe(1);
+    })
+
     describe("Query parameter", () => {
 
         beforeEach(() => {
