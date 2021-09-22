@@ -1,6 +1,5 @@
 const React = require('react');
 const { generateQuery } = require("./utils.js");
-const { hCaptchaError } = require('./hCaptchaError');
 
  // Create script to init hCaptcha
 let onLoadListeners = [];
@@ -57,11 +56,6 @@ class HCaptcha extends React.Component {
         elementId: props.id,
         captchaId: ''
       }
-
-      // Execute utils 
-      this.resolve;
-      this.reject;
-      this.promise;
     }
 
     componentDidMount () { //Once captcha is mounted intialize hCaptcha - hCaptcha
@@ -135,7 +129,6 @@ class HCaptcha extends React.Component {
           "error-callback"      : this.handleError,
           "expired-callback"    : this.handleExpire,
           "callback"            : this.handleSubmit,
-          "chalexpired-callback": this.handleChalExpired,
         });
 
       this.setState({ isRemoved: false, captchaId });
@@ -180,12 +173,6 @@ class HCaptcha extends React.Component {
       const token = hcaptcha.getResponse(captchaId) //Get response token from hCaptcha widget
       const ekey  = hcaptcha.getRespKey(captchaId)  //Get current challenge session id from hCaptcha widget
       onVerify(token, ekey) //Dispatch event to verify user response
-
-      // Resolve promise if exists
-      if (typeof this.resolve !== "undefined") {
-        this.resolve({token, ekey});
-        this.resetPromise();
-      }
     }
 
     handleExpire () {
@@ -206,38 +193,22 @@ class HCaptcha extends React.Component {
 
       hcaptcha.reset(captchaId) // If hCaptcha runs into error, reset captcha - hCaptcha
       if (onError) onError(event);
-
-      // Reject promise if exists
-      if (typeof this.reject !== "undefined") {
-        this.reject(new hCaptchaError(event));
-        this.resetPromise();
-      }
     }
 
-    handleChalExpired() {
-      // Reject promise if exists
-      if (typeof this.reject !== "undefined") {
-        this.reject(new hCaptchaError("hCaptcha expired"));
-        this.resetPromise();
-      }
+    execute () {
+      const { isApiReady, isRemoved, captchaId } = this.state;
+
+      if (!isApiReady || isRemoved) return;
+
+      hcaptcha.execute(captchaId);
     }
 
-    async execute () {
-      // Execute hCaptcha and return a promise
-      hcaptcha.execute();
+    async executeAsync () {
+      const { isApiReady, isRemoved, captchaId } = this.state;
+      
+      if (!isApiReady || isRemoved) return;
 
-      this.promise = new Promise((resolve, reject) => {
-        this.resolve = resolve;
-        this.reject = reject;
-      });
-
-      return this.promise;
-    }
-
-    resetPromise() {
-      this.promise = undefined;
-      this.resolve = undefined;
-      this.reject = undefined;
+      return hcaptcha.execute(captchaId, { async: true });
     }
 
     render () {

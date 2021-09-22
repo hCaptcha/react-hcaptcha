@@ -51,21 +51,34 @@ describe("hCaptcha", () => {
 
     it("has functions", () => {
         expect(typeof instance.execute).toBe("function");
+        expect(typeof instance.executeAsync).toBe("function");
         expect(typeof instance.resetCaptcha).toBe("function");
         expect(instance.execute).toBeDefined();
+        expect(instance.executeAsync).toBeDefined();
         expect(instance.resetCaptcha).toBeDefined();
     });
 
-    // it("can execute", () => {
-    //     expect(window.hcaptcha.execute.mock.calls.length).toBe(0);
-    //     instance.execute();
-    //     expect(window.hcaptcha.execute.mock.calls.length).toBe(1);
-    //     expect(window.hcaptcha.execute.mock.calls[0][0]).toBe(MOCK_WIDGET_ID);
-    // });
-    it("Async execute should return token with test sitekey", async () => {
-      const { token } = await instance.execute();
-      expect(token).toBe("10000000-aaaa-bbbb-cccc-000000000001");
+    it("can execute", () => {
+      expect(window.hcaptcha.execute.mock.calls.length).toBe(0);
+      instance.execute();
+      expect(window.hcaptcha.execute.mock.calls.length).toBe(1);
+      expect(window.hcaptcha.execute).toBeCalledWith(MOCK_WIDGET_ID);
     });
+
+    it("can execute asyncronously", async () => {
+      expect(window.hcaptcha.execute.mock.calls.length).toBe(0);
+      await instance.executeAsync();
+      expect(window.hcaptcha.execute.mock.calls.length).toBe(1);
+      expect(window.hcaptcha.execute).toBeCalledWith(MOCK_WIDGET_ID, { async: true })
+    });
+
+    it("can asyncronously return token and key", async () => {
+      const res = await instance.executeAsync();
+      expect(res).toMatchObject({
+        response: MOCK_TOKEN,
+        key: MOCK_EKEY
+      })
+    })
 
     it("can reset", () => {
         expect(window.hcaptcha.reset.mock.calls.length).toBe(0);

@@ -26,15 +26,17 @@ interface HCaptchaProps {
   id?: string;
   reCaptchaCompat?: boolean;
 }
+interface ExecuteResponse {
+  token: string;
+  key: string;
+}
 
 declare class HCaptcha extends React.Component<HCaptchaProps, HCaptchaState> {
   resetCaptcha(): void;
   renderCaptcha(): void;
   removeCaptcha(): void;
-  execute(): () => Promise<{
-    token: string;
-    ekey: string;
-  }>;
+  execute(): void;
+  executeAsync(): Promise<ExecuteResponse>
 }
 
 export = HCaptcha;

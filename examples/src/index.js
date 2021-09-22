@@ -8,8 +8,8 @@ const AsyncDemo = () => {
 
   const executeCaptcha = async () => {
     try {
-      const { token, ekey } = await captchaRef.current.execute();
-      console.log("Verified asyncronously: ", { token, ekey });
+      const res = await captchaRef.current.executeAsync();
+      console.log("Verified asyncronously: ", res);
 
     } catch (error) {
       console.log(error);
@@ -22,8 +22,8 @@ const AsyncDemo = () => {
         sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
         theme="light"
         onVerify={() => undefined}
-        />
-        <button onClick={executeCaptcha}>Execute asyncronously</button>
+      />
+      <button onClick={executeCaptcha}>Execute asyncronously</button>
     </div>
   );
 }
