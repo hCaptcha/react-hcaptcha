@@ -51,10 +51,8 @@ describe("hCaptcha", () => {
 
     it("has functions", () => {
         expect(typeof instance.execute).toBe("function");
-        expect(typeof instance.executeAsync).toBe("function");
         expect(typeof instance.resetCaptcha).toBe("function");
         expect(instance.execute).toBeDefined();
-        expect(instance.executeAsync).toBeDefined();
         expect(instance.resetCaptcha).toBeDefined();
     });
 
@@ -62,18 +60,11 @@ describe("hCaptcha", () => {
       expect(window.hcaptcha.execute.mock.calls.length).toBe(0);
       instance.execute();
       expect(window.hcaptcha.execute.mock.calls.length).toBe(1);
-      expect(window.hcaptcha.execute).toBeCalledWith(MOCK_WIDGET_ID);
+      expect(window.hcaptcha.execute).toBeCalledWith(MOCK_WIDGET_ID, { async: true });
     });
 
-    it("can execute asyncronously", async () => {
-      expect(window.hcaptcha.execute.mock.calls.length).toBe(0);
-      await instance.executeAsync();
-      expect(window.hcaptcha.execute.mock.calls.length).toBe(1);
-      expect(window.hcaptcha.execute).toBeCalledWith(MOCK_WIDGET_ID, { async: true })
-    });
-
-    it("can asyncronously return token and key", async () => {
-      const res = await instance.executeAsync();
+    it("can asynchronously return token and key", async () => {
+      const res = await instance.execute();
       expect(res).toMatchObject({
         response: MOCK_TOKEN,
         key: MOCK_EKEY

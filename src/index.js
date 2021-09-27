@@ -201,14 +201,6 @@ class HCaptcha extends React.Component {
 
       if (!isApiReady || isRemoved) return;
 
-      hcaptcha.execute(captchaId);
-    }
-
-    async executeAsync () {
-      const { isApiReady, isRemoved, captchaId } = this.state;
-      
-      if (!isApiReady || isRemoved) return;
-
       return hcaptcha.execute(captchaId, { async: true });
     }
 

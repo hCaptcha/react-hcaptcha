@@ -8,8 +8,8 @@ const AsyncDemo = () => {
 
   const executeCaptcha = async () => {
     try {
-      const res = await captchaRef.current.executeAsync();
-      console.log("Verified asyncronously: ", res);
+      const res = await captchaRef.current.execute();
+      console.log("Verified asynchronously: ", res);
 
     } catch (error) {
       console.log(error);
@@ -23,7 +23,7 @@ const AsyncDemo = () => {
         theme="light"
         onVerify={() => undefined}
       />
-      <button onClick={executeCaptcha}>Execute asyncronously</button>
+      <button onClick={executeCaptcha}>Execute asynchronously</button>
     </div>
   );
 }
@@ -79,7 +79,7 @@ class ReactDemo extends React.Component {
           </label>
           <label>
             <input type="radio" name="behavior" checked={this.state.async} onChange={() => this.setState({ async: true })}></input>
-            Asyncronous
+            Asynchronous
           </label>
         </div>
         {!this.state.async ? (
