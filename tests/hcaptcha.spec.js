@@ -56,20 +56,42 @@ describe("hCaptcha", () => {
         expect(instance.resetCaptcha).toBeDefined();
     });
 
-    it("can execute", () => {
+    it("can execute synchronously without arguments", () => {
       expect(window.hcaptcha.execute.mock.calls.length).toBe(0);
       instance.execute();
+      expect(window.hcaptcha.execute.mock.calls.length).toBe(1);
+      expect(window.hcaptcha.execute).toBeCalledWith(MOCK_WIDGET_ID);
+    });
+
+    it("can execute synchronously with async: false", () => {
+      expect(window.hcaptcha.execute.mock.calls.length).toBe(0);
+      instance.execute({ async: false });
+      expect(window.hcaptcha.execute.mock.calls.length).toBe(1);
+      expect(window.hcaptcha.execute).toBeCalledWith(MOCK_WIDGET_ID);
+    });
+
+    it("can execute asynchronously with async: true", async () => {
+      expect(window.hcaptcha.execute.mock.calls.length).toBe(0);
+      await instance.execute({ async: true });
       expect(window.hcaptcha.execute.mock.calls.length).toBe(1);
       expect(window.hcaptcha.execute).toBeCalledWith(MOCK_WIDGET_ID, { async: true });
     });
 
     it("can asynchronously return token and key", async () => {
-      const res = await instance.execute();
+      const res = await instance.execute({ async: true });
       expect(res).toMatchObject({
         response: MOCK_TOKEN,
         key: MOCK_EKEY
       })
-    })
+    });
+
+    it("can execute synchronously without returning a promise", async () => {
+      const resWithAsyncFalse = await instance.execute({ async: false });
+      const resWithoutParams = await instance.execute();
+
+      expect(resWithAsyncFalse).toBe(undefined);
+      expect(resWithoutParams).toEqual(resWithAsyncFalse);
+    });
 
     it("can reset", () => {
         expect(window.hcaptcha.reset.mock.calls.length).toBe(0);

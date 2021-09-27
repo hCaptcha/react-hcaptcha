@@ -196,12 +196,20 @@ class HCaptcha extends React.Component {
       if (onError) onError(event);
     }
 
-    execute () {
+    async execute (opts) {
       const { isApiReady, isRemoved, captchaId } = this.state;
 
       if (!isApiReady || isRemoved) return;
 
-      return hcaptcha.execute(captchaId, { async: true });
+      if (opts && opts.async === true) {
+        return hcaptcha.execute(captchaId, { async: true });
+      }
+
+      // else if (opts && typeof opts.async !== "boolean") {
+      //    TODO: catch bad opts and throw custom hcaptcha error
+      // }
+
+      hcaptcha.execute(captchaId);
     }
 
     render () {
