@@ -69,7 +69,7 @@ describe("hCaptcha", () => {
       expect(window.hcaptcha.execute.mock.calls.length).toBe(1);
       expect(window.hcaptcha.execute).toBeCalledWith(MOCK_WIDGET_ID, null);
     });
-
+    
     it("can execute synchronously with async: false", () => {
       expect(window.hcaptcha.execute.mock.calls.length).toBe(0);
       instance.execute({ async: false });
