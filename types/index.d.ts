@@ -26,6 +26,7 @@ interface HCaptchaProps {
   id?: string;
   reCaptchaCompat?: boolean;
 }
+
 interface ExecuteResponse {
   response: string;
   key: string;
