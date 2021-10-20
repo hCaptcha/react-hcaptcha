@@ -13,7 +13,11 @@ export function getMockedHcaptcha() {
         getResponse: jest.fn(() => MOCK_TOKEN),
         getRespKey: jest.fn(() => MOCK_EKEY),
         reset: jest.fn(),
-        execute: jest.fn(),
+        execute: jest.fn((id, opts) => {
+          if (opts && opts.async === true) {
+            return Promise.resolve({ response: MOCK_TOKEN, key: MOCK_EKEY });
+          }
+        }),
         remove: jest.fn(),
     };
 }

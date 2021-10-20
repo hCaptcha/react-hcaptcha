@@ -127,9 +127,9 @@ class HCaptcha extends React.Component {
       const captchaId = hcaptcha.render(this.ref.current,
         {
           ...this.props,
-          "error-callback"  : this.handleError,
-          "expired-callback": this.handleExpire,
-          "callback"        : this.handleSubmit
+          "error-callback"      : this.handleError,
+          "expired-callback"    : this.handleExpire,
+          "callback"            : this.handleSubmit,
         });
 
       this.setState({ isRemoved: false, captchaId });
@@ -196,12 +196,16 @@ class HCaptcha extends React.Component {
       if (onError) onError(event);
     }
 
-    execute () {
+    execute (opts = null) {
       const { isApiReady, isRemoved, captchaId } = this.state;
 
-      if (!isApiReady || isRemoved) return
+      if (!isApiReady || isRemoved) return;
 
-      hcaptcha.execute(captchaId)
+      if (opts && typeof opts !== "object") {
+        opts = null;
+      }
+
+      return hcaptcha.execute(captchaId, opts);
     }
 
     render () {
