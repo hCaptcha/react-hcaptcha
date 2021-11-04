@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 import ReactDOM from "react-dom";
 import ReactTestUtils, { act } from "react-dom/test-utils";
-import waitForExpect from "wait-for-expect";
 import {getMockedHcaptcha, MOCK_EKEY, MOCK_TOKEN, MOCK_WIDGET_ID} from "./hcaptcha.mock";
 
 let HCaptcha;
