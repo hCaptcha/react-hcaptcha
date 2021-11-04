@@ -1,6 +1,6 @@
 {
   "name": "@hcaptcha/react-hcaptcha",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "types": "types/index.d.ts",
   "main": "dist/index.js",
   "files": [
