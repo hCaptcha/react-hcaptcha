@@ -47,6 +47,44 @@ import { default as RenamedCaptcha } from '../utils/captcha';
 </FormComponent>
 ```
 
+#### Programmatic Usage
+In the event you want to call the hCaptcha client API directly you can do so by using the hook `useRef` and waiting for `onLoad` to be called. By waiting for `onLoad` the hCaptcha API will be ready and the hCaptcha client will have been setup. See the following example:
+
+```js
+import { useEffect, useRef, useState } from "react";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
+
+export default function Form() {
+  const [token, setToken] = useState(null);
+  const captchaRef = useRef(null);
+
+  const onLoad = () => {
+    // this reaches out to the hcaptcha library and runs the
+    // execute function on it. you can use other functions as well
+    // documented in the api:
+    // https://docs.hcaptcha.com/configuration#jsapi
+    captchaRef.current.execute();
+  };
+
+  useEffect(() => {
+
+    if (token)
+      console.log(`hCaptcha Token: ${token}`);
+
+  }, [token]);
+
+  return (
+    <form>
+      <HCaptcha
+        sitekey="your-sitekey"
+        onVerify={setToken}
+        ref={captchaRef}
+      />
+    </form>
+  );
+}
+```
+
 #### Advanced usage
 
 In most real-world implementations, you'll probably be using a form library such as [Formik](https://github.com/jaredpalmer/formik) or [React Hook Form](https://github.com/react-hook-form/react-hook-form).
