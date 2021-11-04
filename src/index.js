@@ -119,7 +119,7 @@ class HCaptcha extends React.Component {
       }
     }
 
-    renderCaptcha() {
+    renderCaptcha(onReady) {
       const { isApiReady } = this.state;
       if (!isApiReady) return;
 
@@ -132,7 +132,9 @@ class HCaptcha extends React.Component {
           "callback"            : this.handleSubmit,
         });
 
-      this.setState({ isRemoved: false, captchaId });
+      this.setState({ isRemoved: false, captchaId }, () => {
+        onReady && onReady();
+      });
     }
 
     resetCaptcha() {
@@ -156,12 +158,13 @@ class HCaptcha extends React.Component {
 
     handleOnLoad () {
       this.setState({ isApiReady: true }, () => {
-        // trigger onLoad if it exists
-        const { onLoad } = this.props;
-        if (onLoad) onLoad();
 
-        // render captcha
-        this.renderCaptcha();
+        // render captcha and wait for captcha id
+        this.renderCaptcha(() => {
+            // trigger onLoad if it exists
+            const { onLoad } = this.props;
+            if (onLoad) onLoad();
+        });
       });
     }
 

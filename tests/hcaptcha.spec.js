@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import ReactDOM from "react-dom";
 import ReactTestUtils, { act } from "react-dom/test-utils";
 import {getMockedHcaptcha, MOCK_EKEY, MOCK_TOKEN, MOCK_WIDGET_ID} from "./hcaptcha.mock";
@@ -176,6 +176,24 @@ describe("hCaptcha", () => {
         const node = ReactDOM.findDOMNode(instance);
         expect(node.getAttribute("id")).toBe(null);
     });
+
+    it("should not set id if no id prop is passed", (done) => {
+
+        const onLoad = jest.fn(() => {
+            expect(instance.state.captchaId).toBe(MOCK_WIDGET_ID);
+            done();
+        });
+
+        instance = ReactTestUtils.renderIntoDocument(
+            <HCaptcha
+                sitekey={TEST_PROPS.sitekey}
+                onLoad={onLoad}
+            />,
+        );
+
+        instance.handleOnLoad();
+    });
+
 
     describe("Query parameter", () => {
 
