@@ -59,7 +59,6 @@ class HCaptcha extends React.Component {
     }
 
     componentDidMount () { //Once captcha is mounted intialize hCaptcha - hCaptcha
-
       const { apihost, assethost, endpoint, host, imghost, languageOverride:hl, reCaptchaCompat, reportapi, sentry, custom } = this.props;
       const { isApiReady } = this.state;
 
@@ -89,7 +88,6 @@ class HCaptcha extends React.Component {
     }
 
     componentWillUnmount() {
-
         const { isApiReady, isRemoved, captchaId } = this.state;
         if(!isApiReady || isRemoved) return
 
@@ -122,7 +120,6 @@ class HCaptcha extends React.Component {
     }
 
     renderCaptcha(onReady) {
-
       const { isApiReady } = this.state;
       if (!isApiReady) return;
 
