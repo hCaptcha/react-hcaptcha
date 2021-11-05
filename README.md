@@ -48,7 +48,7 @@ import { default as RenamedCaptcha } from '../utils/captcha';
 ```
 
 #### Programmatic Usage
-In the event you want to call the hCaptcha client API directly you can do so by using the hook `useRef` and waiting for `onLoad` to be called. By waiting for `onLoad` the hCaptcha API will be ready and the hCaptcha client will have been setup. See the following example:
+In the event you want to call the hCaptcha client API directly, you can do so by using the hook `useRef` and waiting for `onLoad` to be called. By waiting for `onLoad` the hCaptcha API will be ready and the hCaptcha client will have been setup. See the following example:
 
 ```js
 import { useEffect, useRef, useState } from "react";
