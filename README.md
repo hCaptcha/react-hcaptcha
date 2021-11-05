@@ -59,7 +59,7 @@ export default function Form() {
   const captchaRef = useRef(null);
 
   const onLoad = () => {
-    // this reaches out to the hcaptcha library and runs the
+    // this reaches out to the hCaptcha JS API and runs the
     // execute function on it. you can use other functions as
     // documented here:
     // https://docs.hcaptcha.com/configuration#jsapi
