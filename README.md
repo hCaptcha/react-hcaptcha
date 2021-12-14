@@ -91,6 +91,26 @@ In most real-world implementations, you'll probably be using a form library such
 
 In these instances, you'll most likely want to use `ref` to handle the callbacks as well as handle field-level validation of a `captcha` field. For an example of this, you can view this [CodeSandbox](https://codesandbox.io/s/react-hcaptchaform-example-forked-ngxge?file=/src/Form.jsx).  This `ref` will point to an instance of the [hCaptcha API](https://docs.hcaptcha.com/configuration#jsapi) where can you interact directly with it.
 
+#### Passing in fields like `rqdata` to `execute()`
+
+Passing an object into the `execute(yourObj)` call will send it through to the underlying JS API. This enables support for Enterprise features like `rqdata`. A simple example is below:
+
+```
+const {sitekey, rqdata} = props;
+const captchaRef = React.useRef<HCaptcha>(null);
+
+const onLoad = () => {
+  const executePayload = {};
+  if (rqdata) {
+    executePayload['rqdata'] = rqdata;
+  }
+  captchaRef.current?.execute(executePayload);
+};
+
+return <HCaptcha ref={captchaRef} onLoad={onLoad} sitekey={sitekey} {...props} />;
+```
+
+
 ### Props
 
 |Name|Values/Type|Required|Default|Description|
