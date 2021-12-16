@@ -77,6 +77,7 @@ export default function Form() {
     <form>
       <HCaptcha
         sitekey="your-sitekey"
+        onLoad={onLoad}
         onVerify={setToken}
         ref={captchaRef}
       />
