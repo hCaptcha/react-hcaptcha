@@ -123,7 +123,7 @@ class HCaptcha extends React.Component {
       const { isApiReady } = this.state;
       if (!isApiReady) return;
 
-      const { sitekey, size, theme, tabindex, languageOverride, endpoint } = this.props;
+      const { sitekey, size, theme, tabindex, languageOverride } = this.props;
 
       const renderParams = {
         sitekey, size, theme, tabindex,
