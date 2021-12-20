@@ -123,14 +123,17 @@ class HCaptcha extends React.Component {
       const { isApiReady } = this.state;
       if (!isApiReady) return;
 
+      const renderParams = Object.assign({
+        "error-callback"      : this.handleError,
+        "expired-callback"    : this.handleExpire,
+        "callback"            : this.handleSubmit,
+      }, this.props, {
+        hl: this.props.hl || this.props.languageOverride,
+        languageOverride: undefined
+      });
+
       //Render hCaptcha widget and provide necessary callbacks - hCaptcha
-      const captchaId = hcaptcha.render(this.ref.current,
-        {
-          ...this.props,
-          "error-callback"      : this.handleError,
-          "expired-callback"    : this.handleExpire,
-          "callback"            : this.handleSubmit,
-        });
+      const captchaId = hcaptcha.render(this.ref.current, renderParams);
 
       this.setState({ isRemoved: false, captchaId }, () => {
         onReady && onReady();
