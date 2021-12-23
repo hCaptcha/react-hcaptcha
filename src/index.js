@@ -17,7 +17,7 @@ const mountCaptchaScript = (params={}) => {
     });
   };
 
-  const domain = params.apihost || "https://hcaptcha.com";
+  const domain = params.apihost || "https://js.hcaptcha.com";
   delete params.apihost;
 
   const script = document.createElement("script");
