@@ -214,7 +214,7 @@ describe("hCaptcha", () => {
                 />);
 
             const script = document.querySelector("head > script");
-            expect(script.src).toEqual("https://hcaptcha.com/1/api.js?render=explicit&onload=hcaptchaOnLoad");
+            expect(script.src).toEqual("https://js.hcaptcha.com/1/api.js?render=explicit&onload=hcaptchaOnLoad");
         });
 
         it("apihost should change script src, but not be added as query", () => {
