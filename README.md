@@ -26,10 +26,10 @@ hCaptcha API library and append it to the parent component. This is designed for
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 
 <FormComponent>
-	<HCaptcha
-		sitekey="your-sitekey"
-		onVerify={(token,ekey) => handleVerificationSuccess(token, ekey)}
-	/>
+    <HCaptcha
+        sitekey="your-sitekey"
+        onVerify={(token,ekey) => handleVerificationSuccess(token, ekey)}
+    />
 </FormComponent>
 ```
 
@@ -55,34 +55,31 @@ import { useEffect, useRef, useState } from "react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 export default function Form() {
-	const [token, setToken] = useState(null);
-	const captchaRef = useRef(null);
+    const [token, setToken] = useState(null);
+    const captchaRef = useRef(null);
 
-	const onLoad = () => {
-		// this reaches out to the hCaptcha JS API and runs the
-		// execute function on it. you can use other functions as
-		// documented here:
-		// https://docs.hcaptcha.com/configuration#jsapi
-		captchaRef.current.execute();
-	};
+    const onLoad = () => {
+        // this reaches out to the hCaptcha JS API and runs the
+        // execute function on it. you can use other functions as
+        // documented here:
+        // https://docs.hcaptcha.com/configuration#jsapi
+        captchaRef.current.execute();
+    };
 
-	useEffect(() => {
+    useEffect(() => {
+        if (token) console.log(`hCaptcha Token: ${token}`);
+    }, [token]);
 
-		if (token)
-			console.log(`hCaptcha Token: ${token}`);
-
-	}, [token]);
-
-	return (
-		<form>
-			<HCaptcha
-				sitekey="your-sitekey"
-				onLoad={onLoad}
-				onVerify={setToken}
-				ref={captchaRef}
-			/>
-		</form>
-	);
+    return (
+        <form>
+            <HCaptcha
+                sitekey="your-sitekey"
+                onLoad={onLoad}
+                onVerify={setToken}
+                ref={captchaRef}
+            />
+        </form>
+    );
 }
 ```
 
