@@ -45,6 +45,8 @@ class HCaptcha extends React.Component {
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleExpire = this.handleExpire.bind(this);
       this.handleError  = this.handleError.bind(this);
+      this.handleOpenCallback = this.handleOpenCallback.bind(this);
+      this.handleCloseCallback = this.handleCloseCallback.bind(this);
 
       const isApiReady = typeof hcaptcha !== 'undefined';
 
@@ -127,6 +129,8 @@ class HCaptcha extends React.Component {
         "error-callback"      : this.handleError,
         "expired-callback"    : this.handleExpire,
         "callback"            : this.handleSubmit,
+        "open-callback"       : this.handleOpenCallback,
+        "close-callback"      : this.handleCloseCallback
       }, this.props, {
         hl: this.props.hl || this.props.languageOverride,
         languageOverride: undefined
@@ -200,6 +204,28 @@ class HCaptcha extends React.Component {
 
       hcaptcha.reset(captchaId) // If hCaptcha runs into error, reset captcha - hCaptcha
       if (onError) onError(event);
+    }
+
+    // data-open-callback
+    // Optional. Called when the user display of a challenge starts.
+    handleOpenCallback() {
+      const { onOpen } = this.props;
+      const { isApiReady, isRemoved } = this.state;
+
+      if (!isApiReady || isRemoved) return;
+
+      if (onOpen) return onOpen();
+    }
+
+    // data-close-callback
+    // Optional. Called when the user dismisses a challenge.
+    handleCloseCallback() {
+      const { onClose } = this.props;
+      const { isApiReady, isRemoved } = this.state;
+
+      if (!isApiReady || isRemoved) return;
+
+      if (onClose) return onClose();
     }
 
     execute (opts = null) {

@@ -26,10 +26,10 @@ hCaptcha API library and append it to the parent component. This is designed for
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 
 <FormComponent>
-    <HCaptcha
-      sitekey="your-sitekey"
-      onVerify={(token,ekey) => handleVerificationSuccess(token, ekey)}
-    />
+	<HCaptcha
+		sitekey="your-sitekey"
+		onVerify={(token,ekey) => handleVerificationSuccess(token, ekey)}
+	/>
 </FormComponent>
 ```
 
@@ -43,8 +43,8 @@ export default HCaptcha;
 // MyFormComponent.tsx
 import { default as RenamedCaptcha } from '../utils/captcha';
 <FormComponent>
-  <RenamedCaptcha sitekey="your-sitekey" />
-</FormComponent>
+    <RenamedCaptcha sitekey="your-sitekey" />
+    </FormComponent>
 ```
 
 #### Programmatic Usage
@@ -55,34 +55,34 @@ import { useEffect, useRef, useState } from "react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 export default function Form() {
-  const [token, setToken] = useState(null);
-  const captchaRef = useRef(null);
+	const [token, setToken] = useState(null);
+	const captchaRef = useRef(null);
 
-  const onLoad = () => {
-    // this reaches out to the hCaptcha JS API and runs the
-    // execute function on it. you can use other functions as
-    // documented here:
-    // https://docs.hcaptcha.com/configuration#jsapi
-    captchaRef.current.execute();
-  };
+	const onLoad = () => {
+		// this reaches out to the hCaptcha JS API and runs the
+		// execute function on it. you can use other functions as
+		// documented here:
+		// https://docs.hcaptcha.com/configuration#jsapi
+		captchaRef.current.execute();
+	};
 
-  useEffect(() => {
+	useEffect(() => {
 
-    if (token)
-      console.log(`hCaptcha Token: ${token}`);
+		if (token)
+			console.log(`hCaptcha Token: ${token}`);
 
-  }, [token]);
+	}, [token]);
 
-  return (
-    <form>
-      <HCaptcha
-        sitekey="your-sitekey"
-        onLoad={onLoad}
-        onVerify={setToken}
-        ref={captchaRef}
-      />
-    </form>
-  );
+	return (
+		<form>
+			<HCaptcha
+				sitekey="your-sitekey"
+				onLoad={onLoad}
+				onVerify={setToken}
+				ref={captchaRef}
+			/>
+		</form>
+	);
 }
 ```
 
@@ -140,6 +140,8 @@ return <HCaptcha ref={captchaRef} onLoad={onLoad} sitekey={sitekey} {...props} /
 |`onVerify`|`token, eKey`|When challenge is completed. The response `token` and an `eKey` (session id) are passed along.|
 |`onExpire`|-|When the current token expires.|
 |`onLoad`|-|When the hCaptcha API loads.|
+|`onOpen`|-|When the user display of a challenge starts.|
+|`onClose`|-|When the user dismisses a challenge.|
 
 ### Methods
 
@@ -173,7 +175,7 @@ Please note that "invisible" simply means that no hCaptcha button will be render
 To publish a new version, follow the next steps:
 1. Bump the version in `package.json`
 2. Create a [Github Release](https://docs.github.com/en/free-pro-team@latest/github/administering-a-repository/managing-releases-in-a-repository#creating-a-release) with version from step 1 **without** a prefix such as `v` (e.g. `1.0.3`)
-  * `publish` workflow will be triggered which will: build, test and deploy the package to the [npm @hcaptcha/react-hcaptcha](https://www.npmjs.com/package/@hcaptcha/react-hcaptcha).
+* `publish` workflow will be triggered which will: build, test and deploy the package to the [npm @hcaptcha/react-hcaptcha](https://www.npmjs.com/package/@hcaptcha/react-hcaptcha).
 
 
 #### Running locally for development
