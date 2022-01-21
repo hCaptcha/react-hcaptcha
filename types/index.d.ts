@@ -15,6 +15,9 @@ interface HCaptchaState {
 
 interface HCaptchaProps {
   onExpire?: () => any;
+  onOpen?: () => any;
+  onClose?: () => any;
+  onChalExpired?: () => any;
   onError?: (event: string) => any;
   onVerify?: (token: string) => any;
   onLoad?: () => any;
