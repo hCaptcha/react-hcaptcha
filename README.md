@@ -140,6 +140,9 @@ return <HCaptcha ref={captchaRef} onLoad={onLoad} sitekey={sitekey} {...props} /
 |`onVerify`|`token, eKey`|When challenge is completed. The response `token` and an `eKey` (session id) are passed along.|
 |`onExpire`|-|When the current token expires.|
 |`onLoad`|-|When the hCaptcha API loads.|
+|`onOpen`|-|When the user display of a challenge starts.|
+|`onClose`|-|When the user dismisses a challenge.|
+|`onChalExpired`|-|When the user display of a challenge times out with no answer.|
 
 ### Methods
 
