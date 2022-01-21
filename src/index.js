@@ -45,6 +45,9 @@ class HCaptcha extends React.Component {
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleExpire = this.handleExpire.bind(this);
       this.handleError  = this.handleError.bind(this);
+      this.handleOpen = this.handleOpen.bind(this);
+      this.handleClose = this.handleClose.bind(this);
+      this.handleChallengeExpired = this.handleChallengeExpired.bind(this);
 
       const isApiReady = typeof hcaptcha !== 'undefined';
 
@@ -124,7 +127,10 @@ class HCaptcha extends React.Component {
       if (!isApiReady) return;
 
       const renderParams = Object.assign({
+        "open-callback"       : this.handleOpen,
+        "close-callback"      : this.handleClose,
         "error-callback"      : this.handleError,
+        "chalexpired-callback": this.handleChallengeExpired,
         "expired-callback"    : this.handleExpire,
         "callback"            : this.handleSubmit,
       }, this.props, {
@@ -200,6 +206,24 @@ class HCaptcha extends React.Component {
 
       hcaptcha.reset(captchaId) // If hCaptcha runs into error, reset captcha - hCaptcha
       if (onError) onError(event);
+    }
+
+    handleOpen () {
+      if (this.props.onOpen) {
+        this.props.onOpen();
+      }
+    }
+
+    handleClose () {
+      if (this.props.onClose) {
+        this.props.onClose();
+      }
+    }
+
+    handleChallengeExpired () {
+      if (this.props.onChalExpired) {
+        this.props.onChalExpired();
+      }
     }
 
     execute (opts = null) {

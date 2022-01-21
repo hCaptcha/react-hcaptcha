@@ -28,6 +28,9 @@ describe("hCaptcha", () => {
             onError: jest.fn(),
             onExpire: jest.fn(),
             onLoad: jest.fn(),
+            onOpen: jest.fn(),
+            onClose: jest.fn(),
+            onChalExpired: jest.fn(),
         };
         window.hcaptcha = getMockedHcaptcha();
         instance = ReactTestUtils.renderIntoDocument(
@@ -41,6 +44,9 @@ describe("hCaptcha", () => {
                 onError={mockFns.onError}
                 onExpire={mockFns.onExpire}
                 onLoad={mockFns.onLoad}
+                onOpen={mockFns.onOpen}
+                onClose={mockFns.onClose}
+                onChalExpired={mockFns.onChalExpired}
             />,
         );
     });
@@ -142,6 +148,66 @@ describe("hCaptcha", () => {
         instance.handleExpire();
         expect(mockFns.onExpire.mock.calls.length).toBe(1);
         expect(window.hcaptcha.reset.mock.calls.length).toBe(1);
+    });
+
+    describe('onOpen callback', () => {
+        it("should be invoked if present", () => {
+            expect(mockFns.onOpen.mock.calls.length).toBe(0);
+            instance.handleOpen();
+            expect(mockFns.onOpen.mock.calls.length).toBe(1);
+        });
+
+        it("should not invoke the onOpen callback if not passed", () => {
+            instance = ReactTestUtils.renderIntoDocument(
+                <HCaptcha
+                    sitekey={TEST_PROPS.sitekey}
+                />,
+            );
+
+            expect(mockFns.onOpen.mock.calls.length).toBe(0);
+            instance.handleOpen();
+            expect(mockFns.onOpen.mock.calls.length).toBe(0);
+        });
+    });
+
+    describe('onClose callback', () => {
+        it("should be invoked if present", () => {
+            expect(mockFns.onClose.mock.calls.length).toBe(0);
+            instance.handleClose();
+            expect(mockFns.onClose.mock.calls.length).toBe(1);
+        });
+
+        it("should not be invoked if not passed", () => {
+            instance = ReactTestUtils.renderIntoDocument(
+                <HCaptcha
+                    sitekey={TEST_PROPS.sitekey}
+                />,
+            );
+
+            expect(mockFns.onClose.mock.calls.length).toBe(0);
+            instance.handleClose();
+            expect(mockFns.onClose.mock.calls.length).toBe(0);
+        });
+    });
+
+    describe('onChalExpired callback', () => {
+        it("should be invoked if present", () => {
+            expect(mockFns.onChalExpired.mock.calls.length).toBe(0);
+            instance.handleChallengeExpired();
+            expect(mockFns.onChalExpired.mock.calls.length).toBe(1);
+        });
+
+        it("should not be invoked if not passed", () => {
+            instance = ReactTestUtils.renderIntoDocument(
+                <HCaptcha
+                    sitekey={TEST_PROPS.sitekey}
+                />,
+            );
+
+            expect(mockFns.onChalExpired.mock.calls.length).toBe(0);
+            instance.handleChallengeExpired();
+            expect(mockFns.onChalExpired.mock.calls.length).toBe(0);
+        });
     });
 
     it("el renders after api loads and a widget id is set", () => {
