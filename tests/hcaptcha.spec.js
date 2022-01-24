@@ -156,7 +156,7 @@ describe("hCaptcha", () => {
         });
 
         it("should be invoked if the captcha is ready and the callback is present", () => {
-            jest.spyOn(instance, 'isCaptchaReady').mockImplementation(() => true);
+            jest.spyOn(instance, 'isReady').mockImplementation(() => true);
 
             expect(mockFns.onOpen.mock.calls.length).toBe(0);
             instance.handleOpen();
@@ -164,7 +164,7 @@ describe("hCaptcha", () => {
         });
 
         it("should not be invoked if the captcha is not ready", () => {
-            jest.spyOn(instance, 'isCaptchaReady').mockImplementation(() => false);
+            jest.spyOn(instance, 'isReady').mockImplementation(() => false);
 
             expect(mockFns.onOpen.mock.calls.length).toBe(0);
             instance.handleOpen();
@@ -177,7 +177,7 @@ describe("hCaptcha", () => {
                     sitekey={TEST_PROPS.sitekey}
                 />,
             );
-            jest.spyOn(instance, 'isCaptchaReady').mockImplementation(() => true);
+            jest.spyOn(instance, 'isReady').mockImplementation(() => true);
 
             expect(mockFns.onOpen.mock.calls.length).toBe(0);
             instance.handleOpen();
@@ -191,7 +191,7 @@ describe("hCaptcha", () => {
         });
 
         it("should be invoked if the captcha is ready and the callback is present", () => {
-            jest.spyOn(instance, 'isCaptchaReady').mockImplementation(() => true);
+            jest.spyOn(instance, 'isReady').mockImplementation(() => true);
 
             expect(mockFns.onClose.mock.calls.length).toBe(0);
             instance.handleClose();
@@ -199,7 +199,7 @@ describe("hCaptcha", () => {
         });
 
         it("should not be invoked if the captcha is not ready", () => {
-            jest.spyOn(instance, 'isCaptchaReady').mockImplementation(() => false);
+            jest.spyOn(instance, 'isReady').mockImplementation(() => false);
 
             expect(mockFns.onClose.mock.calls.length).toBe(0);
             instance.handleClose();
@@ -212,7 +212,7 @@ describe("hCaptcha", () => {
                     sitekey={TEST_PROPS.sitekey}
                 />,
             );
-            jest.spyOn(instance, 'isCaptchaReady').mockImplementation(() => true);
+            jest.spyOn(instance, 'isReady').mockImplementation(() => true);
 
             expect(mockFns.onClose.mock.calls.length).toBe(0);
             instance.handleClose();
@@ -226,7 +226,7 @@ describe("hCaptcha", () => {
         });
 
         it("should be invoked if present", () => {
-            jest.spyOn(instance, 'isCaptchaReady').mockImplementation(() => true);
+            jest.spyOn(instance, 'isReady').mockImplementation(() => true);
 
             expect(mockFns.onChalExpired.mock.calls.length).toBe(0);
             instance.handleChallengeExpired();
@@ -234,7 +234,7 @@ describe("hCaptcha", () => {
         });
 
         it("should not be invoked if the captcha is not ready", () => {
-            jest.spyOn(instance, 'isCaptchaReady').mockImplementation(() => false);
+            jest.spyOn(instance, 'isReady').mockImplementation(() => false);
 
             expect(mockFns.onClose.mock.calls.length).toBe(0);
             instance.handleClose();
@@ -247,7 +247,7 @@ describe("hCaptcha", () => {
                     sitekey={TEST_PROPS.sitekey}
                 />,
             );
-            jest.spyOn(instance, 'isCaptchaReady').mockImplementation(() => true);
+            jest.spyOn(instance, 'isReady').mockImplementation(() => true);
 
             expect(mockFns.onChalExpired.mock.calls.length).toBe(0);
             instance.handleChallengeExpired();

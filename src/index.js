@@ -39,7 +39,7 @@ class HCaptcha extends React.Component {
       this.renderCaptcha = this.renderCaptcha.bind(this);
       this.resetCaptcha  = this.resetCaptcha.bind(this);
       this.removeCaptcha = this.removeCaptcha.bind(this);
-      this.isCaptchaReady = this.isCaptchaReady.bind(this);
+      this.isReady = this.isReady.bind(this);
 
       // Event Handlers
       this.handleOnLoad = this.handleOnLoad.bind(this);
@@ -94,7 +94,7 @@ class HCaptcha extends React.Component {
     componentWillUnmount() {
         const { captchaId } = this.state;
 
-        if (!this.isCaptchaReady()) {
+        if (!this.isReady()) {
           return;
         }
 
@@ -153,7 +153,7 @@ class HCaptcha extends React.Component {
     resetCaptcha() {
       const { captchaId } = this.state;
 
-      if (!this.isCaptchaReady()) {
+      if (!this.isReady()) {
         return;
       }
       // Reset captcha state, removes stored token and unticks checkbox
@@ -163,7 +163,7 @@ class HCaptcha extends React.Component {
     removeCaptcha(callback) {
       const { captchaId } = this.state;
 
-      if (!this.isCaptchaReady()) {
+      if (!this.isReady()) {
         return;
       }
 
@@ -200,7 +200,7 @@ class HCaptcha extends React.Component {
       const { onExpire } = this.props;
       const { captchaId } = this.state;
 
-      if (!this.isCaptchaReady()) {
+      if (!this.isReady()) {
         return;
       }
 
@@ -213,7 +213,7 @@ class HCaptcha extends React.Component {
       const { onError } = this.props;
       const { captchaId } = this.state;
 
-      if (!this.isCaptchaReady()) {
+      if (!this.isReady()) {
         return;
       }
 
@@ -221,14 +221,14 @@ class HCaptcha extends React.Component {
       if (onError) onError(event);
     }
 
-    isCaptchaReady () {
+    isReady () {
       const { isApiReady, isRemoved } = this.state;
 
       return isApiReady && !isRemoved;
     }
 
     handleOpen () {
-      if (!this.isCaptchaReady() || !this.props.onOpen) {
+      if (!this.isReady() || !this.props.onOpen) {
         return;
       }
 
@@ -236,7 +236,7 @@ class HCaptcha extends React.Component {
     }
 
     handleClose () {
-      if (!this.isCaptchaReady() || !this.props.onClose) {
+      if (!this.isReady() || !this.props.onClose) {
         return;
       }
 
@@ -244,7 +244,7 @@ class HCaptcha extends React.Component {
     }
 
     handleChallengeExpired () {
-      if (!this.isCaptchaReady() || !this.props.onChalExpired) {
+      if (!this.isReady() || !this.props.onChalExpired) {
         return;
       }
 
@@ -254,7 +254,7 @@ class HCaptcha extends React.Component {
     execute (opts = null) {
       const { captchaId } = this.state;
 
-      if (!this.isCaptchaReady()) {
+      if (!this.isReady()) {
         return;
       }
 
