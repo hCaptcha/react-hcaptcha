@@ -155,7 +155,7 @@ describe("hCaptcha", () => {
             jest.restoreAllMocks();
         });
 
-        it("should be invoked if the captcha is ready and the callback is present", () => {
+        it("should be called if the captcha is ready and the callback is provided as a prop", () => {
             jest.spyOn(instance, 'isReady').mockImplementation(() => true);
 
             expect(mockFns.onOpen.mock.calls.length).toBe(0);
@@ -163,7 +163,7 @@ describe("hCaptcha", () => {
             expect(mockFns.onOpen.mock.calls.length).toBe(1);
         });
 
-        it("should not be invoked if the captcha is not ready", () => {
+        it("should not be called if the captcha is not ready", () => {
             jest.spyOn(instance, 'isReady').mockImplementation(() => false);
 
             expect(mockFns.onOpen.mock.calls.length).toBe(0);
@@ -171,7 +171,7 @@ describe("hCaptcha", () => {
             expect(mockFns.onOpen.mock.calls.length).toBe(0);
         });
 
-        it("should not be invoked if not passed", () => {
+        it("should not be called if not provided as a prop", () => {
             instance = ReactTestUtils.renderIntoDocument(
                 <HCaptcha
                     sitekey={TEST_PROPS.sitekey}
@@ -190,7 +190,7 @@ describe("hCaptcha", () => {
             jest.restoreAllMocks();
         });
 
-        it("should be invoked if the captcha is ready and the callback is present", () => {
+        it("should be called if the captcha is ready and the callback is provided as a prop", () => {
             jest.spyOn(instance, 'isReady').mockImplementation(() => true);
 
             expect(mockFns.onClose.mock.calls.length).toBe(0);
@@ -198,7 +198,7 @@ describe("hCaptcha", () => {
             expect(mockFns.onClose.mock.calls.length).toBe(1);
         });
 
-        it("should not be invoked if the captcha is not ready", () => {
+        it("should not be called if the captcha is not ready", () => {
             jest.spyOn(instance, 'isReady').mockImplementation(() => false);
 
             expect(mockFns.onClose.mock.calls.length).toBe(0);
@@ -206,7 +206,7 @@ describe("hCaptcha", () => {
             expect(mockFns.onClose.mock.calls.length).toBe(0);
         });
 
-        it("should not be invoked if not passed", () => {
+        it("should not be called if not provided as a prop", () => {
             instance = ReactTestUtils.renderIntoDocument(
                 <HCaptcha
                     sitekey={TEST_PROPS.sitekey}
@@ -225,7 +225,7 @@ describe("hCaptcha", () => {
             jest.restoreAllMocks();
         });
 
-        it("should be invoked if present", () => {
+        it("should be called if the captcha is ready and the callback is provided as a prop", () => {
             jest.spyOn(instance, 'isReady').mockImplementation(() => true);
 
             expect(mockFns.onChalExpired.mock.calls.length).toBe(0);
@@ -233,7 +233,7 @@ describe("hCaptcha", () => {
             expect(mockFns.onChalExpired.mock.calls.length).toBe(1);
         });
 
-        it("should not be invoked if the captcha is not ready", () => {
+        it("should not be called if the captcha is not ready", () => {
             jest.spyOn(instance, 'isReady').mockImplementation(() => false);
 
             expect(mockFns.onClose.mock.calls.length).toBe(0);
@@ -241,7 +241,7 @@ describe("hCaptcha", () => {
             expect(mockFns.onClose.mock.calls.length).toBe(0);
         });
 
-        it("should not be invoked if not passed", () => {
+        it("should not be called if not provided as a prop", () => {
             instance = ReactTestUtils.renderIntoDocument(
                 <HCaptcha
                     sitekey={TEST_PROPS.sitekey}
