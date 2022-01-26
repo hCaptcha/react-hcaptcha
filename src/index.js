@@ -39,12 +39,16 @@ class HCaptcha extends React.Component {
       this.renderCaptcha = this.renderCaptcha.bind(this);
       this.resetCaptcha  = this.resetCaptcha.bind(this);
       this.removeCaptcha = this.removeCaptcha.bind(this);
+      this.isReady = this.isReady.bind(this);
 
       // Event Handlers
       this.handleOnLoad = this.handleOnLoad.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleExpire = this.handleExpire.bind(this);
       this.handleError  = this.handleError.bind(this);
+      this.handleOpen = this.handleOpen.bind(this);
+      this.handleClose = this.handleClose.bind(this);
+      this.handleChallengeExpired = this.handleChallengeExpired.bind(this);
 
       const isApiReady = typeof hcaptcha !== 'undefined';
 
@@ -88,8 +92,11 @@ class HCaptcha extends React.Component {
     }
 
     componentWillUnmount() {
-        const { isApiReady, isRemoved, captchaId } = this.state;
-        if(!isApiReady || isRemoved) return
+        const { captchaId } = this.state;
+
+        if (!this.isReady()) {
+          return;
+        }
 
         // Reset any stored variables / timers when unmounting
         hcaptcha.reset(captchaId);
@@ -124,7 +131,10 @@ class HCaptcha extends React.Component {
       if (!isApiReady) return;
 
       const renderParams = Object.assign({
+        "open-callback"       : this.handleOpen,
+        "close-callback"      : this.handleClose,
         "error-callback"      : this.handleError,
+        "chalexpired-callback": this.handleChallengeExpired,
         "expired-callback"    : this.handleExpire,
         "callback"            : this.handleSubmit,
       }, this.props, {
@@ -141,17 +151,21 @@ class HCaptcha extends React.Component {
     }
 
     resetCaptcha() {
-      const { isApiReady, isRemoved, captchaId } = this.state;
+      const { captchaId } = this.state;
 
-      if (!isApiReady || isRemoved) return
+      if (!this.isReady()) {
+        return;
+      }
       // Reset captcha state, removes stored token and unticks checkbox
       hcaptcha.reset(captchaId)
     }
 
     removeCaptcha(callback) {
-      const { isApiReady, isRemoved, captchaId } = this.state;
+      const { captchaId } = this.state;
 
-      if (!isApiReady || isRemoved) return
+      if (!this.isReady()) {
+        return;
+      }
 
       this.setState({ isRemoved: true }, () => {
         hcaptcha.remove(captchaId);
@@ -184,9 +198,12 @@ class HCaptcha extends React.Component {
 
     handleExpire () {
       const { onExpire } = this.props;
-      const { isApiReady, isRemoved, captchaId } = this.state;
+      const { captchaId } = this.state;
 
-      if (!isApiReady || isRemoved) return
+      if (!this.isReady()) {
+        return;
+      }
+
       hcaptcha.reset(captchaId) // If hCaptcha runs into error, reset captcha - hCaptcha
 
       if (onExpire) onExpire();
@@ -194,18 +211,52 @@ class HCaptcha extends React.Component {
 
     handleError (event) {
       const { onError } = this.props;
-      const { isApiReady, isRemoved, captchaId } = this.state;
+      const { captchaId } = this.state;
 
-      if (!isApiReady || isRemoved) return
+      if (!this.isReady()) {
+        return;
+      }
 
       hcaptcha.reset(captchaId) // If hCaptcha runs into error, reset captcha - hCaptcha
       if (onError) onError(event);
     }
 
-    execute (opts = null) {
-      const { isApiReady, isRemoved, captchaId } = this.state;
+    isReady () {
+      const { isApiReady, isRemoved } = this.state;
 
-      if (!isApiReady || isRemoved) return;
+      return isApiReady && !isRemoved;
+    }
+
+    handleOpen () {
+      if (!this.isReady() || !this.props.onOpen) {
+        return;
+      }
+
+      this.props.onOpen();
+    }
+
+    handleClose () {
+      if (!this.isReady() || !this.props.onClose) {
+        return;
+      }
+
+      this.props.onClose();
+    }
+
+    handleChallengeExpired () {
+      if (!this.isReady() || !this.props.onChalExpired) {
+        return;
+      }
+
+      this.props.onChalExpired();
+    }
+
+    execute (opts = null) {
+      const { captchaId } = this.state;
+
+      if (!this.isReady()) {
+        return;
+      }
 
       if (opts && typeof opts !== "object") {
         opts = null;

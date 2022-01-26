@@ -14,14 +14,30 @@ const AsyncDemo = () => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
+
+  const handleOpen = () => {
+    console.log("HCaptcha [onOpen]: The user display of a challenge starts.");
+  };
+
+  const handleClose = () => {
+    console.log("HCaptcha [onClose]: The user dismisses a challenge.");
+  };
+
+  const handleChallengeExpired = () => {
+    console.log("HCaptcha [onChalExpired]: The user display of a challenge times out with no answer.");
+  };
 
   return (
     <div>
-      <HCaptcha ref={captchaRef}
+      <HCaptcha
+        ref={captchaRef}
         sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
         theme="light"
         onVerify={() => undefined}
+        onOpen={handleOpen}
+        onClose={handleClose}
+        onChalExpired={handleChallengeExpired}
       />
       <button onClick={executeCaptcha}>Execute asynchronously</button>
     </div>
@@ -39,6 +55,9 @@ class ReactDemo extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleReset  = this.handleReset.bind(this);
     this.onVerifyCaptcha = this.onVerifyCaptcha.bind(this);
+    this.handleOpen = this.handleOpen.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.handleChallengeExpired = this.handleChallengeExpired.bind(this);
     // Leave languageOverride unset or null for browser autodetection.
     // To force a language, use the code: https://hcaptcha.com/docs/languages
     this.languageOverride = null; // "fr";
@@ -48,7 +67,7 @@ class ReactDemo extends React.Component {
     this.setState({isVerified: true});
   }
 
-  onVerifyCaptcha (token) {
+  onVerifyCaptcha(token) {
     console.log("Verified: " + token);
     this.setState({isVerified: true})
   }
@@ -62,6 +81,18 @@ class ReactDemo extends React.Component {
     event.preventDefault()
     this.captcha.current.resetCaptcha()
     this.setState({isVerified: false})
+  }
+
+  handleOpen() {
+    console.log("HCaptcha [onOpen]: The user display of a challenge starts.");
+  }
+
+  handleClose() {
+    console.log("HCaptcha [onClose]: The user dismisses a challenge.");
+  }
+
+  handleChallengeExpired() {
+    console.log("HCaptcha [onChalExpired]: The user display of a challenge times out with no answer.");
   }
 
   render() {
@@ -85,24 +116,42 @@ class ReactDemo extends React.Component {
         {!this.state.async ? (
           <>
             <div>
-            <HCaptcha ref={this.captcha} onVerify={this.onVerifyCaptcha} languageOverride={this.languageOverride}
-            sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
-            theme="light"
+            <HCaptcha
+              ref={this.captcha}
+              onVerify={this.onVerifyCaptcha}
+              languageOverride={this.languageOverride}
+              sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
+              theme="light"
+              onOpen={this.handleOpen}
+              onClose={this.handleClose}
+              onChalExpired={this.handleChallengeExpired}
             />
             </div>
 
             <div>
-              <HCaptcha ref={this.captcha} onVerify={this.onVerifyCaptcha} languageOverride={this.languageOverride}
-              sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
-              theme="dark"
+              <HCaptcha
+                ref={this.captcha}
+                onVerify={this.onVerifyCaptcha}
+                languageOverride={this.languageOverride}
+                sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
+                theme="dark"
+                onOpen={this.handleOpen}
+                onClose={this.handleClose}
+                onChalExpired={this.handleChallengeExpired}
               />
             </div>
 
             <div>
-              <HCaptcha ref={this.captcha} onVerify={this.onVerifyCaptcha} languageOverride={this.languageOverride}
-              sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
-              size="compact"
-              theme="dark"
+              <HCaptcha
+                ref={this.captcha}
+                onVerify={this.onVerifyCaptcha}
+                languageOverride={this.languageOverride}
+                sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
+                size="compact"
+                theme="dark"
+                onOpen={this.handleOpen}
+                onClose={this.handleClose}
+                onChalExpired={this.handleChallengeExpired}
               />
             </div>
             {isVerified &&
