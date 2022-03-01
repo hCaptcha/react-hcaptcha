@@ -19,7 +19,7 @@ interface HCaptchaProps {
   onClose?: () => any;
   onChalExpired?: () => any;
   onError?: (event: string) => any;
-  onVerify?: (token: string) => any;
+  onVerify?: (token: string, ekey: string) => any;
   onLoad?: () => any;
   languageOverride?: string;
   sitekey: string;
@@ -39,7 +39,7 @@ declare class HCaptcha extends React.Component<HCaptchaProps, HCaptchaState> {
   resetCaptcha(): void;
   renderCaptcha(): void;
   removeCaptcha(): void;
-  execute(opts: { async: true }): Promise<ExecuteResponse>
+  execute(opts: { async: true }): Promise<ExecuteResponse>;
   execute(opts?: { async: false }): void;
   execute(opts?: { async: boolean }): Promise<ExecuteResponse> | void;
 }
