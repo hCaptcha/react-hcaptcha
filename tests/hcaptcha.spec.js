@@ -58,8 +58,14 @@ describe("hCaptcha", () => {
     it("has functions", () => {
         expect(typeof instance.execute).toBe("function");
         expect(typeof instance.resetCaptcha).toBe("function");
+        expect(typeof instance.getResponse).toBe("function");
+        expect(typeof instance.getRespKey).toBe("function");
+        expect(typeof instance.setData).toBe("function");
         expect(instance.execute).toBeDefined();
         expect(instance.resetCaptcha).toBeDefined();
+        expect(instance.getResponse).toBeDefined();
+        expect(instance.getRespKey).toBeDefined();
+        expect(instance.setData).toBeDefined();
     });
 
     it("can execute synchronously without arguments", () => {
@@ -118,6 +124,27 @@ describe("hCaptcha", () => {
         instance.removeCaptcha();
         expect(window.hcaptcha.remove.mock.calls.length).toBe(1);
         expect(window.hcaptcha.remove.mock.calls[0][0]).toBe(MOCK_WIDGET_ID);
+    });
+
+    it("can get Response", () => {
+        expect(window.hcaptcha.getResponse.mock.calls.length).toBe(0);
+        instance.getResponse();
+        expect(window.hcaptcha.getResponse.mock.calls.length).toBe(1);
+        expect(window.hcaptcha.getResponse.mock.calls[0][0]).toBe(MOCK_WIDGET_ID);
+    });
+
+    it("can get RespKey", () => {
+        expect(window.hcaptcha.getRespKey.mock.calls.length).toBe(0);
+        instance.getRespKey();
+        expect(window.hcaptcha.getRespKey.mock.calls.length).toBe(1);
+        expect(window.hcaptcha.getRespKey.mock.calls[0][0]).toBe(MOCK_WIDGET_ID);
+    });
+
+    it("can set Data", () => {
+        expect(window.hcaptcha.setData.mock.calls.length).toBe(0);
+        instance.setData();
+        expect(window.hcaptcha.setData.mock.calls.length).toBe(1);
+        expect(window.hcaptcha.setData.mock.calls[0][0]).toBe(MOCK_WIDGET_ID);
     });
 
     it("emits onLoad event", () => {

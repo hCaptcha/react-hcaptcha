@@ -16,6 +16,26 @@ const AsyncDemo = () => {
     }
   };
 
+  const getResponse = async () => {
+    try {
+      const res = await captchaRef.current.getResponse();
+      console.log("Response: ", res);
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getRespKey = async () => {
+    try {
+      const res = await captchaRef.current.getRespKey();
+      console.log("Response Key: ", res);
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleOpen = () => {
     console.log("HCaptcha [onOpen]: The user display of a challenge starts.");
   };
@@ -40,6 +60,8 @@ const AsyncDemo = () => {
         onChalExpired={handleChallengeExpired}
       />
       <button onClick={executeCaptcha}>Execute asynchronously</button>
+      <button onClick={getRespKey}>Get Response Key asynchronously</button>
+      <button onClick={getResponse}>Get Response asynchronously</button>
     </div>
   );
 }

@@ -265,6 +265,40 @@ class HCaptcha extends React.Component {
       return hcaptcha.execute(captchaId, opts);
     }
 
+    setData (opts) {
+      const { captchaId } = this.state;
+
+      if (!this.isReady()) {
+        return;
+      }
+
+      if (opts && typeof opts !== "object") {
+        opts = null;
+      }
+
+      hcaptcha.setData(captchaId, opts);
+    }
+
+    getResponse() {
+      const { captchaId } = this.state;
+
+      if (!this.isReady()) {
+        return;
+      }
+      //Get response token from hCaptcha widget
+      return hcaptcha.getResponse(captchaId);
+    }
+
+    getRespKey() {
+      const { captchaId } = this.state;
+
+      if (!this.isReady()) {
+        return;
+      }
+      //Get current challenge session id from hCaptcha widget
+      return hcaptcha.getRespKey(captchaId)  
+    }
+
     render () {
       const { elementId } = this.state;
       return <div ref={this.ref} id={elementId}></div>
