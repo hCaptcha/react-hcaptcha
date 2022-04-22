@@ -152,7 +152,7 @@ return <HCaptcha ref={captchaRef} onLoad={onLoad} sitekey={sitekey} {...props} /
 |`getRespKey()`|Get the current challenge reference ID|
 |`getResponse()`|Get the current challenge response token from completed challenge|
 |`resetCaptcha()`|Reset the current challenge|
-|`setData()`|Set custom data to be sent challenge request|
+|`setData()`|Set custom data to be sent on challenge request|
 
 
 **NOTE**: Make sure to reset the hCaptcha state when you submit your form by calling the method `.resetCaptcha` on your hCaptcha React Component! Passcodes are one-time use, so if your user submits the same passcode twice then it will be rejected by the server the second time.
