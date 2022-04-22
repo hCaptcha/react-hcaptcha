@@ -16,9 +16,9 @@ const AsyncDemo = () => {
     }
   };
 
-  const getResponse = async () => {
+  const getResponse = () => {
     try {
-      const res = await captchaRef.current.getResponse();
+      const res = captchaRef.current.getResponse();
       console.log("Response: ", res);
 
     } catch (error) {
@@ -26,9 +26,9 @@ const AsyncDemo = () => {
     }
   };
 
-  const getRespKey = async () => {
+  const getRespKey = () => {
     try {
-      const res = await captchaRef.current.getRespKey();
+      const res = captchaRef.current.getRespKey();
       console.log("Response Key: ", res);
 
     } catch (error) {
@@ -60,8 +60,8 @@ const AsyncDemo = () => {
         onChalExpired={handleChallengeExpired}
       />
       <button onClick={executeCaptcha}>Execute asynchronously</button>
-      <button onClick={getRespKey}>Get Response Key asynchronously</button>
-      <button onClick={getResponse}>Get Response asynchronously</button>
+      <button onClick={getRespKey}>Get Response Key</button>
+      <button onClick={getResponse}>Get Response</button>
     </div>
   );
 }

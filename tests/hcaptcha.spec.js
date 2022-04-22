@@ -128,23 +128,27 @@ describe("hCaptcha", () => {
 
     it("can get Response", () => {
         expect(window.hcaptcha.getResponse.mock.calls.length).toBe(0);
-        instance.getResponse();
+        const res = instance.getResponse();
         expect(window.hcaptcha.getResponse.mock.calls.length).toBe(1);
         expect(window.hcaptcha.getResponse.mock.calls[0][0]).toBe(MOCK_WIDGET_ID);
+        expect(res).toBe(MOCK_TOKEN);
     });
 
     it("can get RespKey", () => {
         expect(window.hcaptcha.getRespKey.mock.calls.length).toBe(0);
-        instance.getRespKey();
+        const res = instance.getRespKey();
         expect(window.hcaptcha.getRespKey.mock.calls.length).toBe(1);
         expect(window.hcaptcha.getRespKey.mock.calls[0][0]).toBe(MOCK_WIDGET_ID);
+        expect(res).toBe(MOCK_EKEY);
     });
 
     it("can set Data", () => {
         expect(window.hcaptcha.setData.mock.calls.length).toBe(0);
-        instance.setData();
+        const dataObj = { data: { nested: 1 } };
+        instance.setData(dataObj);
         expect(window.hcaptcha.setData.mock.calls.length).toBe(1);
         expect(window.hcaptcha.setData.mock.calls[0][0]).toBe(MOCK_WIDGET_ID);
+        expect(window.hcaptcha.setData.mock.calls[0][1]).toBe(dataObj);
     });
 
     it("emits onLoad event", () => {

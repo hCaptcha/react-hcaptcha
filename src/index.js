@@ -280,23 +280,11 @@ class HCaptcha extends React.Component {
     }
 
     getResponse() {
-      const { captchaId } = this.state;
-
-      if (!this.isReady()) {
-        return;
-      }
-      //Get response token from hCaptcha widget
-      return hcaptcha.getResponse(captchaId);
+      return hcaptcha.getResponse(this.state.captchaId);
     }
 
     getRespKey() {
-      const { captchaId } = this.state;
-
-      if (!this.isReady()) {
-        return;
-      }
-      //Get current challenge session id from hCaptcha widget
-      return hcaptcha.getRespKey(captchaId)  
+      return hcaptcha.getRespKey(this.state.captchaId)
     }
 
     render () {
