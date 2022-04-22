@@ -265,18 +265,18 @@ class HCaptcha extends React.Component {
       return hcaptcha.execute(captchaId, opts);
     }
 
-    setData (opts) {
+    setData (data) {
       const { captchaId } = this.state;
 
       if (!this.isReady()) {
         return;
       }
 
-      if (opts && typeof opts !== "object") {
-        opts = null;
+      if (data && typeof data !== "object") {
+        data = null;
       }
 
-      hcaptcha.setData(captchaId, opts);
+      hcaptcha.setData(captchaId, data);
     }
 
     getResponse() {
