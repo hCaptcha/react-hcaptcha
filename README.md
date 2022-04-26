@@ -149,7 +149,10 @@ return <HCaptcha ref={captchaRef} onLoad={onLoad} sitekey={sitekey} {...props} /
 |Method|Description|
 |---|---|
 |`execute()`|Programmatically trigger a challenge request. Additionally, this method can be run asynchronously and returns a promise with the `token` and `eKey` when the challenge is completed.|
+|`getRespKey()`|Get the current challenge reference ID|
+|`getResponse()`|Get the current challenge response token from completed challenge|
 |`resetCaptcha()`|Reset the current challenge|
+|`setData()`|See enterprise docs.|
 
 
 **NOTE**: Make sure to reset the hCaptcha state when you submit your form by calling the method `.resetCaptcha` on your hCaptcha React Component! Passcodes are one-time use, so if your user submits the same passcode twice then it will be rejected by the server the second time.
