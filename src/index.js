@@ -67,22 +67,23 @@ class HCaptcha extends React.Component {
       const { isApiReady } = this.state;
 
       if (!isApiReady) {  //Check if hCaptcha has already been loaded, if not create script tag and wait to render captcha
-
-        if (!apiScriptRequested) {
-            // Only create the script tag once, use a global variable to track
-            mountCaptchaScript({
-              apihost,
-              assethost,
-              endpoint,
-              hl,
-              host,
-              imghost,
-              recaptchacompat: reCaptchaCompat === false? "off" : null,
-              reportapi,
-              sentry,
-              custom
-            });
+        if (apiScriptRequested) {
+          return;
         }
+
+        // Only create the script tag once, use a global variable to track
+        mountCaptchaScript({
+          apihost,
+          assethost,
+          endpoint,
+          hl,
+          host,
+          imghost,
+          recaptchacompat: reCaptchaCompat === false? "off" : null,
+          reportapi,
+          sentry,
+          custom
+        });
 
         // Add onload callback to global onload listeners
         onLoadListeners.push(this.handleOnLoad);
