@@ -53,7 +53,6 @@ const AsyncDemo = () => {
       <HCaptcha
         ref={captchaRef}
         sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
-        host="hcaptcha.com"
         theme="light"
         onVerify={() => undefined}
         onOpen={handleOpen}
@@ -144,7 +143,6 @@ class ReactDemo extends React.Component {
               onVerify={this.onVerifyCaptcha}
               languageOverride={this.languageOverride}
               sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
-              host="hcaptcha.com"
               theme="light"
               onOpen={this.handleOpen}
               onClose={this.handleClose}
@@ -158,7 +156,6 @@ class ReactDemo extends React.Component {
                 onVerify={this.onVerifyCaptcha}
                 languageOverride={this.languageOverride}
                 sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
-                host="hcaptcha.com"
                 theme="dark"
                 onOpen={this.handleOpen}
                 onClose={this.handleClose}
@@ -172,7 +169,6 @@ class ReactDemo extends React.Component {
                 onVerify={this.onVerifyCaptcha}
                 languageOverride={this.languageOverride}
                 sitekey="917ba1eb-0b37-486e-9c90-39f3cb7b2579"
-                host="hcaptcha.com"
                 size="compact"
                 theme="dark"
                 onOpen={this.handleOpen}
