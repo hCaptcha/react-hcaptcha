@@ -1,5 +1,5 @@
-const React = require('react');
-const { generateQuery } = require("./utils.js");
+import * as React from 'react';
+import { generateQuery } from "./utils.js";
 
  // Create script to init hCaptcha
 let onLoadListeners = [];
@@ -294,4 +294,4 @@ class HCaptcha extends React.Component {
     }
   }
 
-module.exports = HCaptcha;
+export default HCaptcha;
