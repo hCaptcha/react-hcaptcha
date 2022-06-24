@@ -31,7 +31,7 @@ const mountCaptchaScript = (params={}) => {
   script.async = true;
   script.onerror = (event) => {
     console.error('Failed to load api: ' + script.src, event);
-    rejectFn(new Error('Failed to load api'));
+    rejectFn('script-error');
   }
 
   const query = generateQuery(params);

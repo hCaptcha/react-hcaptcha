@@ -504,13 +504,13 @@ describe("hCaptcha", () => {
             const script = document.querySelector("head > script");
             expect(onError.mock.calls.length).toBe(0);
 
-            script.onerror('api-script-failed');
+            script.onerror(new Error('loading failed'));
 
             // simulate microtask
             await Promise.reject().catch(() => null)
 
             expect(onError.mock.calls.length).toBe(1);
-            expect(onError.mock.calls[0][0]).toEqual(new Error('Failed to load api'));
+            expect(onError.mock.calls[0][0]).toEqual('script-error');
         });
     });
 });
