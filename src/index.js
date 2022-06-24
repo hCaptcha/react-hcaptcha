@@ -54,7 +54,6 @@ class HCaptcha extends React.Component {
 
       // Event Handlers
       this.handleOnLoad = this.handleOnLoad.bind(this);
-      this.handleOnLoadingError = this.handleOnLoadingError.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleExpire = this.handleExpire.bind(this);
       this.handleError  = this.handleError.bind(this);
@@ -95,7 +94,7 @@ class HCaptcha extends React.Component {
         // Only create the script tag once, use a global promise to track
         mountCaptchaScript(mountParams)
           .then(this.handleOnLoad)
-          .catch(this.handleOnLoadingError);
+          .catch(this.handleError);
       } else {
         this.renderCaptcha();
       }
@@ -195,12 +194,6 @@ class HCaptcha extends React.Component {
       });
     }
 
-    handleOnLoadingError (event) {
-      const { onError } = this.props;
-
-      if (onError) onError(event);
-    }
-
     handleSubmit (event) {
       const { onVerify } = this.props;
       const { isRemoved, captchaId } = this.state;
@@ -229,11 +222,11 @@ class HCaptcha extends React.Component {
       const { onError } = this.props;
       const { captchaId } = this.state;
 
-      if (!this.isReady()) {
-        return;
+      if (this.isReady()) {
+        // If hCaptcha runs into error, reset captcha - hCaptcha
+        hcaptcha.reset(captchaId);
       }
 
-      hcaptcha.reset(captchaId) // If hCaptcha runs into error, reset captcha - hCaptcha
       if (onError) onError(event);
     }
 
