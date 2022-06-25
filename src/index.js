@@ -29,10 +29,7 @@ const mountCaptchaScript = (params={}) => {
   script.id = SCRIPT_ID;
   script.src = `${domain}/1/api.js?render=explicit&onload=${HCAPTCHA_LOAD_FN_NAME}`;
   script.async = true;
-  script.onerror = (event) => {
-    console.error('Failed to load api: ' + script.src, event);
-    rejectFn('script-error');
-  }
+  script.onerror = (event) => rejectFn('script-error');
 
   const query = generateQuery(params);
   script.src += query !== ""? `&${query}` : "";
