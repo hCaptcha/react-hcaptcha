@@ -1,5 +1,5 @@
-const React = require('react');
-const { generateQuery } = require("./utils.js");
+import * as React from 'react';
+import { generateQuery } from "./utils.js";
 
 const SCRIPT_ID = 'hcaptcha-api-script-id';
 const HCAPTCHA_LOAD_FN_NAME = 'hcaptchaOnLoad';
@@ -299,4 +299,4 @@ class HCaptcha extends React.Component {
     }
   }
 
-module.exports = HCaptcha;
+export default HCaptcha;

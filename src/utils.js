@@ -6,6 +6,4 @@ function generateQuery(params) {
         }).join("&");
 };
 
-module.exports = {
-    generateQuery
-};
+export { generateQuery };
