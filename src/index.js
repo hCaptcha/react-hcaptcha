@@ -1,34 +1,42 @@
 import * as React from 'react';
 import { generateQuery } from "./utils.js";
 
- // Create script to init hCaptcha
-let onLoadListeners = [];
-let apiScriptRequested = false;
+const SCRIPT_ID = 'hcaptcha-api-script-id';
+const HCAPTCHA_LOAD_FN_NAME = 'hcaptchaOnLoad';
 
-// Generate hCaptcha API Script
+// Prevent loading API script multiple times
+let resolveFn;
+let rejectFn;
+const mountPromise = new Promise((resolve, reject) => {
+  resolveFn = resolve;
+  rejectFn = reject;
+});
+
+// Generate hCaptcha API script
 const mountCaptchaScript = (params={}) => {
-  apiScriptRequested = true;
+  if (document.getElementById(SCRIPT_ID)) {
+    // API was already requested
+    return mountPromise;
+  }
+
   // Create global onload callback
-  window.hcaptchaOnLoad = () => {
-    // Iterate over onload listeners, call each listener
-    onLoadListeners = onLoadListeners.filter(listener => {
-      listener();
-      return false;
-    });
-  };
+  window[HCAPTCHA_LOAD_FN_NAME] = resolveFn;
 
   const domain = params.apihost || "https://js.hcaptcha.com";
   delete params.apihost;
 
   const script = document.createElement("script");
-  script.src = `${domain}/1/api.js?render=explicit&onload=hcaptchaOnLoad`;
+  script.id = SCRIPT_ID;
+  script.src = `${domain}/1/api.js?render=explicit&onload=${HCAPTCHA_LOAD_FN_NAME}`;
   script.async = true;
+  script.onerror = (event) => rejectFn('script-error');
 
   const query = generateQuery(params);
   script.src += query !== ""? `&${query}` : "";
 
   document.head.appendChild(script);
-}
+  return mountPromise;
+};
 
 
 class HCaptcha extends React.Component {
@@ -62,17 +70,12 @@ class HCaptcha extends React.Component {
       }
     }
 
-    componentDidMount () { //Once captcha is mounted intialize hCaptcha - hCaptcha
+    componentDidMount () { // Once captcha is mounted intialize hCaptcha - hCaptcha
       const { apihost, assethost, endpoint, host, imghost, languageOverride:hl, reCaptchaCompat, reportapi, sentry, custom } = this.props;
       const { isApiReady } = this.state;
 
-      if (!isApiReady) {  //Check if hCaptcha has already been loaded, if not create script tag and wait to render captcha
-        if (apiScriptRequested) {
-          return;
-        }
-
-        // Only create the script tag once, use a global variable to track
-        mountCaptchaScript({
+      if (!isApiReady) {  // Check if hCaptcha has already been loaded, if not create script tag and wait to render captcha
+        const mountParams = {
           apihost,
           assethost,
           endpoint,
@@ -83,10 +86,12 @@ class HCaptcha extends React.Component {
           reportapi,
           sentry,
           custom
-        });
+        };
 
-        // Add onload callback to global onload listeners
-        onLoadListeners.push(this.handleOnLoad);
+        // Only create the script tag once, use a global promise to track
+        mountCaptchaScript(mountParams)
+          .then(this.handleOnLoad)
+          .catch(this.handleError);
       } else {
         this.renderCaptcha();
       }
@@ -214,11 +219,11 @@ class HCaptcha extends React.Component {
       const { onError } = this.props;
       const { captchaId } = this.state;
 
-      if (!this.isReady()) {
-        return;
+      if (this.isReady()) {
+        // If hCaptcha runs into error, reset captcha - hCaptcha
+        hcaptcha.reset(captchaId);
       }
 
-      hcaptcha.reset(captchaId) // If hCaptcha runs into error, reset captcha - hCaptcha
       if (onError) onError(event);
     }
 

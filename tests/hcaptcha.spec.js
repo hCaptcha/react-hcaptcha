@@ -337,7 +337,7 @@ describe("hCaptcha", () => {
     });
 
 
-    describe("Query parameter", () => {
+    describe("Mount hCaptcha API script", () => {
 
         beforeEach(() => {
             // Setup hCaptcha as undefined to load script
@@ -491,6 +491,26 @@ describe("hCaptcha", () => {
 
             const script = document.querySelector("head > script");
             expect(script.src).toContain("custom=true");
+        });
+
+        it("emits error when script is failed", async () => {
+            const onError = jest.fn();
+
+            instance = ReactTestUtils.renderIntoDocument(<HCaptcha
+                    onError={onError}
+                    sitekey={TEST_PROPS.sitekey}
+                />);
+
+            const script = document.querySelector("head > script");
+            expect(onError.mock.calls.length).toBe(0);
+
+            script.onerror(new Error('loading failed'));
+
+            // simulate microtask
+            await Promise.reject().catch(() => null)
+
+            expect(onError.mock.calls.length).toBe(1);
+            expect(onError.mock.calls[0][0]).toEqual('script-error');
         });
     });
 });
