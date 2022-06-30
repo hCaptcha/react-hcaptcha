@@ -44,6 +44,10 @@ const AsyncDemo = () => {
     console.log("HCaptcha [onClose]: The user dismisses a challenge.");
   };
 
+  const handleError = error => {
+    console.log("HCaptcha [onError]:", error);
+  };
+
   const handleChallengeExpired = () => {
     console.log("HCaptcha [onChalExpired]: The user display of a challenge times out with no answer.");
   };
@@ -57,6 +61,7 @@ const AsyncDemo = () => {
         onVerify={() => undefined}
         onOpen={handleOpen}
         onClose={handleClose}
+        onError={handleError}
         onChalExpired={handleChallengeExpired}
       />
       <button onClick={executeCaptcha}>Execute asynchronously</button>
@@ -79,6 +84,7 @@ class ReactDemo extends React.Component {
     this.onVerifyCaptcha = this.onVerifyCaptcha.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.handleError = this.handleError.bind(this);
     this.handleChallengeExpired = this.handleChallengeExpired.bind(this);
     // Leave languageOverride unset or null for browser autodetection.
     // To force a language, use the code: https://hcaptcha.com/docs/languages
@@ -113,6 +119,10 @@ class ReactDemo extends React.Component {
     console.log("HCaptcha [onClose]: The user dismisses a challenge.");
   }
 
+  handleError(error) {
+    console.log("HCaptcha [onError]:", error);
+  };
+
   handleChallengeExpired() {
     console.log("HCaptcha [onChalExpired]: The user display of a challenge times out with no answer.");
   }
@@ -146,6 +156,7 @@ class ReactDemo extends React.Component {
               theme="light"
               onOpen={this.handleOpen}
               onClose={this.handleClose}
+              onError={this.handleError}
               onChalExpired={this.handleChallengeExpired}
             />
             </div>
@@ -159,6 +170,7 @@ class ReactDemo extends React.Component {
                 theme="dark"
                 onOpen={this.handleOpen}
                 onClose={this.handleClose}
+                onError={this.handleError}
                 onChalExpired={this.handleChallengeExpired}
               />
             </div>
@@ -173,6 +185,7 @@ class ReactDemo extends React.Component {
                 theme="dark"
                 onOpen={this.handleOpen}
                 onClose={this.handleClose}
+                onError={this.handleError}
                 onChalExpired={this.handleChallengeExpired}
               />
             </div>

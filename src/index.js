@@ -50,6 +50,7 @@ class HCaptcha extends React.Component {
       this.isReady = this.isReady.bind(this);
 
       // Event Handlers
+      this.loadCaptcha = this.loadCaptcha.bind(this);
       this.handleOnLoad = this.handleOnLoad.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleExpire = this.handleExpire.bind(this);
@@ -61,6 +62,7 @@ class HCaptcha extends React.Component {
       const isApiReady = typeof hcaptcha !== 'undefined';
 
       this.ref = React.createRef();
+      this.apiScriptRequested = false;
 
       this.state = {
         isApiReady,
@@ -71,42 +73,32 @@ class HCaptcha extends React.Component {
     }
 
     componentDidMount () { // Once captcha is mounted intialize hCaptcha - hCaptcha
-      const { apihost, assethost, endpoint, host, imghost, languageOverride:hl, reCaptchaCompat, reportapi, sentry, custom } = this.props;
       const { isApiReady } = this.state;
 
-      if (!isApiReady) {  // Check if hCaptcha has already been loaded, if not create script tag and wait to render captcha
-        const mountParams = {
-          apihost,
-          assethost,
-          endpoint,
-          hl,
-          host,
-          imghost,
-          recaptchacompat: reCaptchaCompat === false? "off" : null,
-          reportapi,
-          sentry,
-          custom
-        };
-
-        // Only create the script tag once, use a global promise to track
-        mountCaptchaScript(mountParams)
-          .then(this.handleOnLoad)
-          .catch(this.handleError);
-      } else {
+      /*
+       * Check if hCaptcha has already been loaded,
+       * If Yes, render the captcha
+       * If No, create script tag and wait to render the captcha
+       */
+      if (isApiReady) {
         this.renderCaptcha();
+
+        return;
       }
+
+      this.loadCaptcha();
     }
 
     componentWillUnmount() {
-        const { captchaId } = this.state;
+      const { captchaId } = this.state;
 
-        if (!this.isReady()) {
-          return;
-        }
+      if (!this.isReady()) {
+        return;
+      }
 
-        // Reset any stored variables / timers when unmounting
-        hcaptcha.reset(captchaId);
-        hcaptcha.remove(captchaId);
+      // Reset any stored variables / timers when unmounting
+      hcaptcha.reset(captchaId);
+      hcaptcha.remove(captchaId);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -130,6 +122,42 @@ class HCaptcha extends React.Component {
           this.renderCaptcha();
         });
       }
+    }
+
+    loadCaptcha() {
+      if (this.apiScriptRequested) {
+        return;
+      }
+
+      const {
+        apihost,
+        assethost,
+        endpoint,
+        host,
+        imghost,
+        languageOverride: hl,
+        reCaptchaCompat,
+        reportapi,
+        sentry,
+        custom
+      } = this.props;
+      const mountParams = {
+        apihost,
+        assethost,
+        endpoint,
+        hl,
+        host,
+        imghost,
+        recaptchacompat: reCaptchaCompat === false? "off" : null,
+        reportapi,
+        sentry,
+        custom
+      };
+
+      mountCaptchaScript(mountParams)
+        .then(this.handleOnLoad)
+        .catch(this.handleError);
+      this.apiScriptRequested = true;
     }
 
     renderCaptcha(onReady) {
