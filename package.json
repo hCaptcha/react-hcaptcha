@@ -31,6 +31,10 @@
     "captcha"
   ],
   "author": "hCaptcha team and contributors",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hCaptcha/react-hcaptcha.git"
+  },
   "license": "MIT",
   "devDependencies": {
     "@babel/cli": "^7.12.10",
