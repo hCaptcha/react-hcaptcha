@@ -12,6 +12,8 @@ const mountPromise = new Promise((resolve, reject) => {
   rejectFn = reject;
 });
 
+const compareObject = (a, b) => JSON.stringify(a) === JSON.stringify(b)
+
 // Generate hCaptcha API script
 const mountCaptchaScript = (params={}) => {
   if (document.getElementById(SCRIPT_ID)) {
@@ -112,9 +114,12 @@ class HCaptcha extends React.Component {
 
     componentDidUpdate(prevProps) {
       // Prop Keys that could change
-      const keys = ['sitekey', 'size', 'theme', 'tabindex', 'languageOverride', 'endpoint'];
+      const primitiveKeys = ['sitekey', 'size', 'theme', 'custom', 'tabindex', 'languageOverride', 'endpoint'];
+      const objectKeys = ['customTheme']
       // See if any props changed during component update
-      const match = keys.every( key => prevProps[key] === this.props[key]);
+      const primitiveKeysMatch = primitiveKeys.every(key => prevProps[key] === this.props[key]);
+      const objectKeysMatch = objectKeys.every(key => compareObject(prevProps[key], this.props[key]));
+      const match = primitiveKeysMatch && objectKeysMatch
 
       // If they have changed, remove current captcha and render a new one
       if (!match) {
@@ -164,6 +169,8 @@ class HCaptcha extends React.Component {
       const { isApiReady } = this.state;
       if (!isApiReady) return;
 
+      const theme = this.props.custom ? this.props.customTheme : this.props.theme
+
       const renderParams = Object.assign({
         "open-callback"       : this.handleOpen,
         "close-callback"      : this.handleClose,
@@ -173,8 +180,8 @@ class HCaptcha extends React.Component {
         "callback"            : this.handleSubmit,
       }, this.props, {
         hl: this.props.hl || this.props.languageOverride,
-        languageOverride: undefined
-      });
+        languageOverride: undefined,
+      }, { theme });
 
       //Render hCaptcha widget and provide necessary callbacks - hCaptcha
       const captchaId = hcaptcha.render(this.ref.current, renderParams);

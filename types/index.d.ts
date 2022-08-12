@@ -28,6 +28,8 @@ interface HCaptchaProps {
   tabIndex?: number;
   id?: string;
   reCaptchaCompat?: boolean;
+  custom?: boolean;
+  customTheme?: Record<string, unknown>;
 }
 
 interface ExecuteResponse {

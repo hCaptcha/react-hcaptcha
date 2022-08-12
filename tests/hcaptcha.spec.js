@@ -513,4 +513,35 @@ describe("hCaptcha", () => {
             expect(onError.mock.calls[0][0]).toEqual('script-error');
         });
     });
+
+    it("el renders with custom theme", () => {
+        const customTheme = { palette: { primary: { main: "#FF00FF" } } };
+        instance = ReactTestUtils.renderIntoDocument(
+            <HCaptcha
+                sitekey={TEST_PROPS.sitekey}
+                theme={TEST_PROPS.theme}
+                size={TEST_PROPS.size}
+                tabindex={TEST_PROPS.tabindex}
+                onChange={mockFns.onChange}
+                onVerify={mockFns.onVerify}
+                onError={mockFns.onError}
+                onExpire={mockFns.onExpire}
+                onLoad={mockFns.onLoad}
+                onOpen={mockFns.onOpen}
+                onClose={mockFns.onClose}
+                onChalExpired={mockFns.onChalExpired}
+                custom
+                customTheme={customTheme}
+            />,
+        );
+        expect(instance.state.captchaId).toBe(MOCK_WIDGET_ID);
+        expect(window.hcaptcha.render).toHaveBeenCalledTimes(2);
+        expect(window.hcaptcha.render.mock.calls[1][1]).toMatchObject({
+            sitekey: TEST_PROPS.sitekey,
+            theme: TEST_PROPS.theme,
+            size: TEST_PROPS.size,
+            tabindex: TEST_PROPS.tabindex,
+            theme: customTheme,
+        });
+    });
 });
