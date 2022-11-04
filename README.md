@@ -180,6 +180,12 @@ Please note that "invisible" simply means that no hCaptcha button will be render
     This issue generally occurs when the component is re-rendered causing the current `useRef` to become stale, meaning the `ref` being used is no longer available in the DOM.
 
 
+2. #### Make sure you don't double-import the api.js script
+    Importing the JS SDK twice can cause unpredictable behavior, so don't do a direct import separately if you are using react-hcaptcha.
+
+3. #### Make sure you are using `reCaptchaCompat=false` if you have the reCAPTCHA JS loaded on the same page.
+    The hCaptcha "compatibility mode" will interfere with reCAPTCHA, as it adds properties with the same name. If for any reason you are running both hCaptcha and reCAPTCHA in parallel (we recommend only running hCaptcha) then please disable our compatibility mode.
+
 
 ---
 ### Contributing
