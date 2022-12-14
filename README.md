@@ -1,12 +1,17 @@
 # React hCaptcha Component Library
 
-## Description
 
 hCaptcha Component Library for ReactJS.
 
 [hCaptcha](https://www.hcaptcha.com) is a drop-replacement for reCAPTCHA that protects user privacy, rewards websites, and helps companies get their data labeled.
 
 Sign up at [hCaptcha](https://www.hcaptcha.com) to get your sitekey today. **You need a sitekey to use this library.**
+
+
+1. [Installation](#installation)
+2. [References](#references)
+3. [Debugging](#debugging)
+4. [Contributing](#contributing)
 
 ## Installation
 
@@ -16,11 +21,11 @@ You can install this library via npm with:
 npm install @hcaptcha/react-hcaptcha --save
 ```
 
-### Usage
+### Implementation
 The two requirements for usage are the `sitekey` [prop](#props) and a `parent component` such as a `<form />`. The component will automatically include and load the
 hCaptcha API library and append it to the parent component. This is designed for ease of use with the hCaptcha API!
 
-#### Basic Usage
+#### Standard
 
 ```js
 import HCaptcha from '@hcaptcha/react-hcaptcha';
@@ -33,21 +38,7 @@ import HCaptcha from '@hcaptcha/react-hcaptcha';
 </FormComponent>
 ```
 
-**A note about TypeScript usage:** If you want to reassign the component name, you could consider making a util that imports the component, then re-exports it as a default. Example:
-
-```ts
-// utils/captcha.ts
-import HCaptcha from '@hcaptcha/react-hcaptcha';
-export default HCaptcha;
-
-// MyFormComponent.tsx
-import { default as RenamedCaptcha } from '../utils/captcha';
-<FormComponent>
-  <RenamedCaptcha sitekey="your-sitekey" />
-</FormComponent>
-```
-
-#### Programmatic Usage
+#### Programmatic
 In the event you want to call the hCaptcha client API directly, you can do so by using the hook `useRef` and waiting for `onLoad` to be called. By waiting for `onLoad` the hCaptcha API will be ready and the hCaptcha client will have been setup. See the following example:
 
 ```js
@@ -86,7 +77,22 @@ export default function Form() {
 }
 ```
 
-#### Advanced usage
+**Typescript Support** \
+If you want to reassign the component name, you could consider making a util that imports the component, then re-exports it as a default.
+
+```ts
+// utils/captcha.ts
+import HCaptcha from '@hcaptcha/react-hcaptcha';
+export default HCaptcha;
+
+// MyFormComponent.tsx
+import { default as RenamedCaptcha } from '../utils/captcha';
+<FormComponent>
+  <RenamedCaptcha sitekey="your-sitekey" />
+</FormComponent>
+```
+
+#### Advanced
 
 In most real-world implementations, you'll probably be using a form library such as [Formik](https://github.com/jaredpalmer/formik) or [React Hook Form](https://github.com/react-hook-form/react-hook-form).
 
@@ -111,8 +117,9 @@ const onLoad = () => {
 return <HCaptcha ref={captchaRef} onLoad={onLoad} sitekey={sitekey} {...props} />;
 ```
 
+### References
 
-### Props
+#### Props
 
 |Name|Values/Type|Required|Default|Description|
 |---|---|---|---|---|
@@ -132,7 +139,7 @@ return <HCaptcha ref={captchaRef} onLoad={onLoad} sitekey={sitekey} {...props} /
 |`sentry`|String|No|`-`|See enterprise docs.|
 |`custom`|Boolean|No|`-`|See enterprise docs.|
 
-### Events
+#### Events
 
 |Event|Params|Description|
 |---|---|---|
@@ -144,7 +151,7 @@ return <HCaptcha ref={captchaRef} onLoad={onLoad} sitekey={sitekey} {...props} /
 |`onClose`|-|When the user dismisses a challenge.|
 |`onChalExpired`|-|When the user display of a challenge times out with no answer.|
 
-### Methods
+#### Methods
 
 |Method|Description|
 |---|---|
@@ -155,7 +162,8 @@ return <HCaptcha ref={captchaRef} onLoad={onLoad} sitekey={sitekey} {...props} /
 |`setData()`|See enterprise docs.|
 
 
-**NOTE**: Make sure to reset the hCaptcha state when you submit your form by calling the method `.resetCaptcha` on your hCaptcha React Component! Passcodes are one-time use, so if your user submits the same passcode twice then it will be rejected by the server the second time.
+> **Note** \
+> Make sure to reset the hCaptcha state when you submit your form by calling the method `.resetCaptcha` on your hCaptcha React Component! Passcodes are one-time use, so if your user submits the same passcode twice then it will be rejected by the server the second time.
 
 Please refer to the demo for examples of basic usage and an invisible hCaptcha.
 
@@ -163,9 +171,24 @@ Alternatively, see [this sandbox code](https://codesandbox.io/s/react-hcaptchafo
 
 Please note that "invisible" simply means that no hCaptcha button will be rendered. Whether a challenge shows up will depend on the sitekey difficulty level. Note to hCaptcha Enterprise ([BotStop](https://www.botstop.com)) users: select "Passive" or "99.9% Passive" modes to get this No-CAPTCHA behavior.
 
----
 
-### Note for maintainers
+
+
+### Debugging
+
+1. #### Invalid hCaptcha Id: <hcaptcha_id>
+    This issue generally occurs when the component is re-rendered causing the current `useRef` to become stale, meaning the `ref` being used is no longer available in the DOM.
+
+
+2. #### Make sure you don't double-import the api.js script
+    Importing the JS SDK twice can cause unpredictable behavior, so don't do a direct import separately if you are using react-hcaptcha.
+
+3. #### Make sure you are using `reCaptchaCompat=false` if you have the reCAPTCHA JS loaded on the same page.
+    The hCaptcha "compatibility mode" will interfere with reCAPTCHA, as it adds properties with the same name. If for any reason you are running both hCaptcha and reCAPTCHA in parallel (we recommend only running hCaptcha) then please disable our compatibility mode.
+
+
+---
+### Contributing
 
 #### Scripts
 
@@ -188,8 +211,9 @@ Please see: [Local Development Notes](https://docs.hcaptcha.com/#localdev).
 
 Summary:
 
-`sudo echo "127.0.0.1 fakelocal.com" >> /private/etc/hosts`
-
-`npm start -- --disable-host-check`
+```
+sudo echo "127.0.0.1 fakelocal.com" >> /private/etc/hosts
+npm start -- --disable-host-check
+```
 
 open [http://fakelocal.com:9000](http://fakelocal.com:9000) to start the example.
