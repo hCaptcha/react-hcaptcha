@@ -1,7 +1,7 @@
 # React hCaptcha Component Library
 
 
-hCaptcha Component Library for ReactJS.
+hCaptcha Component Library for ReactJS and PreactJS.
 
 [hCaptcha](https://www.hcaptcha.com) is a drop-replacement for reCAPTCHA that protects user privacy.
 
