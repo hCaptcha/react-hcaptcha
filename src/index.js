@@ -28,7 +28,10 @@ const mountCaptchaScript = (params={}) => {
   const script = document.createElement("script");
   script.id = SCRIPT_ID;
   script.src = `${domain}/1/api.js?render=explicit&onload=${HCAPTCHA_LOAD_FN_NAME}`;
+
   script.async = params.loadAsync !== undefined? params.loadAsync : true;
+  delete params.loadAsync;
+
   script.onerror = (event) => rejectFn('script-error');
 
   const query = generateQuery(params);
