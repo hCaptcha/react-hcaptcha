@@ -1,6 +1,9 @@
 import React, { useRef } from "react";
 import ReactDOM from "react-dom";
 import ReactTestUtils, { act } from "react-dom/test-utils";
+
+import { describe, jest, it } from "@jest/globals";
+
 import {getMockedHcaptcha, MOCK_EKEY, MOCK_TOKEN, MOCK_WIDGET_ID} from "./hcaptcha.mock";
 
 let HCaptcha;
@@ -511,6 +514,35 @@ describe("hCaptcha", () => {
 
             expect(onError.mock.calls.length).toBe(1);
             expect(onError.mock.calls[0][0]).toEqual('script-error');
+        });
+
+        it("should have async set by default", () => {
+            instance = ReactTestUtils.renderIntoDocument(<HCaptcha
+                    sitekey={TEST_PROPS.sitekey}
+                />);
+
+            const script = document.querySelector("head > script");
+            expect(script.async).toBeTruthy();
+        });
+
+        it("should not have async set when prop loadAsync is set as false", () => {
+            instance = ReactTestUtils.renderIntoDocument(<HCaptcha
+                    loadAsync={false}
+                    sitekey={TEST_PROPS.sitekey}
+                />);
+
+            const script = document.querySelector("head > script");
+            expect(script.async).toBeFalsy();
+        });
+
+        it("should have async set when prop loadAsync is set as true", () => {
+            instance = ReactTestUtils.renderIntoDocument(<HCaptcha
+                    loadAsync={true}
+                    sitekey={TEST_PROPS.sitekey}
+                />);
+
+            const script = document.querySelector("head > script");
+            expect(script.async).toBeTruthy();
         });
     });
 });
