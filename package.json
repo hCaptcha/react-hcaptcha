@@ -1,7 +1,8 @@
 {
   "name": "@hcaptcha/react-hcaptcha",
-  "version": "1.4.4",
+  "version": "1.5.0",
   "types": "types/index.d.ts",
+  "type": "module",
   "main": "dist/index.js",
   "module": "dist/esm/index.js",
   "files": [
@@ -11,7 +12,7 @@
   ],
   "description": "A React library for hCaptcha",
   "scripts": {
-    "start": "webpack-dev-server --config ./webpack.config.js --mode development",
+    "start": "webpack serve",
     "test": "jest",
     "watch": "babel src -d dist --copy-files --watch",
     "transpile": "babel src -d dist --copy-files",
@@ -51,9 +52,9 @@
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "rimraf": "^3.0.2",
-    "webpack": "^5.75.0",
+    "webpack": "^5.76.3",
     "webpack-cli": "^5.0.1",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^4.13.1"
   },
   "dependencies": {
     "@babel/runtime": "^7.17.9"

@@ -28,6 +28,7 @@ interface HCaptchaProps {
   tabIndex?: number;
   id?: string;
   reCaptchaCompat?: boolean;
+  loadAsync?: boolean;
 }
 
 interface ExecuteResponse {
