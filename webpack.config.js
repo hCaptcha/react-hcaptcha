@@ -1,16 +1,31 @@
-// NPM Modules
-const Webpack = require('webpack');
-const Path = require('path');
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+import { dirname, resolve } from 'path';
+import { fileURLToPath } from 'url';
 
-// Webpack Plugins
-const htmlPlugin = new HtmlWebpackPlugin({
-    template: Path.join(__dirname, "./examples/src/index.html"),
-    filename: "./index.html"
-}); 
+import webpack from 'webpack';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 
-module.exports = {
-  entry: Path.join(__dirname, "./examples/src/index.js"),
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const SRC_DIR  = resolve(__dirname, 'src');
+const DIST_DIR = resolve(__dirname, 'dist');
+const DEMO_DIR = resolve(__dirname, 'demo');
+
+export default {
+  mode: 'development',
+
+  entry: {
+    demo: resolve(DEMO_DIR, 'index.js'),
+  },
+
+  output: {
+    path: DIST_DIR,
+    filename: '[name].js'
+  },
+
+  resolve: {
+    extensions: ['.json', '.js', '.ts']
+  },
 
   module: {
     rules: [
@@ -22,18 +37,11 @@ module.exports = {
     ]
   },
 
-  resolve: {
-    extensions: ['*', '.js', '.jsx']
-  },
-
-  output: {
-    path: __dirname + '/dist',
-    publicPath: '/',
-    filename: 'bundle.js'
-  },
-
   plugins: [
-    htmlPlugin
+    new HtmlWebpackPlugin({
+      template: resolve(DEMO_DIR, 'index.html'),
+      inject: true
+    })
   ],
 
   devServer: {

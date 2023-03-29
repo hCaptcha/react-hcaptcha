@@ -1,3 +1,5 @@
+import { describe, jest, it } from "@jest/globals";
+
 import { generateQuery } from "../src/utils.js";
 
 describe("Encode query", () => {

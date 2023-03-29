@@ -28,7 +28,10 @@ const mountCaptchaScript = (params={}) => {
   const script = document.createElement("script");
   script.id = SCRIPT_ID;
   script.src = `${domain}/1/api.js?render=explicit&onload=${HCAPTCHA_LOAD_FN_NAME}`;
-  script.async = true;
+
+  script.async = params.loadAsync !== undefined? params.loadAsync : true;
+  delete params.loadAsync;
+
   script.onerror = (event) => rejectFn('script-error');
 
   const query = generateQuery(params);
@@ -139,7 +142,8 @@ class HCaptcha extends React.Component {
         reCaptchaCompat,
         reportapi,
         sentry,
-        custom
+        custom,
+        loadAsync
       } = this.props;
       const mountParams = {
         apihost,
@@ -151,7 +155,8 @@ class HCaptcha extends React.Component {
         recaptchacompat: reCaptchaCompat === false? "off" : null,
         reportapi,
         sentry,
-        custom
+        custom,
+        loadAsync
       };
 
       mountCaptchaScript(mountParams)
@@ -323,7 +328,7 @@ class HCaptcha extends React.Component {
 
     render () {
       const { elementId } = this.state;
-      return <div ref={this.ref} id={elementId}></div>
+      return <div ref={this.ref} id={elementId}></div>;
     }
   }
 
