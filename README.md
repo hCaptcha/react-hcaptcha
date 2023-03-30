@@ -139,6 +139,7 @@ return <HCaptcha ref={captchaRef} onLoad={onLoad} sitekey={sitekey} {...props} /
 |`reportapi`|String|No|`-`|See enterprise docs.|
 |`sentry`|String|No|`-`|See enterprise docs.|
 |`custom`|Boolean|No|`-`|See enterprise docs.|
+|`loadAsync`|Boolean|No|`true`|Set if the script should be loaded asynchronously|
 
 #### Events
 
