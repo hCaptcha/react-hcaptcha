@@ -8,7 +8,9 @@ const AsyncDemo = () => {
 
   const executeCaptcha = async () => {
     try {
-      const res = await captchaRef.current.execute();
+      const res = await captchaRef.current.execute({
+        async: true
+      });
       console.log("Verified asynchronously: ", res);
 
     } catch (error) {
