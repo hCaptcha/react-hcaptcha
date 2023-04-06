@@ -535,8 +535,8 @@ describe("hCaptcha", () => {
         describe("scriptLocation", () => {
 
 
-             it("validate src without", () => {
-                const instance = ReactTestUtils.renderIntoDocument(<HCaptcha
+             it("should append to document.head by default", () => {
+                ReactTestUtils.renderIntoDocument(<HCaptcha
                         sitekey={TEST_PROPS.sitekey}
                     />);
 
@@ -550,7 +550,7 @@ describe("hCaptcha", () => {
 
                 document.body.appendChild(element);
 
-                const nstance = ReactTestUtils.renderIntoDocument(<HCaptcha
+                ReactTestUtils.renderIntoDocument(<HCaptcha
                         scriptLocation={element}
                         sitekey={TEST_PROPS.sitekey}
                     />);
