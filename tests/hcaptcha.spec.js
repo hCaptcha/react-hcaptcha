@@ -473,19 +473,6 @@ describe("hCaptcha", () => {
             expect(script.src).toContain("host=test.com");
         });
 
-        it("shouldn't create multiple scripts for multiple captchas", () => {
-            ReactTestUtils.renderIntoDocument(<HCaptcha
-                sitekey={TEST_PROPS.sitekey}
-            />);
-            ReactTestUtils.renderIntoDocument(<HCaptcha
-                sitekey={TEST_PROPS.sitekey}
-            />);
-
-            const scripts = document.querySelectorAll("head > script");
-
-            expect(scripts.length).toBe(1);
-        });
-
         it("custom parameter should be in script query", () => {
             instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     custom={true}
@@ -544,5 +531,123 @@ describe("hCaptcha", () => {
             const script = document.querySelector("head > script");
             expect(script.async).toBeTruthy();
         });
+
+    });
+
+    describe("scriptLocation", () => {
+
+        beforeEach(() => {
+            // Setup hCaptcha as undefined to load script
+            window.hcaptcha = undefined;
+        });
+
+         it("should append to document.head by default", () => {
+            ReactTestUtils.renderIntoDocument(<HCaptcha
+                    sitekey={TEST_PROPS.sitekey}
+                />);
+
+            const script = document.querySelector("head > script");
+            expect(script).toBeTruthy();
+
+            // clean up
+            document.head.removeChild(script)
+        });
+
+        it("shouldn't create multiple scripts for multiple captchas", () => {
+            ReactTestUtils.renderIntoDocument(<HCaptcha
+                sitekey={TEST_PROPS.sitekey}
+            />);
+
+            ReactTestUtils.renderIntoDocument(<HCaptcha
+                sitekey={TEST_PROPS.sitekey}
+            />);
+
+            const scripts = document.querySelectorAll("head > script");
+            expect(scripts.length).toBe(1);
+
+            // clean up
+            const script = document.querySelector("head > script");
+            document.head.removeChild(script)
+        });
+
+        it("should append script into specified DOM element", () => {
+            const element = document.createElement('div');
+            element.id = "script-location";
+
+            document.body.appendChild(element);
+
+            ReactTestUtils.renderIntoDocument(<HCaptcha
+                    scriptLocation={element}
+                    sitekey={TEST_PROPS.sitekey}
+                />);
+
+            let script;
+            script = document.querySelector("head > script");
+            expect(script).toBeFalsy();
+
+            script = document.querySelector("#script-location > script");
+            expect(script).toBeTruthy();
+
+            // clean up
+            document.body.removeChild(element)
+        });
+
+        describe('iframe', () => {
+            const iframe = document.createElement('iframe');
+             document.body.appendChild(iframe);
+
+            const iframeDoc = iframe.contentWindow.document;
+
+            afterAll(() => {
+                // clean up, keep iFrame persistent between tests
+                document.body.removeChild(iframe);
+            });
+
+            it("should append script into supplied iFrame", () => {
+                ReactTestUtils.renderIntoDocument(<HCaptcha
+                        scriptLocation={iframeDoc.head}
+                        sitekey={TEST_PROPS.sitekey}
+                    />);
+
+                let script;
+                script = document.querySelector("head > script");
+                expect(script).toBeFalsy();
+
+                script = iframeDoc.querySelector("head > script");
+                expect(script).toBeTruthy();
+            });
+
+            it("should only append script tag once for same element specified", () => {
+                ReactTestUtils.renderIntoDocument(<HCaptcha
+                    scriptLocation={iframeDoc.head}
+                    sitekey={TEST_PROPS.sitekey}
+                />);
+
+                const scripts = iframeDoc.querySelectorAll("head > script");
+                expect(scripts.length).toBe(1);
+            });
+
+            it("should append new script tag for new element specified", () => {
+                const iframe2 = document.createElement("iframe");
+                document.body.appendChild(iframe2);
+
+                const iframe2Doc = iframe.contentWindow.document;
+
+                ReactTestUtils.renderIntoDocument(<HCaptcha
+                    scriptLocation={iframe2Doc.head}
+                    sitekey={TEST_PROPS.sitekey}
+                />);
+
+                const script = iframe2Doc.querySelector("head > script");
+                expect(script).toBeTruthy();
+
+                const scripts = iframe2Doc.querySelectorAll("head > script");
+                expect(scripts.length).toBe(1);
+
+                document.body.removeChild(iframe2);
+            });
+
+        });
+
     });
 });

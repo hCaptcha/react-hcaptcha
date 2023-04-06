@@ -139,7 +139,8 @@ return <HCaptcha ref={captchaRef} onLoad={onLoad} sitekey={sitekey} {...props} /
 |`reportapi`|String|No|`-`|See enterprise docs.|
 |`sentry`|String|No|`-`|See enterprise docs.|
 |`custom`|Boolean|No|`-`|See enterprise docs.|
-|`loadAsync`|Boolean|No|`true`|Set if the script should be loaded asynchronously|
+|`loadAsync`|Boolean|No|`true`|Set if the script should be loaded asynchronously.|
+|`scriptLocation`|Element|No|`document.head`| Location of where to append the script tag. Make sure to add it to an area that will persist to prevent loading multiple times in the same document view. Note: If `null` is provided, the `document.head` will be used.|
 
 #### Events
 
