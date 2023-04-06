@@ -544,5 +544,28 @@ describe("hCaptcha", () => {
             const script = document.querySelector("head > script");
             expect(script.async).toBeTruthy();
         });
+
+        it("should append script into specified DOM element", () => {
+            const element = document.createElement('div');
+            element.id = "script-location";
+
+            document.body.appendChild(element);
+
+            instance = ReactTestUtils.renderIntoDocument(<HCaptcha
+                    scriptLocation={element}
+                    sitekey={TEST_PROPS.sitekey}
+                />);
+
+            let script;
+            script = document.querySelector("head > script");
+            expect(script).toBeFalsy();
+
+            script = document.querySelector("#script-location > script");
+            expect(script).toBeTruthy();
+
+            // Clean up
+            document.body.removeChild(element)
+        });
+
     });
 });
