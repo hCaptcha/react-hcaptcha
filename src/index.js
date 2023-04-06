@@ -239,7 +239,7 @@ class HCaptcha extends React.Component {
 
       const token = hcaptcha.getResponse(captchaId) //Get response token from hCaptcha widget
       const ekey  = hcaptcha.getRespKey(captchaId)  //Get current challenge session id from hCaptcha widget
-      onVerify(token, ekey) //Dispatch event to verify user response
+      if (onVerify) onVerify(token, ekey) //Dispatch event to verify user response
     }
 
     handleExpire () {
