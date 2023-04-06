@@ -29,6 +29,7 @@ interface HCaptchaProps {
   id?: string;
   reCaptchaCompat?: boolean;
   loadAsync?: boolean;
+  scriptLocation?: HTMLElement | null;
 }
 
 interface ExecuteResponse {
