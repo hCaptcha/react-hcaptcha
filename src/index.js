@@ -14,7 +14,12 @@ const mountPromise = new Promise((resolve, reject) => {
 
 // Generate hCaptcha API script
 const mountCaptchaScript = (params={}) => {
-  if (document.getElementById(SCRIPT_ID)) {
+  const parent = params.scriptLocation || document.head;
+  delete params.scriptLocation;
+
+  const doc = parent.ownerDocument || document;
+
+  if (doc.getElementById(SCRIPT_ID)) {
     // API was already requested
     return mountPromise;
   }
@@ -25,10 +30,7 @@ const mountCaptchaScript = (params={}) => {
   const domain = params.apihost || "https://js.hcaptcha.com";
   delete params.apihost;
 
-  const parent = params.scriptLocation || document.head;
-  delete params.scriptLocation;
-
-  const script = document.createElement("script");
+  const script = doc.createElement("script");
   script.id = SCRIPT_ID;
   script.src = `${domain}/1/api.js?render=explicit&onload=${HCAPTCHA_LOAD_FN_NAME}`;
 
