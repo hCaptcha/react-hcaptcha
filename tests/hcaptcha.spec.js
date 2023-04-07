@@ -542,28 +542,41 @@ describe("hCaptcha", () => {
         });
 
          it("should append to document.head by default", () => {
-            ReactTestUtils.renderIntoDocument(<HCaptcha
+            const instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     sitekey={TEST_PROPS.sitekey}
                 />);
+
+            // Manually set hCaptcha API since script does not actually load here
+            window.hcaptcha = getMockedHcaptcha();
+            instance.handleOnLoad();
+
+            expect(instance._hcaptcha).toEqual(window.hcaptcha);
 
             const script = document.querySelector("head > script");
             expect(script).toBeTruthy();
 
             // clean up
-            document.head.removeChild(script)
+            document.head.removeChild(script);
         });
 
         it("shouldn't create multiple scripts for multiple captchas", () => {
-            ReactTestUtils.renderIntoDocument(<HCaptcha
+            const instance0 = ReactTestUtils.renderIntoDocument(<HCaptcha
                 sitekey={TEST_PROPS.sitekey}
             />);
 
-            ReactTestUtils.renderIntoDocument(<HCaptcha
+            // Manually set hCaptcha API since script does not actually load here
+            window.hcaptcha = getMockedHcaptcha();
+            instance0.handleOnLoad();
+
+            const instance1 = ReactTestUtils.renderIntoDocument(<HCaptcha
                 sitekey={TEST_PROPS.sitekey}
             />);
 
             const scripts = document.querySelectorAll("head > script");
             expect(scripts.length).toBe(1);
+
+            expect(instance0._hcaptcha).toEqual(window.hcaptcha);
+            expect(instance1._hcaptcha).toEqual(window.hcaptcha);
 
             // clean up
             const script = document.querySelector("head > script");
@@ -576,10 +589,14 @@ describe("hCaptcha", () => {
 
             document.body.appendChild(element);
 
-            ReactTestUtils.renderIntoDocument(<HCaptcha
+            const instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     scriptLocation={element}
                     sitekey={TEST_PROPS.sitekey}
                 />);
+
+            // Manually set hCaptcha API since script does not actually load here
+            window.hcaptcha = getMockedHcaptcha();
+            instance.handleOnLoad();
 
             let script;
             script = document.querySelector("head > script");
@@ -587,6 +604,8 @@ describe("hCaptcha", () => {
 
             script = document.querySelector("#script-location > script");
             expect(script).toBeTruthy();
+
+            expect(instance._hcaptcha).toEqual(window.hcaptcha);
 
             // clean up
             document.body.removeChild(element)
@@ -599,6 +618,8 @@ describe("hCaptcha", () => {
             const iframeWin = iframe.contentWindow;
             const iframeDoc = iframeWin.document;
 
+            let instance;
+
             beforeAll(() => {
                 delete window["hcaptchaOnLoad"];
             });
@@ -610,10 +631,14 @@ describe("hCaptcha", () => {
             });
 
             it("should append script into supplied iFrame", () => {
-                ReactTestUtils.renderIntoDocument(<HCaptcha
+                instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                         scriptLocation={iframeDoc.head}
                         sitekey={TEST_PROPS.sitekey}
                     />);
+
+                // Manually set hCaptcha API since script does not actually load here
+                iframeWin.hcaptcha = getMockedHcaptcha();
+                instance.handleOnLoad();
 
                 let script;
                 script = document.querySelector("head > script");
@@ -625,6 +650,10 @@ describe("hCaptcha", () => {
 
             it("should have hcaptchaOnLoad in iFrame window", () => {
                 expect(iframeWin).toHaveProperty("hcaptchaOnLoad");
+            });
+
+            it("should load hCaptcha API in iFrame window", () => {
+                expect(instance._hcaptcha).toEqual(iframeWin.hcaptcha);
             });
 
             it("should only append script tag once for same element specified", () => {
@@ -644,10 +673,14 @@ describe("hCaptcha", () => {
                 const iframe2Win = iframe.contentWindow;
                 const iframe2Doc = iframe2Win.document;
 
-                ReactTestUtils.renderIntoDocument(<HCaptcha
+                const instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     scriptLocation={iframe2Doc.head}
                     sitekey={TEST_PROPS.sitekey}
                 />);
+
+                // Manually set hCaptcha API since script does not actually load here
+                iframe2Win.hcaptcha = getMockedHcaptcha();
+                instance.handleOnLoad();
 
                 const script = iframe2Doc.querySelector("head > script");
                 expect(script).toBeTruthy();
@@ -656,6 +689,7 @@ describe("hCaptcha", () => {
                 expect(scripts.length).toBe(1);
 
                 expect(iframe2Win).toHaveProperty("hcaptchaOnLoad");
+                expect(instance._hcaptcha).toEqual(iframe2Win.hcaptcha);
 
                 // clean up
                 document.body.removeChild(iframe2);
