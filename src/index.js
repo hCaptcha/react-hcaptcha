@@ -7,6 +7,7 @@ const HCAPTCHA_LOAD_FN_NAME = 'hcaptchaOnLoad';
 // Prevent loading API script multiple times
 let resolveFn;
 let rejectFn;
+let scriptContainerWindow;
 const mountPromise = new Promise((resolve, reject) => {
   resolveFn = resolve;
   rejectFn = reject;
@@ -19,7 +20,7 @@ const mountCaptchaScript = (params={}) => {
   delete params.scriptLocation;
 
   const doc = parent.ownerDocument || document;
-  const win = doc.defaultView || doc.parentWindow;
+  scriptContainerWindow = doc.defaultView || doc.parentWindow;
 
   if (doc.getElementById(SCRIPT_ID)) {
     // API was already requested
@@ -27,7 +28,7 @@ const mountCaptchaScript = (params={}) => {
   }
 
   // Create global onload callback
-  win[HCAPTCHA_LOAD_FN_NAME] = resolveFn;
+  scriptContainerWindow[HCAPTCHA_LOAD_FN_NAME] = resolveFn;
 
   const domain = params.apihost || "https://js.hcaptcha.com";
   delete params.apihost;
@@ -69,7 +70,7 @@ class HCaptcha extends React.Component {
       this.handleClose = this.handleClose.bind(this);
       this.handleChallengeExpired = this.handleChallengeExpired.bind(this);
 
-      const isApiReady = typeof hcaptcha !== 'undefined';
+      const isApiReady = scriptContainerWindow && typeof scriptContainerWindow.hcaptcha !== 'undefined';
 
       this.ref = React.createRef();
       this.apiScriptRequested = false;
@@ -107,8 +108,8 @@ class HCaptcha extends React.Component {
       }
 
       // Reset any stored variables / timers when unmounting
-      hcaptcha.reset(captchaId);
-      hcaptcha.remove(captchaId);
+      scriptContainerWindow.hcaptcha.reset(captchaId);
+      scriptContainerWindow.hcaptcha.remove(captchaId);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -191,7 +192,7 @@ class HCaptcha extends React.Component {
       });
 
       //Render hCaptcha widget and provide necessary callbacks - hCaptcha
-      const captchaId = hcaptcha.render(this.ref.current, renderParams);
+      const captchaId = scriptContainerWindow.hcaptcha.render(this.ref.current, renderParams);
 
       this.setState({ isRemoved: false, captchaId }, () => {
         onReady && onReady();
@@ -205,7 +206,7 @@ class HCaptcha extends React.Component {
         return;
       }
       // Reset captcha state, removes stored token and unticks checkbox
-      hcaptcha.reset(captchaId)
+      scriptContainerWindow.hcaptcha.reset(captchaId)
     }
 
     removeCaptcha(callback) {
@@ -216,7 +217,7 @@ class HCaptcha extends React.Component {
       }
 
       this.setState({ isRemoved: true }, () => {
-        hcaptcha.remove(captchaId);
+        scriptContainerWindow.hcaptcha.remove(captchaId);
         callback && callback()
       });
     }
@@ -237,10 +238,10 @@ class HCaptcha extends React.Component {
       const { onVerify } = this.props;
       const { isRemoved, captchaId } = this.state;
 
-      if (typeof hcaptcha === 'undefined' || isRemoved) return
+      if (typeof scriptContainerWindow.hcaptcha === 'undefined' || isRemoved) return
 
-      const token = hcaptcha.getResponse(captchaId) //Get response token from hCaptcha widget
-      const ekey  = hcaptcha.getRespKey(captchaId)  //Get current challenge session id from hCaptcha widget
+      const token = scriptContainerWindow.hcaptcha.getResponse(captchaId) //Get response token from hCaptcha widget
+      const ekey  = scriptContainerWindow.hcaptcha.getRespKey(captchaId)  //Get current challenge session id from hCaptcha widget
       if (onVerify) onVerify(token, ekey) //Dispatch event to verify user response
     }
 
@@ -252,7 +253,7 @@ class HCaptcha extends React.Component {
         return;
       }
 
-      hcaptcha.reset(captchaId) // If hCaptcha runs into error, reset captcha - hCaptcha
+      scriptContainerWindow.hcaptcha.reset(captchaId) // If hCaptcha runs into error, reset captcha - hCaptcha
 
       if (onExpire) onExpire();
     }
@@ -263,7 +264,7 @@ class HCaptcha extends React.Component {
 
       if (this.isReady()) {
         // If hCaptcha runs into error, reset captcha - hCaptcha
-        hcaptcha.reset(captchaId);
+        scriptContainerWindow.hcaptcha.reset(captchaId);
       }
 
       if (onError) onError(event);
@@ -310,7 +311,7 @@ class HCaptcha extends React.Component {
         opts = null;
       }
 
-      return hcaptcha.execute(captchaId, opts);
+      return scriptContainerWindow.hcaptcha.execute(captchaId, opts);
     }
 
     setData (data) {
@@ -324,15 +325,15 @@ class HCaptcha extends React.Component {
         data = null;
       }
 
-      hcaptcha.setData(captchaId, data);
+      scriptContainerWindow.hcaptcha.setData(captchaId, data);
     }
 
     getResponse() {
-      return hcaptcha.getResponse(this.state.captchaId);
+      return scriptContainerWindow.hcaptcha.getResponse(this.state.captchaId);
     }
 
     getRespKey() {
-      return hcaptcha.getRespKey(this.state.captchaId)
+      return scriptContainerWindow.hcaptcha.getRespKey(this.state.captchaId)
     }
 
     render () {
