@@ -596,11 +596,17 @@ describe("hCaptcha", () => {
             const iframe = document.createElement('iframe');
              document.body.appendChild(iframe);
 
-            const iframeDoc = iframe.contentWindow.document;
+            const iframeWin = iframe.contentWindow;
+            const iframeDoc = iframeWin.document;
+
+            beforeAll(() => {
+                delete window["hcaptchaOnLoad"];
+            });
 
             afterAll(() => {
                 // clean up, keep iFrame persistent between tests
                 document.body.removeChild(iframe);
+                delete iframeWin["hcaptchaOnLoad"];
             });
 
             it("should append script into supplied iFrame", () => {
@@ -617,6 +623,10 @@ describe("hCaptcha", () => {
                 expect(script).toBeTruthy();
             });
 
+            it("should have hcaptchaOnLoad in iFrame window", () => {
+                expect(iframeWin).toHaveProperty("hcaptchaOnLoad");
+            });
+
             it("should only append script tag once for same element specified", () => {
                 ReactTestUtils.renderIntoDocument(<HCaptcha
                     scriptLocation={iframeDoc.head}
@@ -631,7 +641,8 @@ describe("hCaptcha", () => {
                 const iframe2 = document.createElement("iframe");
                 document.body.appendChild(iframe2);
 
-                const iframe2Doc = iframe.contentWindow.document;
+                const iframe2Win = iframe.contentWindow;
+                const iframe2Doc = iframe2Win.document;
 
                 ReactTestUtils.renderIntoDocument(<HCaptcha
                     scriptLocation={iframe2Doc.head}
@@ -644,7 +655,11 @@ describe("hCaptcha", () => {
                 const scripts = iframe2Doc.querySelectorAll("head > script");
                 expect(scripts.length).toBe(1);
 
+                expect(iframe2Win).toHaveProperty("hcaptchaOnLoad");
+
+                // clean up
                 document.body.removeChild(iframe2);
+                delete iframe2Win["hcaptchaOnLoad"];
             });
 
         });

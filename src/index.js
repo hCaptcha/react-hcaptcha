@@ -15,9 +15,11 @@ const mountPromise = new Promise((resolve, reject) => {
 // Generate hCaptcha API script
 const mountCaptchaScript = (params={}) => {
   const parent = params.scriptLocation || document.head;
+
   delete params.scriptLocation;
 
   const doc = parent.ownerDocument || document;
+  const win = doc.defaultView || doc.parentWindow;
 
   if (doc.getElementById(SCRIPT_ID)) {
     // API was already requested
@@ -25,7 +27,7 @@ const mountCaptchaScript = (params={}) => {
   }
 
   // Create global onload callback
-  window[HCAPTCHA_LOAD_FN_NAME] = resolveFn;
+  win[HCAPTCHA_LOAD_FN_NAME] = resolveFn;
 
   const domain = params.apihost || "https://js.hcaptcha.com";
   delete params.apihost;
