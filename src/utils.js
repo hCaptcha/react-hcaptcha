@@ -12,7 +12,12 @@ function getFrame(element) {
     return { document: doc, window: win };
 }
 
+function getMountElement(element) {
+    return element || document.head;
+}
+
 export {
     generateQuery,
-    getFrame
+    getFrame,
+    getMountElement
 };

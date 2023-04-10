@@ -1,6 +1,6 @@
 import { describe, jest, it } from "@jest/globals";
 
-import { generateQuery, getFrame } from "../src/utils.js";
+import { generateQuery, getFrame, getMountElement } from "../src/utils.js";
 
 describe("generateQuery", () => {
 
@@ -85,6 +85,21 @@ describe("getFrame", () => {
 
         // clean up
         document.body.removeChild(iframe);
+    });
+
+});
+
+describe("getMountElement", () => {
+
+    it("should return document.head by default", () => {
+        const mountElement = getMountElement();
+        expect(mountElement).toEqual(document.head);
+    });
+
+    it("should return element passed in", () => {
+        const element = document.createElement('div');
+        const mountElement = getMountElement(element);
+        expect(mountElement).toEqual(element);
     });
 
 });

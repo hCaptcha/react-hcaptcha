@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { generateQuery, getFrame } from "./utils.js";
+import { generateQuery, getFrame, getMountElement } from "./utils.js";
 
 const SCRIPT_ID = 'hcaptcha-api-script-id';
 const HCAPTCHA_LOAD_FN_NAME = 'hcaptchaOnLoad';
@@ -9,11 +9,10 @@ const scripts = [];
 
 // Generate hCaptcha API script
 const mountCaptchaScript = (params={}) => {
-  const parent = params.scriptLocation || document.head;
-
+  const element = getMountElement(params.scriptLocation);
   delete params.scriptLocation;
 
-  const frame = getFrame(parent);
+  const frame = getFrame(element);
   const script = scripts.find(({ scope }) => scope === frame.window);
 
   if (frame.document.getElementById(SCRIPT_ID) && script) {
@@ -40,7 +39,7 @@ const mountCaptchaScript = (params={}) => {
     const query = generateQuery(params);
     script.src += query !== ""? `&${query}` : "";
 
-    parent.appendChild(script);
+    element.appendChild(script);
   });
 
   scripts.push({ promise, scope: frame.window });
@@ -53,8 +52,8 @@ class HCaptcha extends React.Component {
     constructor (props) {
       super(props);
 
-      const parent = this.props.scriptLocation || document.head;
-      const frame = getFrame(parent);
+      const element = getMountElement(this.props.scriptLocation);
+      const frame = getFrame(element);
 
       /**
        * Internal reference to track hCaptcha API
@@ -239,8 +238,8 @@ class HCaptcha extends React.Component {
 
     handleOnLoad () {
       this.setState({ isApiReady: true }, () => {
-        const parent = this.props.scriptLocation || document.head;
-        const frame = getFrame(parent);
+        const element = getMountElement(this.props.scriptLocation);
+        const frame = getFrame(element);
 
         this._hcaptcha = frame.window.hcaptcha;
 
