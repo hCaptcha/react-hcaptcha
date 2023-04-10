@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { generateQuery } from "./utils.js";
+import { generateQuery, getFrame } from "./utils.js";
 
 const SCRIPT_ID = 'hcaptcha-api-script-id';
 const HCAPTCHA_LOAD_FN_NAME = 'hcaptchaOnLoad';
@@ -13,24 +13,22 @@ const mountCaptchaScript = (params={}) => {
 
   delete params.scriptLocation;
 
-  const doc = parent.ownerDocument || document;
-  const win = doc.defaultView || doc.parentWindow;
+  const frame = getFrame(parent);
+  const script = scripts.find(({ scope }) => scope === frame.window);
 
-  const script = scripts.find(({ scope }) => scope === win);
-
-  if (doc.getElementById(SCRIPT_ID) && script) {
+  if (frame.document.getElementById(SCRIPT_ID) && script) {
     // API was already requested
     return script.promise;
   }
 
   const promise = new Promise((resolve, reject) => {
     // Create global onload callback
-    win[HCAPTCHA_LOAD_FN_NAME] = resolve;
+    frame.window[HCAPTCHA_LOAD_FN_NAME] = resolve;
 
     const domain = params.apihost || "https://js.hcaptcha.com";
     delete params.apihost;
 
-    const script = doc.createElement("script");
+    const script = frame.document.createElement("script");
     script.id = SCRIPT_ID;
     script.src = `${domain}/1/api.js?render=explicit&onload=${HCAPTCHA_LOAD_FN_NAME}`;
 
@@ -45,7 +43,7 @@ const mountCaptchaScript = (params={}) => {
     parent.appendChild(script);
   });
 
-  scripts.push({ promise, scope: win });
+  scripts.push({ promise, scope: frame.window });
 
   return promise;
 };
@@ -56,8 +54,7 @@ class HCaptcha extends React.Component {
       super(props);
 
       const parent = this.props.scriptLocation || document.head;
-      const doc = parent.ownerDocument || document;
-      const win = doc.defaultView || doc.parentWindow;
+      const frame = getFrame(parent);
 
       /**
        * Internal reference to track hCaptcha API
@@ -65,7 +62,7 @@ class HCaptcha extends React.Component {
        * Required as window is relative to initialization in application
        * not where the script and iFrames have been loaded.
        */
-      this._hcaptcha = win.hcaptcha || undefined;
+      this._hcaptcha = frame.window.hcaptcha || undefined;
 
       // API Methods
       this.renderCaptcha = this.renderCaptcha.bind(this);
@@ -243,10 +240,9 @@ class HCaptcha extends React.Component {
     handleOnLoad () {
       this.setState({ isApiReady: true }, () => {
         const parent = this.props.scriptLocation || document.head;
-        const doc = parent.ownerDocument || document;
-        const win = doc.defaultView || doc.parentWindow;
+        const frame = getFrame(parent);
 
-        this._hcaptcha = win.hcaptcha;
+        this._hcaptcha = frame.window.hcaptcha;
 
         // render captcha and wait for captcha id
         this.renderCaptcha(() => {

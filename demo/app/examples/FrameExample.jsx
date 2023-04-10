@@ -1,41 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 
 import HCaptcha from '../../../src/index.js';
 
 export function FrameExample({ document }) {
   const captchaRef = useRef();
-
-  const executeCaptcha = async () => {
-    try {
-      const res = await captchaRef.current.execute({
-        async: true
-      });
-      console.log("Verified asynchronously: ", res);
-
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getResponse = () => {
-    try {
-      const res = captchaRef.current.getResponse();
-      console.log("Response: ", res);
-
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getRespKey = () => {
-    try {
-      const res = captchaRef.current.getRespKey();
-      console.log("Response Key: ", res);
-
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const handleOpen = () => {
     console.log("HCaptcha [onOpen]: The user display of a challenge starts.");
@@ -53,12 +21,16 @@ export function FrameExample({ document }) {
     console.log("HCaptcha [onChalExpired]: The user display of a challenge times out with no answer.");
   };
 
+  const handleVerified = (token) => {
+    console.log("Verified: " + token);
+  };
+
   return (
     <HCaptcha
       ref={captchaRef}
       sitekey="10000000-ffff-ffff-ffff-000000000001"
       theme="light"
-      onVerify={() => undefined}
+      onVerify={handleVerified}
       onOpen={handleOpen}
       onClose={handleClose}
       onError={handleError}

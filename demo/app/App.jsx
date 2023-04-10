@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useEffect, useState } from 'react';
 
 import { AsyncExample, ClassExample, FrameExample } from './examples';
 import { CustomFrame } from './components';
