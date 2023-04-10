@@ -6,4 +6,18 @@ function generateQuery(params) {
         }).join("&");
 };
 
-export { generateQuery };
+function getFrame(element) {
+    const doc = (element && element.ownerDocument) || document;
+    const win = doc.defaultView || doc.parentWindow;
+    return { document: doc, window: win };
+}
+
+function getMountElement(element) {
+    return element || document.head;
+}
+
+export {
+    generateQuery,
+    getFrame,
+    getMountElement
+};

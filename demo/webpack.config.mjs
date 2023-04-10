@@ -7,15 +7,13 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const SRC_DIR  = resolve(__dirname, 'src');
 const DIST_DIR = resolve(__dirname, 'dist');
-const DEMO_DIR = resolve(__dirname, 'demo');
 
 export default {
   mode: 'development',
 
   entry: {
-    demo: resolve(DEMO_DIR, 'index.js'),
+    demo: resolve(__dirname, 'index.js'),
   },
 
   output: {
@@ -24,7 +22,7 @@ export default {
   },
 
   resolve: {
-    extensions: ['.json', '.js', '.ts']
+    extensions: ['.json', '.js', '.jsx', '.ts', '.tsx']
   },
 
   module: {
@@ -39,12 +37,22 @@ export default {
 
   plugins: [
     new HtmlWebpackPlugin({
-      template: resolve(DEMO_DIR, 'index.html'),
+      template: resolve(__dirname, 'index.html'),
       inject: true
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'frame.html',
+      template: resolve(__dirname, 'frame.html'),
+      inject: false
     })
   ],
 
   devServer: {
-    port: 9000
+    port: 9000,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+      'Access-Control-Allow-Methods': '*',
+    }
   }
 };
