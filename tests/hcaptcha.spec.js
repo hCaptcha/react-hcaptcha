@@ -52,8 +52,6 @@ describe("hCaptcha", () => {
                 onChalExpired={mockFns.onChalExpired}
             />,
         );
-
-        instance.componentDidMount();
     });
 
     it("renders into a div", () => {

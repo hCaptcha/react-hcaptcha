@@ -100,10 +100,14 @@ class HCaptcha extends React.Component {
        * If No, create script tag and wait to render the captcha
        */
       if (isApiReady) {
-        this.renderCaptcha();
-        this.setState({
-          isApiReady: true
-        });
+        this.setState(
+          {
+            isApiReady: true
+          },
+          () => {
+            this.renderCaptcha();
+          }
+        );
 
         return;
       }
