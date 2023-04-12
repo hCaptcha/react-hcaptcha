@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { generateQuery, getFrame, getMountElement } from "./utils.js";
+import { generateQuery, getFrame, getMountElement } from './utils.js';
 
 const SCRIPT_ID = 'hcaptcha-api-script-id';
 const HCAPTCHA_LOAD_FN_NAME = 'hcaptchaOnLoad';
@@ -8,7 +8,7 @@ const HCAPTCHA_LOAD_FN_NAME = 'hcaptchaOnLoad';
 const scripts = [];
 
 // Generate hCaptcha API script
-const mountCaptchaScript = (params={}) => {
+const mountCaptchaScript = (params = {}) => {
   const element = getMountElement(params.scriptLocation);
   delete params.scriptLocation;
 
@@ -52,16 +52,13 @@ class HCaptcha extends React.Component {
     constructor (props) {
       super(props);
 
-      const element = getMountElement(this.props.scriptLocation);
-      const frame = getFrame(element);
-
       /**
        * Internal reference to track hCaptcha API
        *
        * Required as window is relative to initialization in application
        * not where the script and iFrames have been loaded.
        */
-      this._hcaptcha = frame.window.hcaptcha || undefined;
+      this._hcaptcha = undefined;
 
       // API Methods
       this.renderCaptcha = this.renderCaptcha.bind(this);
@@ -79,14 +76,11 @@ class HCaptcha extends React.Component {
       this.handleClose = this.handleClose.bind(this);
       this.handleChallengeExpired = this.handleChallengeExpired.bind(this);
 
-
-      const isApiReady = typeof this._hcaptcha !== 'undefined';
-
       this.ref = React.createRef();
       this.apiScriptRequested = false;
 
       this.state = {
-        isApiReady,
+        isApiReady: false,
         isRemoved: false,
         elementId: props.id,
         captchaId: ''
@@ -94,7 +88,11 @@ class HCaptcha extends React.Component {
     }
 
     componentDidMount () { // Once captcha is mounted intialize hCaptcha - hCaptcha
-      const { isApiReady } = this.state;
+      const element = getMountElement(this.props.scriptLocation);
+      const frame = getFrame(element);
+      this._hcaptcha = frame.window.hcaptcha || undefined;
+
+      const isApiReady = typeof this._hcaptcha !== 'undefined';
 
       /*
        * Check if hCaptcha has already been loaded,
@@ -102,7 +100,14 @@ class HCaptcha extends React.Component {
        * If No, create script tag and wait to render the captcha
        */
       if (isApiReady) {
-        this.renderCaptcha();
+        this.setState(
+          {
+            isApiReady: true
+          },
+          () => {
+            this.renderCaptcha();
+          }
+        );
 
         return;
       }
@@ -177,7 +182,7 @@ class HCaptcha extends React.Component {
         sentry,
         custom,
         loadAsync,
-        scriptLocation
+        scriptLocation,
       };
 
       mountCaptchaScript(mountParams)
