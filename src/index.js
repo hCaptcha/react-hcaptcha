@@ -191,8 +191,9 @@ class HCaptcha extends React.Component {
       this.apiScriptRequested = true;
     }
 
-    renderCaptcha(onReady) {
+    renderCaptcha(onRender) {
       const { isApiReady, captchaId } = this.state;
+      const { onReady } = this.props;
 
       // Prevent calling hCaptcha render on two conditions:
       // • API is not ready
@@ -216,7 +217,8 @@ class HCaptcha extends React.Component {
       const id = hcaptcha.render(this.ref.current, renderParams);
 
       this.setState({ isRemoved: false, captchaId: id }, () => {
-        onReady && onReady();
+        onRender && onRender();
+        onReady  && onReady();
       });
     }
 
