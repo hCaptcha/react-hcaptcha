@@ -191,9 +191,14 @@ class HCaptcha extends React.Component {
       this.apiScriptRequested = true;
     }
 
-    renderCaptcha(onReady) {
-      const { isApiReady } = this.state;
-      if (!isApiReady) return;
+    renderCaptcha(onRender) {
+      const { isApiReady, captchaId } = this.state;
+      const { onReady } = this.props;
+
+      // Prevent calling hCaptcha render on two conditions:
+      // • API is not ready
+      // • Component has already been mounted
+      if (!isApiReady || captchaId) return;
 
       const renderParams = Object.assign({
         "open-callback"       : this.handleOpen,
@@ -209,10 +214,11 @@ class HCaptcha extends React.Component {
 
       const hcaptcha = this._hcaptcha;
       //Render hCaptcha widget and provide necessary callbacks - hCaptcha
-      const captchaId = hcaptcha.render(this.ref.current, renderParams);
+      const id = hcaptcha.render(this.ref.current, renderParams);
 
-      this.setState({ isRemoved: false, captchaId }, () => {
-        onReady && onReady();
+      this.setState({ isRemoved: false, captchaId: id }, () => {
+        onRender && onRender();
+        onReady  && onReady();
       });
     }
 
@@ -339,6 +345,17 @@ class HCaptcha extends React.Component {
       }
 
       return hcaptcha.execute(captchaId, opts);
+    }
+
+    close() {
+      const { captchaId } = this.state;
+      const hcaptcha = this._hcaptcha;
+
+      if (!this.isReady()) {
+        return;
+      }
+
+      return hcaptcha.close(captchaId);
     }
 
     setData (data) {
