@@ -243,11 +243,6 @@ class HCaptcha extends React.Component {
             if (onLoad) onLoad();
         });
       });
-      this.sentryHub?.addBreadcrumb({
-        category: 'react-sdk',
-        message: 'hCaptcha loaded',
-        level: 'info'
-      });
     }
 
     handleSubmit (event) {
