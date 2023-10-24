@@ -20,6 +20,7 @@ class HCaptcha extends React.Component {
       this.resetCaptcha  = this.resetCaptcha.bind(this);
       this.removeCaptcha = this.removeCaptcha.bind(this);
       this.isReady = this.isReady.bind(this);
+      this.setSentryTag = this.setSentryTag.bind(this);
 
       // Event Handlers
       this.loadCaptcha = this.loadCaptcha.bind(this);
@@ -51,7 +52,7 @@ class HCaptcha extends React.Component {
       const isApiReady = typeof this._hcaptcha !== 'undefined';
 
       this.sentryHub = initSentry(this.props.sentry);
-      this.sentryHub?.setTag('@hCaptcha/react');
+      this.setSentryTag();
 
       this.sentryHub?.addBreadcrumb({
         category: 'react-sdk',
@@ -228,6 +229,7 @@ class HCaptcha extends React.Component {
     }
 
     handleOnLoad () {
+      this.setSentryTag();
       this.setState({ isApiReady: true }, () => {
         const element = getMountElement(this.props.scriptLocation);
         const frame = getFrame(element);
@@ -290,8 +292,6 @@ class HCaptcha extends React.Component {
         hcaptcha.reset(captchaId);
       }
 
-      this.sentryHub?.captureException(event);
-
       if (onError) onError(event);
     }
 
@@ -324,6 +324,10 @@ class HCaptcha extends React.Component {
 
       this.props.onChalExpired();
     }
+
+  setSentryTag() {
+    this.sentryHub?.setTag('@hCaptcha/react');
+  }
 
     execute (opts = null) {
       const { captchaId } = this.state;
