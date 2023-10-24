@@ -1108,6 +1108,11 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
   integrity sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==
 
+"@hcaptcha/loader@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@hcaptcha/loader/-/loader-1.0.5.tgz#6f97c13351051b99b88c9c0bc575dca74f4fcab7"
+  integrity sha512-chpuxYmz7D/kYfikIM1zTftBpatO/cIeD296hh+SaCmIeluqlWxQmQng4tgt2C58Yvao9YsbaVah9lEQZ7vk2A==
+
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@istanbuljs/load-nyc-config/-/load-nyc-config-1.1.0.tgz#fd3db1d59ecf7cf121e80650bb86712f9b55eced"

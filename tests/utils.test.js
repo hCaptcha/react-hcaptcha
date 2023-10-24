@@ -1,6 +1,7 @@
 import { describe, jest, it } from "@jest/globals";
+import { generateQuery } from "@hcaptcha/loader"
 
-import { generateQuery, getFrame, getMountElement } from "../src/utils.js";
+import { getFrame, getMountElement } from "../src/utils.js";
 
 describe("generateQuery", () => {
 

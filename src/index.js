@@ -1,51 +1,6 @@
 import * as React from 'react';
-import { generateQuery, getFrame, getMountElement } from './utils.js';
-
-const SCRIPT_ID = 'hcaptcha-api-script-id';
-const HCAPTCHA_LOAD_FN_NAME = 'hcaptchaOnLoad';
-
-// Prevent loading API script multiple times
-const scripts = [];
-
-// Generate hCaptcha API script
-const mountCaptchaScript = (params = {}) => {
-  const element = getMountElement(params.scriptLocation);
-  delete params.scriptLocation;
-
-  const frame = getFrame(element);
-  const script = scripts.find(({ scope }) => scope === frame.window);
-
-  if (frame.document.getElementById(SCRIPT_ID) && script) {
-    // API was already requested
-    return script.promise;
-  }
-
-  const promise = new Promise((resolve, reject) => {
-    // Create global onload callback
-    frame.window[HCAPTCHA_LOAD_FN_NAME] = resolve;
-
-    const domain = params.apihost || "https://js.hcaptcha.com";
-    delete params.apihost;
-
-    const script = frame.document.createElement("script");
-    script.id = SCRIPT_ID;
-    script.src = `${domain}/1/api.js?render=explicit&onload=${HCAPTCHA_LOAD_FN_NAME}`;
-
-    script.async = params.loadAsync !== undefined? params.loadAsync : true;
-    delete params.loadAsync;
-
-    script.onerror = (event) => reject('script-error');
-
-    const query = generateQuery(params);
-    script.src += query !== ""? `&${query}` : "";
-
-    element.appendChild(script);
-  });
-
-  scripts.push({ promise, scope: frame.window });
-
-  return promise;
-};
+import { getFrame, getMountElement } from './utils.js';
+import { hCaptchaLoader, initSentry } from '@hcaptcha/loader';
 
 
 class HCaptcha extends React.Component {
@@ -78,6 +33,7 @@ class HCaptcha extends React.Component {
 
       this.ref = React.createRef();
       this.apiScriptRequested = false;
+      this.sentryHub = null;
 
       this.state = {
         isApiReady: false,
@@ -93,6 +49,16 @@ class HCaptcha extends React.Component {
       this._hcaptcha = frame.window.hcaptcha || undefined;
 
       const isApiReady = typeof this._hcaptcha !== 'undefined';
+
+      this.sentryHub = initSentry(this.props.sentry);
+      this.sentryHub?.setTag('@hCaptcha/react');
+
+      this.sentryHub?.addBreadcrumb({
+        category: 'react-sdk',
+        message: 'hCaptcha component mounted',
+        level: 'info'
+      });
+
 
       /*
        * Check if hCaptcha has already been loaded,
@@ -126,6 +92,12 @@ class HCaptcha extends React.Component {
       // Reset any stored variables / timers when unmounting
       hcaptcha.reset(captchaId);
       hcaptcha.remove(captchaId);
+
+      this.sentryHub?.addBreadcrumb({
+        category: 'react-sdk',
+        message: 'hCaptcha component unmounted',
+        level: 'info'
+      });
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -171,13 +143,14 @@ class HCaptcha extends React.Component {
         scriptLocation
       } = this.props;
       const mountParams = {
+        render: 'explicit',
         apihost,
         assethost,
         endpoint,
         hl,
         host,
         imghost,
-        recaptchacompat: reCaptchaCompat === false? "off" : null,
+        recaptchacompat: reCaptchaCompat === false? 'off' : null,
         reportapi,
         sentry,
         custom,
@@ -185,9 +158,9 @@ class HCaptcha extends React.Component {
         scriptLocation,
       };
 
-      mountCaptchaScript(mountParams)
-        .then(this.handleOnLoad)
-        .catch(this.handleError);
+      hCaptchaLoader(mountParams)
+        .then(this.handleOnLoad, this.handleError);
+
       this.apiScriptRequested = true;
     }
 
@@ -225,6 +198,12 @@ class HCaptcha extends React.Component {
       }
       // Reset captcha state, removes stored token and unticks checkbox
       hcaptcha.reset(captchaId)
+
+      this.sentryHub?.addBreadcrumb({
+        category: 'react-sdk',
+        message: 'hCaptcha reset',
+        level: 'info'
+      });
     }
 
     removeCaptcha(callback) {
@@ -238,6 +217,13 @@ class HCaptcha extends React.Component {
       this.setState({ isRemoved: true }, () => {
         hcaptcha.remove(captchaId);
         callback && callback()
+      });
+
+
+      this.sentryHub?.addBreadcrumb({
+        category: 'react-sdk',
+        message: 'hCaptcha removed',
+        level: 'info'
       });
     }
 
@@ -254,6 +240,11 @@ class HCaptcha extends React.Component {
             const { onLoad } = this.props;
             if (onLoad) onLoad();
         });
+      });
+      this.sentryHub?.addBreadcrumb({
+        category: 'react-sdk',
+        message: 'hCaptcha loaded',
+        level: 'info'
       });
     }
 
@@ -281,6 +272,12 @@ class HCaptcha extends React.Component {
       hcaptcha.reset(captchaId) // If hCaptcha runs into error, reset captcha - hCaptcha
 
       if (onExpire) onExpire();
+
+      this.sentryHub?.addBreadcrumb({
+        category: 'react-sdk',
+        message: 'hCaptcha expired',
+        level: 'info'
+      });
     }
 
     handleError (event) {
@@ -292,6 +289,8 @@ class HCaptcha extends React.Component {
         // If hCaptcha runs into error, reset captcha - hCaptcha
         hcaptcha.reset(captchaId);
       }
+
+      this.sentryHub?.captureException(event);
 
       if (onError) onError(event);
     }

@@ -58,6 +58,7 @@
     "webpack-dev-server": "^4.13.1"
   },
   "dependencies": {
-    "@babel/runtime": "^7.17.9"
+    "@babel/runtime": "^7.17.9",
+    "@hcaptcha/loader": "^1.0.5"
   }
 }
