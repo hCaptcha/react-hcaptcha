@@ -678,7 +678,6 @@ describe("hCaptcha", () => {
             });
 
             it("should have hCaptchaOnLoad in iFrame window", () => {
-                console.log(iframeWin);
                 expect(iframeWin).toHaveProperty("hCaptchaOnLoad");
             });
 
