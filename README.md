@@ -138,6 +138,7 @@ return <HCaptcha ref={captchaRef} onLoad={onLoad} sitekey={sitekey} {...props} /
 |`imghost`|String|No|`-`|See enterprise docs.|
 |`reportapi`|String|No|`-`|See enterprise docs.|
 |`sentry`|String|No|`-`|See enterprise docs.|
+| `cleanup`         | Boolean     | No       | `true`          | Remove script tag after setup.|
 |`custom`|Boolean|No|`-`|See enterprise docs.|
 |`loadAsync`|Boolean|No|`true`|Set if the script should be loaded asynchronously.|
 |`scriptLocation`|Element|No|`document.head`| Location of where to append the script tag. Make sure to add it to an area that will persist to prevent loading multiple times in the same document view. Note: If `null` is provided, the `document.head` will be used.|
