@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { getFrame, getMountElement } from './utils.js';
 import { hCaptchaLoader, initSentry } from '@hcaptcha/loader';
+
+import { getFrame, getMountElement } from './utils.js';
+import { breadcrumbMessages, scopeTag } from "./constants";
 
 
 class HCaptcha extends React.Component {
@@ -20,7 +22,6 @@ class HCaptcha extends React.Component {
       this.resetCaptcha  = this.resetCaptcha.bind(this);
       this.removeCaptcha = this.removeCaptcha.bind(this);
       this.isReady = this.isReady.bind(this);
-      this.setSentryTag = this.setSentryTag.bind(this);
 
       // Event Handlers
       this.loadCaptcha = this.loadCaptcha.bind(this);
@@ -51,15 +52,12 @@ class HCaptcha extends React.Component {
 
       const isApiReady = typeof this._hcaptcha !== 'undefined';
 
-      this.sentryHub = initSentry(this.props.sentry);
-      this.setSentryTag();
+      this.sentryHub = initSentry(this.props.sentry, scopeTag);
 
       this.sentryHub?.addBreadcrumb({
-        category: 'react-sdk',
-        message: 'hCaptcha component mounted',
-        level: 'info'
+        category: scopeTag.value,
+        message: breadcrumbMessages.mounted,
       });
-
 
       /*
        * Check if hCaptcha has already been loaded,
@@ -95,9 +93,8 @@ class HCaptcha extends React.Component {
       hcaptcha.remove(captchaId);
 
       this.sentryHub?.addBreadcrumb({
-        category: 'react-sdk',
-        message: 'hCaptcha component unmounted',
-        level: 'info'
+        category: scopeTag.value,
+        message: breadcrumbMessages.unmounted,
       });
     }
 
@@ -201,9 +198,8 @@ class HCaptcha extends React.Component {
       hcaptcha.reset(captchaId)
 
       this.sentryHub?.addBreadcrumb({
-        category: 'react-sdk',
-        message: 'hCaptcha reset',
-        level: 'info'
+        category: scopeTag.value,
+        message: breadcrumbMessages.reset,
       });
     }
 
@@ -222,14 +218,12 @@ class HCaptcha extends React.Component {
 
 
       this.sentryHub?.addBreadcrumb({
-        category: 'react-sdk',
-        message: 'hCaptcha removed',
-        level: 'info'
+        category: scopeTag.value,
+        message: breadcrumbMessages.removed,
       });
     }
 
     handleOnLoad () {
-      this.setSentryTag();
       this.setState({ isApiReady: true }, () => {
         const element = getMountElement(this.props.scriptLocation);
         const frame = getFrame(element);
@@ -271,9 +265,8 @@ class HCaptcha extends React.Component {
       if (onExpire) onExpire();
 
       this.sentryHub?.addBreadcrumb({
-        category: 'react-sdk',
-        message: 'hCaptcha expired',
-        level: 'info'
+        category: scopeTag.value,
+        message: breadcrumbMessages.expired,
       });
     }
 
@@ -319,10 +312,6 @@ class HCaptcha extends React.Component {
 
       this.props.onChalExpired();
     }
-
-  setSentryTag() {
-    this.sentryHub?.setTag('@hCaptcha/react');
-  }
 
     execute (opts = null) {
       const { captchaId } = this.state;
