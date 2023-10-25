@@ -223,19 +223,25 @@ class HCaptcha extends React.Component {
       });
     }
 
-    handleOnLoad () {
+  handleOnLoad () {
       this.setState({ isApiReady: true }, () => {
-        const element = getMountElement(this.props.scriptLocation);
-        const frame = getFrame(element);
+        try {
+          const element = getMountElement(this.props.scriptLocation);
+          const frame = getFrame(element);
 
-        this._hcaptcha = frame.window.hcaptcha;
+          this._hcaptcha = frame.window.hcaptcha;
 
-        // render captcha and wait for captcha id
-        this.renderCaptcha(() => {
+
+          // render captcha and wait for captcha id
+          this.renderCaptcha(() => {
             // trigger onLoad if it exists
+
             const { onLoad } = this.props;
             if (onLoad) onLoad();
-        });
+          });
+        } catch (e) {
+          this.sentryHub?.captureException(e);
+        }
       });
     }
 
