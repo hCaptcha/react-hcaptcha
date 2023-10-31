@@ -943,10 +943,10 @@
   "resolved" "https://registry.npmjs.org/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz"
   "version" "0.5.7"
 
-"@hcaptcha/loader@^1.0.5":
-  "integrity" "sha512-chpuxYmz7D/kYfikIM1zTftBpatO/cIeD296hh+SaCmIeluqlWxQmQng4tgt2C58Yvao9YsbaVah9lEQZ7vk2A=="
-  "resolved" "https://registry.npmjs.org/@hcaptcha/loader/-/loader-1.0.5.tgz"
-  "version" "1.0.5"
+"@hcaptcha/loader@^1.0.6":
+  "integrity" "sha512-Xiwr/ApZio8Vu2j+Asx5I4vdksFzi1lZDSd/W6VCkJgE+A1zoLSwxtjZQkzyAXcfaBC72DlsvTV+xKrVggduEg=="
+  "resolved" "https://registry.npmjs.org/@hcaptcha/loader/-/loader-1.0.6.tgz"
+  "version" "1.0.6"
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   "integrity" "sha512-VjeHSlIzpv/NyD3N0YuHfXOPDIixcA1q2ZV98wsMqcYlPmv2n3Yb2lYP9XMElnaFVXg5A7YLTeLu6V84uQDjmQ=="

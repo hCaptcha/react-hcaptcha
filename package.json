@@ -59,6 +59,6 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.17.9",
-    "@hcaptcha/loader": "^1.0.5"
+    "@hcaptcha/loader": "^1.0.6"
   }
 }
