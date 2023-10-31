@@ -239,8 +239,8 @@ class HCaptcha extends React.Component {
             const { onLoad } = this.props;
             if (onLoad) onLoad();
           });
-        } catch (e) {
-          this.sentryHub?.captureException(e);
+        } catch (error) {
+          this.sentryHub?.captureException(error);
         }
       });
     }
@@ -334,8 +334,8 @@ class HCaptcha extends React.Component {
         }
 
         return hcaptcha.execute(captchaId, opts);
-      } catch (e) {
-          this.sentryHub?.captureException(e);
+      } catch (error) {
+          this.sentryHub?.captureException(error);
       }
     }
 
