@@ -157,7 +157,8 @@ class HCaptcha extends React.Component {
       };
 
       hCaptchaLoader(mountParams)
-        .then(this.handleOnLoad, this.handleError);
+          .then(this.handleOnLoad, this.handleError)
+          .catch(this.handleError);
 
       this.apiScriptRequested = true;
     }
