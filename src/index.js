@@ -54,7 +54,7 @@ class HCaptcha extends React.Component {
 
       this.sentryHub = initSentry(this.props.sentry, scopeTag);
 
-      this.sentryHub?.addBreadcrumb({
+      this.sentryHub.addBreadcrumb({
         category: scopeTag.value,
         message: breadcrumbMessages.mounted,
       });
@@ -92,7 +92,7 @@ class HCaptcha extends React.Component {
       hcaptcha.reset(captchaId);
       hcaptcha.remove(captchaId);
 
-      this.sentryHub?.addBreadcrumb({
+      this.sentryHub.addBreadcrumb({
         category: scopeTag.value,
         message: breadcrumbMessages.unmounted,
       });
@@ -198,7 +198,7 @@ class HCaptcha extends React.Component {
       // Reset captcha state, removes stored token and unticks checkbox
       hcaptcha.reset(captchaId)
 
-      this.sentryHub?.addBreadcrumb({
+      this.sentryHub.addBreadcrumb({
         category: scopeTag.value,
         message: breadcrumbMessages.reset,
       });
@@ -218,7 +218,7 @@ class HCaptcha extends React.Component {
       });
 
 
-      this.sentryHub?.addBreadcrumb({
+      this.sentryHub.addBreadcrumb({
         category: scopeTag.value,
         message: breadcrumbMessages.removed,
       });
@@ -241,7 +241,7 @@ class HCaptcha extends React.Component {
             if (onLoad) onLoad();
           });
         } catch (error) {
-          this.sentryHub?.captureException(error);
+          this.sentryHub.captureException(error);
         }
       });
     }
@@ -271,7 +271,7 @@ class HCaptcha extends React.Component {
 
       if (onExpire) onExpire();
 
-      this.sentryHub?.addBreadcrumb({
+      this.sentryHub.addBreadcrumb({
         category: scopeTag.value,
         message: breadcrumbMessages.expired,
       });
@@ -336,7 +336,7 @@ class HCaptcha extends React.Component {
 
         return hcaptcha.execute(captchaId, opts);
       } catch (error) {
-          this.sentryHub?.captureException(error);
+          this.sentryHub.captureException(error);
       }
     }
 
