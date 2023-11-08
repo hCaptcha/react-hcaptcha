@@ -31,6 +31,7 @@ interface HCaptchaProps {
   loadAsync?: boolean;
   scriptLocation?: HTMLElement | null;
   sentry?: boolean;
+  cleanup?: boolean;
 }
 
 interface ExecuteResponse {
