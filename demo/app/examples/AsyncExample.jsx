@@ -64,7 +64,6 @@ export function AsyncExample() {
         onClose={handleClose}
         onError={handleError}
         onChalExpired={handleChallengeExpired}
-        sentry={false}
       />
       <button onClick={executeCaptcha}>Execute asynchronously</button>
       <button onClick={getRespKey}>Get Response Key</button>

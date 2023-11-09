@@ -37,7 +37,6 @@ export function FrameExample({ document }) {
       onChalExpired={handleChallengeExpired}
       scriptLocation={document.head}
       challenge-container={document.body}
-      sentry={false}
     />
 );
 }

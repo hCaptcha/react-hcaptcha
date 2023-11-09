@@ -30,8 +30,6 @@ interface HCaptchaProps {
   reCaptchaCompat?: boolean;
   loadAsync?: boolean;
   scriptLocation?: HTMLElement | null;
-  sentry?: boolean;
-  cleanup?: boolean;
 }
 
 interface ExecuteResponse {
