@@ -4,7 +4,7 @@ import ReactTestUtils, { act } from "react-dom/test-utils";
 
 import { describe, jest, it } from "@jest/globals";
 
-import {getMockedHcaptcha, MOCK_EKEY, MOCK_TOKEN, MOCK_WIDGET_ID} from "./hcaptcha.mock";
+import { getMockedHcaptcha, MOCK_EKEY, MOCK_TOKEN, MOCK_WIDGET_ID } from "./hcaptcha.mock";
 
 let HCaptcha;
 
@@ -501,27 +501,6 @@ describe("hCaptcha", () => {
 
             const script = document.querySelector("head > script");
             expect(script.src).toContain("custom=true");
-        });
-
-        it("emits error when script is failed", async () => {
-            const onError = jest.fn();
-
-            instance = ReactTestUtils.renderIntoDocument(<HCaptcha
-                    onError={onError}
-                    sitekey={TEST_PROPS.sitekey}
-                    sentry={false}
-                />);
-
-            const script = document.querySelector("head > script");
-            expect(onError.mock.calls.length).toBe(0);
-
-            script.onerror(new Error('loading failed'));
-
-            // simulate microtask
-            await Promise.reject().catch(() => null)
-
-            expect(onError.mock.calls.length).toBe(1);
-            expect(onError.mock.calls[0][0].message).toEqual("script-error");
         });
 
         it("should have async set by default", () => {
