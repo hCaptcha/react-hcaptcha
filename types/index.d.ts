@@ -46,6 +46,7 @@ declare class HCaptcha extends React.Component<HCaptchaProps, HCaptchaState> {
   getRespKey(): string;
   getResponse(): string;
   setData(data: object): void;
+  isReady(): boolean;
   execute(opts: { async: true }): Promise<ExecuteResponse>;
   execute(opts?: { async: false }): void;
   execute(opts?: { async: boolean }): Promise<ExecuteResponse> | void;
