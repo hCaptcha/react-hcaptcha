@@ -126,7 +126,7 @@ return <HCaptcha ref={captchaRef} onLoad={onLoad} sitekey={sitekey} {...props} /
 |---|---|---|---|---|
 |`sitekey`|String|**Yes**|`-`|This is your sitekey, this allows you to load captcha. If you need a sitekey, please visit [hCaptcha](https://www.hcaptcha.com), and sign up to get your sitekey.|
 |`size`|String (normal, compact, invisible)|No|`normal`|This specifies the "size" of the component. hCaptcha allows you to decide how big the component will appear on render, this always defaults to normal.|
-|`theme`|String (light, dark)|No|`light`|hCaptcha supports both a light and dark theme. If no theme is inherently set, the captcha will always default to light.|
+|`theme`|String (light, dark, contrast) or Object|No|`light`|hCaptcha supports both a light and dark theme. Defaults to light. Takes Object if custom theme is used.|
 |`tabindex`|Integer|No|`0`|Set the tabindex of the widget and popup. When appropriate, this can make navigation of your site more intuitive.|
 |`languageOverride`|String (ISO 639-2 code)|No|`auto`|hCaptcha auto-detects language via the user's browser. This overrides that to set a default UI language. See [language codes](https://hcaptcha.com/docs/languages).|
 |`reCaptchaCompat`|Boolean|No|`true`|Disable drop-in replacement for reCAPTCHA with `false` to prevent hCaptcha from injecting into `window.grecaptcha`.|
@@ -139,7 +139,7 @@ return <HCaptcha ref={captchaRef} onLoad={onLoad} sitekey={sitekey} {...props} /
 |`reportapi`|String|No|`-`|See enterprise docs.|
 |`sentry`|String|No|`-`|See enterprise docs.|
 | `cleanup`         | Boolean     | No       | `true`          | Remove script tag after setup.|
-|`custom`|Boolean|No|`-`|See enterprise docs.|
+|`custom`|Boolean|No|`-`|Custom theme: see enterprise docs.|
 |`loadAsync`|Boolean|No|`true`|Set if the script should be loaded asynchronously.|
 |`scriptLocation`|Element|No|`document.head`| Location of where to append the script tag. Make sure to add it to an area that will persist to prevent loading multiple times in the same document view. Note: If `null` is provided, the `document.head` will be used.|
 
