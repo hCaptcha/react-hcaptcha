@@ -24,7 +24,7 @@ interface HCaptchaProps {
   languageOverride?: string;
   sitekey: string;
   size?: "normal" | "compact" | "invisible";
-  theme?: "light" | "dark";
+  theme?: "light" | "dark" | "contrast" | Object;
   tabIndex?: number;
   id?: string;
   reCaptchaCompat?: boolean;
