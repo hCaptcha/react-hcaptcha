@@ -192,6 +192,10 @@ Please note that "invisible" simply means that no hCaptcha button will be render
 3. #### Make sure you are using `reCaptchaCompat=false` if you have the reCAPTCHA JS loaded on the same page.
     The hCaptcha "compatibility mode" will interfere with reCAPTCHA, as it adds properties with the same name. If for any reason you are running both hCaptcha and reCAPTCHA in parallel (we recommend only running hCaptcha) then please disable our compatibility mode.
 
+4. #### Avoid conflicts with legacy Sentry package usage on react-hcaptcha 1.9.0+
+    If you are using Sentry 7.x in your React app, this can conflict with the upstream `hcaptcha-loader` package's Sentry error tracing. You can avoid this issue by setting the `sentry` prop to `false`.
+
+
 
 ---
 ### Contributing
