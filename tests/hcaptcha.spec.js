@@ -372,6 +372,30 @@ describe("hCaptcha", () => {
             expect(script.src).toEqual("https://js.hcaptcha.com/1/api.js?onload=hCaptchaOnLoad&render=explicit&sentry=false");
         });
 
+        it("validate src secureApi", () => {
+            instance = ReactTestUtils.renderIntoDocument(<HCaptcha
+                    sitekey={TEST_PROPS.sitekey}
+                    sentry={false}
+                    secureApi={true}
+                    render="explicit"
+            />);
+
+            const script = document.querySelector("head > script");
+            expect(script.src).toEqual("https://js.hcaptcha.com/1/secure-api.js?onload=hCaptchaOnLoad&render=explicit&sentry=false");
+        });
+
+        it("validate src scriptSource", () => {
+            instance = ReactTestUtils.renderIntoDocument(<HCaptcha
+                    sitekey={TEST_PROPS.sitekey}
+                    sentry={false}
+                    scriptSource="https://hcaptcha.com/1/api.js"
+                    render="explicit"
+            />);
+
+            const script = document.querySelector("head > script");
+            expect(script.src).toEqual("https://hcaptcha.com/1/api.js?onload=hCaptchaOnLoad&render=explicit&sentry=false");
+        });
+
         it("apihost should change script src, but not be added as query", () => {
             const ExpectHost = "https://test.com";
 

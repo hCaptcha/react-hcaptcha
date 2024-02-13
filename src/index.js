@@ -139,6 +139,8 @@ class HCaptcha extends React.Component {
         custom,
         loadAsync,
         scriptLocation,
+        scriptSource,
+        secureApi,
         cleanup = true,
       } = this.props;
       const mountParams = {
@@ -155,6 +157,8 @@ class HCaptcha extends React.Component {
         custom,
         loadAsync,
         scriptLocation,
+        scriptSource,
+        secureApi,
         cleanup
       };
 

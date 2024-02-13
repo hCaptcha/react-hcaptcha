@@ -138,6 +138,8 @@ return <HCaptcha ref={captchaRef} onLoad={onLoad} sitekey={sitekey} {...props} /
 |`imghost`|String|No|`-`|See enterprise docs.|
 |`reportapi`|String|No|`-`|See enterprise docs.|
 |`sentry`|String|No|`-`|See enterprise docs.|
+|`secureApi`|Boolean|No|`-`|See enterprise docs.|
+|`scriptSource`|String|No|`-`|See enterprise docs.|
 | `cleanup`         | Boolean     | No       | `true`          | Remove script tag after setup.|
 |`custom`|Boolean|No|`-`|Custom theme: see enterprise docs.|
 |`loadAsync`|Boolean|No|`true`|Set if the script should be loaded asynchronously.|
