@@ -32,6 +32,9 @@ interface HCaptchaProps {
   scriptLocation?: HTMLElement | null;
   sentry?: boolean;
   cleanup?: boolean;
+  custom?: boolean;
+  secureApi?: boolean;
+  scriptSource?: string;
 }
 
 interface ExecuteResponse {

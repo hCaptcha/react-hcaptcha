@@ -1,6 +1,6 @@
 {
   "name": "@hcaptcha/react-hcaptcha",
-  "version": "1.9.4",
+  "version": "1.10.0",
   "types": "types/index.d.ts",
   "main": "dist/index.js",
   "module": "dist/esm/index.js",
@@ -53,12 +53,13 @@
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "rimraf": "^3.0.2",
+    "wait-for-expect": "^3.0.2",
     "webpack": "^5.76.3",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.13.1"
   },
   "dependencies": {
     "@babel/runtime": "^7.17.9",
-    "@hcaptcha/loader": "^1.0.10"
+    "@hcaptcha/loader": "^1.2.0"
   }
 }
