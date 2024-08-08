@@ -333,14 +333,21 @@ class HCaptcha extends React.Component {
 
 
         if (!this.isReady()) {
-            return;
+            if(opts?.async){
+              return queueMicrotask(() => hcaptcha.execute(captchaId, opts))
+            }
+            return ;
         }
 
         if (opts && typeof opts !== "object") {
             opts = null;
         }
 
-        return hcaptcha.execute(captchaId, opts);
+        if (opts?.async) {
+          return Promise.resolve(hcaptcha.execute(captchaId, opts));
+        } else {
+          hcaptcha.execute(captchaId, opts);
+        }
       } catch (error) {
           this.sentryHub.captureException(error);
       }
