@@ -2,7 +2,7 @@ import * as React from 'react';
 import { hCaptchaLoader, initSentry } from '@hcaptcha/loader';
 
 import { getFrame, getMountElement } from './utils.js';
-import { breadcrumbMessages, scopeTag } from "./constants";
+import { breadcrumbMessages, scopeTag, MAX_EXECUTION_TRIALS } from "./constants";
 
 
 class HCaptcha extends React.Component {
@@ -36,6 +36,8 @@ class HCaptcha extends React.Component {
       this.ref = React.createRef();
       this.apiScriptRequested = false;
       this.sentryHub = null;
+
+      this.executionCounts = 0;
 
       this.state = {
         isApiReady: false,
@@ -326,23 +328,51 @@ class HCaptcha extends React.Component {
       this.props.onChalExpired();
     }
 
+    handleExecuteTrial (opts = null) {
+      this.executionCounts += 1;
+    
+      if (this.executionCounts > MAX_EXECUTION_TRIALS) {
+        if (opts && opts.async) {
+          return Promise.resolve({});
+        }
+    
+        return;
+      }
+    
+      if (opts && opts.async) {
+        return new Promise(resolve => setTimeout(() => {
+          resolve(this.execute(opts));
+        }, 500));
+      } else {
+        setTimeout(() => {
+          this.execute(opts);
+        }, 500);
+      }
+    }
+
     execute (opts = null) {
       try {
         const { captchaId } = this.state;
         const hcaptcha = this._hcaptcha;
 
-
         if (!this.isReady()) {
-            return;
+            return this.handleExecuteTrial(opts);
         }
+
+        this.executionCounts = 0;
 
         if (opts && typeof opts !== "object") {
             opts = null;
         }
 
-        return hcaptcha.execute(captchaId, opts);
+        if (opts && opts.async) {
+          return Promise.resolve(hcaptcha.execute(captchaId, opts));
+        } else {
+          hcaptcha.execute(captchaId, opts);
+        }
+
       } catch (error) {
-          this.sentryHub.captureException(error);
+        this.sentryHub.captureException(error);
       }
     }
 
