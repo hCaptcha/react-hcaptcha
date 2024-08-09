@@ -2,7 +2,7 @@ import * as React from 'react';
 import { hCaptchaLoader, initSentry } from '@hcaptcha/loader';
 
 import { getFrame, getMountElement } from './utils.js';
-import { breadcrumbMessages, scopeTag } from "./constants";
+import { breadcrumbMessages, scopeTag, MAX_EXECUTION_TRIALS } from "./constants";
 
 
 class HCaptcha extends React.Component {
@@ -354,20 +354,25 @@ class HCaptcha extends React.Component {
       try {
         const { captchaId } = this.state;
         const hcaptcha = this._hcaptcha;
-    
+
         if (!this.isReady()) {
             return this.handleExecuteTrial(opts);
         }
-    
+
         this.executionCounts = 0;
-    
+
         if (opts && typeof opts !== "object") {
             opts = null;
         }
-    
-        return hcaptcha.execute(captchaId, opts);
+
+        if (opts && opts.async) {
+          return Promise.resolve(hcaptcha.execute(captchaId, opts));
+        } else {
+          hcaptcha.execute(captchaId, opts);
+        }
+
       } catch (error) {
-          this.sentryHub.captureException(error);
+        this.sentryHub.captureException(error);
       }
     }
 
