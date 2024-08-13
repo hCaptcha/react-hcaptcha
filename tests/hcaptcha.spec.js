@@ -88,6 +88,15 @@ describe("hCaptcha", () => {
       expect(window.hcaptcha.execute).toBeCalledWith(MOCK_WIDGET_ID, null);
     });
 
+    it("stores and calls execute after hCaptcha onload is executed", async () => {
+        jest.spyOn(instance, 'isReady').mockReturnValueOnce(false);
+        instance.execute();
+        expect(window.hcaptcha.execute.mock.calls.length).toBe(0);
+        await instance._onReady(MOCK_WIDGET_ID);      
+        expect(window.hcaptcha.execute.mock.calls.length).toBe(1);
+        expect(window.hcaptcha.execute).toBeCalledWith(MOCK_WIDGET_ID, null);
+      });
+
     it("can execute synchronously with async: false", () => {
       expect(window.hcaptcha.execute.mock.calls.length).toBe(0);
       instance.execute({ async: false });
