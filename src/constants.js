@@ -3,8 +3,6 @@ export const scopeTag = {
     value: '@hCaptcha/react'
 }
 
-export const MAX_EXECUTION_TRIALS = 3;
-
 export const breadcrumbMessages = {
     mounted: 'hCaptcha component mounted',
     expired: 'hCaptcha expired',
