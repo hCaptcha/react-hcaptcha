@@ -192,7 +192,7 @@ class HCaptcha extends React.Component {
 
       this.setState({ isRemoved: false, captchaId }, () => {
         onReady && onReady();
-        this._onReady && this._onReady(id);
+        this._onReady && this._onReady(captchaId);
       });
     }
 
