@@ -330,7 +330,7 @@ class HCaptcha extends React.Component {
 
     execute (opts = null) {
 
-      opts = typeof opts === 'object' && opts !== null ? opts : null;
+      opts = typeof opts === 'object' ? opts : null;
 
       try {
         const { captchaId } = this.state;
@@ -338,8 +338,11 @@ class HCaptcha extends React.Component {
         
         if (!this.isReady()) {
           const onReady = new Promise((resolve, reject) => {
+            
             this._onReady = (id) => {
               try {
+                const hcaptcha = this._hcaptcha;
+                
                 if (opts && opts.async) {
                   hcaptcha.execute(id, opts).then(resolve).catch(reject);
                 } else {
