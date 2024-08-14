@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 
 import HCaptcha from '../../../src/index.js';
 
@@ -16,6 +16,10 @@ export function AsyncExample() {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    executeCaptcha();
+  }, []);
 
   const getResponse = () => {
     try {
