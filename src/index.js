@@ -22,6 +22,7 @@ class HCaptcha extends React.Component {
       this.resetCaptcha  = this.resetCaptcha.bind(this);
       this.removeCaptcha = this.removeCaptcha.bind(this);
       this.isReady = this.isReady.bind(this);
+      this._onReady = null;
 
       // Event Handlers
       this.loadCaptcha = this.loadCaptcha.bind(this);
@@ -191,6 +192,7 @@ class HCaptcha extends React.Component {
 
       this.setState({ isRemoved: false, captchaId }, () => {
         onReady && onReady();
+        this._onReady && this._onReady(captchaId);
       });
     }
 
@@ -230,7 +232,7 @@ class HCaptcha extends React.Component {
       });
     }
 
-  handleOnLoad () {
+    handleOnLoad () {
       this.setState({ isApiReady: true }, () => {
         try {
           const element = getMountElement(this.props.scriptLocation);
@@ -327,22 +329,41 @@ class HCaptcha extends React.Component {
     }
 
     execute (opts = null) {
+
+      opts = typeof opts === 'object' ? opts : null;
+
       try {
         const { captchaId } = this.state;
         const hcaptcha = this._hcaptcha;
-
-
+        
         if (!this.isReady()) {
-            return;
+          const onReady = new Promise((resolve, reject) => {
+            
+            this._onReady = (id) => {
+              try {
+                const hcaptcha = this._hcaptcha;
+                
+                if (opts && opts.async) {
+                  hcaptcha.execute(id, opts).then(resolve).catch(reject);
+                } else {
+                  resolve(hcaptcha.execute(id, opts));
+                }
+              } catch (e) {
+                reject(e);
+              }
+            };
+          });
+    
+          return opts?.async ? onReady : null;
         }
-
-        if (opts && typeof opts !== "object") {
-            opts = null;
-        }
-
+        
         return hcaptcha.execute(captchaId, opts);
       } catch (error) {
-          this.sentryHub.captureException(error);
+        this.sentryHub.captureException(error);
+        if (opts && opts.async) {
+          return Promise.reject(error);
+        }
+        return null;
       }
     }
 
