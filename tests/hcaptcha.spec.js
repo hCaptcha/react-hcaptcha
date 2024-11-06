@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import ReactDOM from "react-dom";
 import ReactTestUtils, { act } from "react-dom/test-utils";
+import waitForExpect from "wait-for-expect";
 
 import { describe, jest, it } from "@jest/globals";
 
@@ -13,6 +14,7 @@ const TEST_PROPS = {
     theme: "light",
     size: "invisible",
     tabindex: 0,
+    sentry: false,
 };
 
 describe("hCaptcha", () => {
@@ -50,6 +52,7 @@ describe("hCaptcha", () => {
                 onOpen={mockFns.onOpen}
                 onClose={mockFns.onClose}
                 onChalExpired={mockFns.onChalExpired}
+                sentry={TEST_PROPS.sentry}
             />,
         );
     });
@@ -84,7 +87,39 @@ describe("hCaptcha", () => {
       expect(window.hcaptcha.execute.mock.calls.length).toBe(1);
       expect(window.hcaptcha.execute).toBeCalledWith(MOCK_WIDGET_ID, null);
     });
-    
+
+    it("stores and calls execute after hCaptcha onload is executed", async () => {
+        jest.spyOn(instance, 'isReady').mockReturnValueOnce(false);
+        instance.execute();
+        expect(window.hcaptcha.execute.mock.calls.length).toBe(0);
+        await instance._onReady(MOCK_WIDGET_ID);      
+        expect(window.hcaptcha.execute.mock.calls.length).toBe(1);
+        expect(window.hcaptcha.execute).toBeCalledWith(MOCK_WIDGET_ID, null);
+    });
+
+    it("stores the execute command and calls it after hCaptcha onload is executed", async () => {
+        jest.spyOn(instance, 'isReady').mockReturnValueOnce(false);
+
+        const onLoad = jest.fn(() => {
+            expect(instance.state.captchaId).toBe(MOCK_WIDGET_ID);
+        });
+
+        instance = ReactTestUtils.renderIntoDocument(
+            <HCaptcha
+                sitekey={TEST_PROPS.sitekey}
+                onLoad={onLoad}
+                sentry={false}
+            />,
+        );
+        expect(window.hcaptcha.execute.mock.calls.length).toBe(0);
+
+        instance.execute();
+        instance.handleOnLoad();
+      
+        expect(window.hcaptcha.execute.mock.calls.length).toBe(1);
+        expect(window.hcaptcha.execute).toBeCalledWith(MOCK_WIDGET_ID, null);
+    });
+
     it("can execute synchronously with async: false", () => {
       expect(window.hcaptcha.execute.mock.calls.length).toBe(0);
       instance.execute({ async: false });
@@ -191,110 +226,6 @@ describe("hCaptcha", () => {
         expect(window.hcaptcha.reset.mock.calls.length).toBe(1);
     });
 
-    describe('onOpen callback', () => {
-        afterAll(() => {
-            jest.restoreAllMocks();
-        });
-
-        it("should be called if the captcha is ready and the callback is provided as a prop", () => {
-            jest.spyOn(instance, 'isReady').mockImplementation(() => true);
-
-            expect(mockFns.onOpen.mock.calls.length).toBe(0);
-            instance.handleOpen();
-            expect(mockFns.onOpen.mock.calls.length).toBe(1);
-        });
-
-        it("should not be called if the captcha is not ready", () => {
-            jest.spyOn(instance, 'isReady').mockImplementation(() => false);
-
-            expect(mockFns.onOpen.mock.calls.length).toBe(0);
-            instance.handleOpen();
-            expect(mockFns.onOpen.mock.calls.length).toBe(0);
-        });
-
-        it("should not be called if not provided as a prop", () => {
-            instance = ReactTestUtils.renderIntoDocument(
-                <HCaptcha
-                    sitekey={TEST_PROPS.sitekey}
-                />,
-            );
-            jest.spyOn(instance, 'isReady').mockImplementation(() => true);
-
-            expect(mockFns.onOpen.mock.calls.length).toBe(0);
-            instance.handleOpen();
-            expect(mockFns.onOpen.mock.calls.length).toBe(0);
-        });
-    });
-
-    describe('onClose callback', () => {
-        afterAll(() => {
-            jest.restoreAllMocks();
-        });
-
-        it("should be called if the captcha is ready and the callback is provided as a prop", () => {
-            jest.spyOn(instance, 'isReady').mockImplementation(() => true);
-
-            expect(mockFns.onClose.mock.calls.length).toBe(0);
-            instance.handleClose();
-            expect(mockFns.onClose.mock.calls.length).toBe(1);
-        });
-
-        it("should not be called if the captcha is not ready", () => {
-            jest.spyOn(instance, 'isReady').mockImplementation(() => false);
-
-            expect(mockFns.onClose.mock.calls.length).toBe(0);
-            instance.handleClose();
-            expect(mockFns.onClose.mock.calls.length).toBe(0);
-        });
-
-        it("should not be called if not provided as a prop", () => {
-            instance = ReactTestUtils.renderIntoDocument(
-                <HCaptcha
-                    sitekey={TEST_PROPS.sitekey}
-                />,
-            );
-            jest.spyOn(instance, 'isReady').mockImplementation(() => true);
-
-            expect(mockFns.onClose.mock.calls.length).toBe(0);
-            instance.handleClose();
-            expect(mockFns.onClose.mock.calls.length).toBe(0);
-        });
-    });
-
-    describe('onChalExpired callback', () => {
-        afterAll(() => {
-            jest.restoreAllMocks();
-        });
-
-        it("should be called if the captcha is ready and the callback is provided as a prop", () => {
-            jest.spyOn(instance, 'isReady').mockImplementation(() => true);
-
-            expect(mockFns.onChalExpired.mock.calls.length).toBe(0);
-            instance.handleChallengeExpired();
-            expect(mockFns.onChalExpired.mock.calls.length).toBe(1);
-        });
-
-        it("should not be called if the captcha is not ready", () => {
-            jest.spyOn(instance, 'isReady').mockImplementation(() => false);
-
-            expect(mockFns.onClose.mock.calls.length).toBe(0);
-            instance.handleClose();
-            expect(mockFns.onClose.mock.calls.length).toBe(0);
-        });
-
-        it("should not be called if not provided as a prop", () => {
-            instance = ReactTestUtils.renderIntoDocument(
-                <HCaptcha
-                    sitekey={TEST_PROPS.sitekey}
-                />,
-            );
-            jest.spyOn(instance, 'isReady').mockImplementation(() => true);
-
-            expect(mockFns.onChalExpired.mock.calls.length).toBe(0);
-            instance.handleChallengeExpired();
-            expect(mockFns.onChalExpired.mock.calls.length).toBe(0);
-        });
-    });
 
     it("el renders after api loads and a widget id is set", () => {
         expect(instance.state.captchaId).toBe(MOCK_WIDGET_ID);
@@ -312,6 +243,7 @@ describe("hCaptcha", () => {
             <HCaptcha
                 sitekey={TEST_PROPS.sitekey}
                 id="test-id-1"
+                sentry={false}
             />,
         );
         const node = ReactDOM.findDOMNode(instance);
@@ -323,6 +255,7 @@ describe("hCaptcha", () => {
         instance = ReactTestUtils.renderIntoDocument(
             <HCaptcha
                 sitekey={TEST_PROPS.sitekey}
+                sentry={false}
             />,
         );
         const node = ReactDOM.findDOMNode(instance);
@@ -340,12 +273,15 @@ describe("hCaptcha", () => {
             <HCaptcha
                 sitekey={TEST_PROPS.sitekey}
                 onReady={onReady}
+                sentry={false}
             />,
         );
     });
 
 
     describe("Mount hCaptcha API script", () => {
+
+        const spyOnError = jest.spyOn(HTMLScriptElement.prototype, 'onerror', 'set');
 
         beforeEach(() => {
             // Setup hCaptcha as undefined to load script
@@ -356,15 +292,62 @@ describe("hCaptcha", () => {
             // Clean up created script tag
             document.querySelectorAll("head > script")
               .forEach(script => document.head.removeChild(script));
+
+            jest.restoreAllMocks();
+        });
+
+        it("emits error when script is failed", async () => {
+            const onError = jest.fn();
+
+            spyOnError.mockImplementation((callback) => {
+                callback('Invalid Script');
+            });
+
+            instance = ReactTestUtils.renderIntoDocument(<HCaptcha
+                    onError={onError}
+                    sitekey={TEST_PROPS.sitekey}
+                    sentry={false}
+                />);
+
+            await waitForExpect(() => {
+                expect(onError.mock.calls.length).toBe(1);
+                expect(onError.mock.calls[0][0].message).toEqual("script-error");
+            });
         });
 
         it("validate src without", () => {
             instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     sitekey={TEST_PROPS.sitekey}
-                />);
+                    sentry={false}
+                    render="explicit"
+            />);
 
             const script = document.querySelector("head > script");
-            expect(script.src).toEqual("https://js.hcaptcha.com/1/api.js?render=explicit&onload=hcaptchaOnLoad");
+            expect(script.src).toEqual("https://js.hcaptcha.com/1/api.js?onload=hCaptchaOnLoad&render=explicit&sentry=false");
+        });
+
+        it("validate src secureApi", () => {
+            instance = ReactTestUtils.renderIntoDocument(<HCaptcha
+                    sitekey={TEST_PROPS.sitekey}
+                    sentry={false}
+                    secureApi={true}
+                    render="explicit"
+            />);
+
+            const script = document.querySelector("head > script");
+            expect(script.src).toEqual("https://js.hcaptcha.com/1/secure-api.js?onload=hCaptchaOnLoad&render=explicit&sentry=false");
+        });
+
+        it("validate src scriptSource", () => {
+            instance = ReactTestUtils.renderIntoDocument(<HCaptcha
+                    sitekey={TEST_PROPS.sitekey}
+                    sentry={false}
+                    scriptSource="https://hcaptcha.com/1/api.js"
+                    render="explicit"
+            />);
+
+            const script = document.querySelector("head > script");
+            expect(script.src).toEqual("https://hcaptcha.com/1/api.js?onload=hCaptchaOnLoad&render=explicit&sentry=false");
         });
 
         it("apihost should change script src, but not be added as query", () => {
@@ -373,7 +356,8 @@ describe("hCaptcha", () => {
             instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     apihost={ExpectHost}
                     sitekey={TEST_PROPS.sitekey}
-                />);
+                    sentry={false}
+            />);
 
             const script = document.querySelector("head > script");
             expect(script.src).toContain(ExpectHost);
@@ -386,7 +370,8 @@ describe("hCaptcha", () => {
             instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     assethost={ExpectHost}
                     sitekey={TEST_PROPS.sitekey}
-                />);
+                    sentry={false}
+            />);
 
             const script = document.querySelector("head > script");
             expect(script.src).toContain(`assethost=${encodeURIComponent(ExpectHost)}`);
@@ -398,7 +383,8 @@ describe("hCaptcha", () => {
             instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     endpoint={ExpectHost}
                     sitekey={TEST_PROPS.sitekey}
-                />);
+                    sentry={false}
+            />);
 
             const script = document.querySelector("head > script");
             expect(script.src).toContain(`endpoint=${encodeURIComponent(ExpectHost)}`);
@@ -410,7 +396,8 @@ describe("hCaptcha", () => {
             instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     imghost={ExpectHost}
                     sitekey={TEST_PROPS.sitekey}
-                />);
+                    sentry={false}
+            />);
 
             const script = document.querySelector("head > script");
             expect(script.src).toContain(`imghost=${encodeURIComponent(ExpectHost)}`);
@@ -422,7 +409,8 @@ describe("hCaptcha", () => {
             instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     reportapi={ExpectHost}
                     sitekey={TEST_PROPS.sitekey}
-                />);
+                    sentry={false}
+            />);
 
             const script = document.querySelector("head > script");
             expect(script.src).toContain(`reportapi=${encodeURIComponent(ExpectHost)}`);
@@ -432,7 +420,8 @@ describe("hCaptcha", () => {
             instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     languageOverride="fr"
                     sitekey={TEST_PROPS.sitekey}
-                />);
+                    sentry={false}
+            />);
 
             const script = document.querySelector("head > script");
             expect(script.src).toContain("hl=fr");
@@ -442,6 +431,7 @@ describe("hCaptcha", () => {
             instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     reCaptchaCompat={false}
                     sitekey={TEST_PROPS.sitekey}
+                    sentry={false}
                 />);
 
             const script = document.querySelector("head > script");
@@ -452,7 +442,8 @@ describe("hCaptcha", () => {
             instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     reCaptchaCompat={true}
                     sitekey={TEST_PROPS.sitekey}
-                />);
+                    sentry={false}
+            />);
 
             const script = document.querySelector("head > script");
             expect(script.src).not.toContain("recaptchacompat");
@@ -460,19 +451,20 @@ describe("hCaptcha", () => {
 
         it("sentry should be found when prop is set", () => {
             instance = ReactTestUtils.renderIntoDocument(<HCaptcha
-                    sentry={true}
                     sitekey={TEST_PROPS.sitekey}
-                />);
+                    sentry={false}
+            />);
 
             const script = document.querySelector("head > script");
-            expect(script.src).toContain("sentry=true");
+            expect(script.src).toContain("sentry=false");
         });
 
         it("host should be found when prop is set", () => {
             instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     host="test.com"
                     sitekey={TEST_PROPS.sitekey}
-                />);
+                    sentry={false}
+            />);
 
             const script = document.querySelector("head > script");
             expect(script.src).toContain("host=test.com");
@@ -482,36 +474,18 @@ describe("hCaptcha", () => {
             instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     custom={true}
                     sitekey={TEST_PROPS.sitekey}
-                />);
+                    sentry={false}
+            />);
 
             const script = document.querySelector("head > script");
             expect(script.src).toContain("custom=true");
         });
 
-        it("emits error when script is failed", async () => {
-            const onError = jest.fn();
-
-            instance = ReactTestUtils.renderIntoDocument(<HCaptcha
-                    onError={onError}
-                    sitekey={TEST_PROPS.sitekey}
-                />);
-
-            const script = document.querySelector("head > script");
-            expect(onError.mock.calls.length).toBe(0);
-
-            script.onerror(new Error('loading failed'));
-
-            // simulate microtask
-            await Promise.reject().catch(() => null)
-
-            expect(onError.mock.calls.length).toBe(1);
-            expect(onError.mock.calls[0][0]).toEqual('script-error');
-        });
-
         it("should have async set by default", () => {
             instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     sitekey={TEST_PROPS.sitekey}
-                />);
+                    sentry={false}
+            />);
 
             const script = document.querySelector("head > script");
             expect(script.async).toBeTruthy();
@@ -521,7 +495,8 @@ describe("hCaptcha", () => {
             instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     loadAsync={false}
                     sitekey={TEST_PROPS.sitekey}
-                />);
+                    sentry={false}
+            />);
 
             const script = document.querySelector("head > script");
             expect(script.async).toBeFalsy();
@@ -531,7 +506,8 @@ describe("hCaptcha", () => {
             instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     loadAsync={true}
                     sitekey={TEST_PROPS.sitekey}
-                />);
+                    sentry={false}
+            />);
 
             const script = document.querySelector("head > script");
             expect(script.async).toBeTruthy();
@@ -549,7 +525,8 @@ describe("hCaptcha", () => {
          it("should append to document.head by default", () => {
             const instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     sitekey={TEST_PROPS.sitekey}
-                />);
+                    sentry={false}
+            />);
 
             // Manually set hCaptcha API since script does not actually load here
             window.hcaptcha = getMockedHcaptcha();
@@ -567,6 +544,7 @@ describe("hCaptcha", () => {
         it("shouldn't create multiple scripts for multiple captchas", () => {
             const instance0 = ReactTestUtils.renderIntoDocument(<HCaptcha
                 sitekey={TEST_PROPS.sitekey}
+                sentry={false}
             />);
 
             // Manually set hCaptcha API since script does not actually load here
@@ -575,6 +553,7 @@ describe("hCaptcha", () => {
 
             const instance1 = ReactTestUtils.renderIntoDocument(<HCaptcha
                 sitekey={TEST_PROPS.sitekey}
+                sentry={false}
             />);
 
             const scripts = document.querySelectorAll("head > script");
@@ -597,7 +576,8 @@ describe("hCaptcha", () => {
             const instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     scriptLocation={element}
                     sitekey={TEST_PROPS.sitekey}
-                />);
+                    sentry={false}
+            />);
 
             // Manually set hCaptcha API since script does not actually load here
             window.hcaptcha = getMockedHcaptcha();
@@ -626,20 +606,21 @@ describe("hCaptcha", () => {
             let instance;
 
             beforeAll(() => {
-                delete window["hcaptchaOnLoad"];
+                delete window["hCaptchaOnLoad"];
             });
 
             afterAll(() => {
                 // clean up, keep iFrame persistent between tests
                 document.body.removeChild(iframe);
-                delete iframeWin["hcaptchaOnLoad"];
+                delete iframeWin["hCaptchaOnLoad"];
             });
 
             it("should append script into supplied iFrame", () => {
                 instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                         scriptLocation={iframeDoc.head}
                         sitekey={TEST_PROPS.sitekey}
-                    />);
+                        sentry={false}
+                />);
 
                 // Manually set hCaptcha API since script does not actually load here
                 iframeWin.hcaptcha = getMockedHcaptcha();
@@ -653,8 +634,8 @@ describe("hCaptcha", () => {
                 expect(script).toBeTruthy();
             });
 
-            it("should have hcaptchaOnLoad in iFrame window", () => {
-                expect(iframeWin).toHaveProperty("hcaptchaOnLoad");
+            it("should have hCaptchaOnLoad in iFrame window", () => {
+                expect(iframeWin).toHaveProperty("hCaptchaOnLoad");
             });
 
             it("should load hCaptcha API in iFrame window", () => {
@@ -665,6 +646,7 @@ describe("hCaptcha", () => {
                 ReactTestUtils.renderIntoDocument(<HCaptcha
                     scriptLocation={iframeDoc.head}
                     sitekey={TEST_PROPS.sitekey}
+                    sentry={false}
                 />);
 
                 const scripts = iframeDoc.querySelectorAll("head > script");
@@ -681,6 +663,7 @@ describe("hCaptcha", () => {
                 const instance = ReactTestUtils.renderIntoDocument(<HCaptcha
                     scriptLocation={iframe2Doc.head}
                     sitekey={TEST_PROPS.sitekey}
+                    sentry={false}
                 />);
 
                 // Manually set hCaptcha API since script does not actually load here
@@ -693,15 +676,123 @@ describe("hCaptcha", () => {
                 const scripts = iframe2Doc.querySelectorAll("head > script");
                 expect(scripts.length).toBe(1);
 
-                expect(iframe2Win).toHaveProperty("hcaptchaOnLoad");
+                expect(iframe2Win).toHaveProperty("hCaptchaOnLoad");
                 expect(instance._hcaptcha).toEqual(iframe2Win.hcaptcha);
 
                 // clean up
                 document.body.removeChild(iframe2);
-                delete iframe2Win["hcaptchaOnLoad"];
+                delete iframe2Win["hCaptchaOnLoad"];
             });
 
         });
 
+    });
+
+    describe('onOpen callback', () => {
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
+        it("should be called if the captcha is ready and the callback is provided as a prop", () => {
+            jest.spyOn(instance, 'isReady').mockImplementation(() => true);
+
+            expect(mockFns.onOpen.mock.calls.length).toBe(0);
+            instance.handleOpen();
+            expect(mockFns.onOpen.mock.calls.length).toBe(1);
+        });
+
+        it("should not be called if the captcha is not ready", () => {
+            jest.spyOn(instance, 'isReady').mockImplementation(() => false);
+
+            expect(mockFns.onOpen.mock.calls.length).toBe(0);
+            instance.handleOpen();
+            expect(mockFns.onOpen.mock.calls.length).toBe(0);
+        });
+
+        it("should not be called if not provided as a prop", () => {
+            instance = ReactTestUtils.renderIntoDocument(
+                <HCaptcha
+                    sitekey={TEST_PROPS.sitekey}
+                    sentry={false}
+                />,
+            );
+            jest.spyOn(instance, 'isReady').mockImplementation(() => true);
+
+            expect(mockFns.onOpen.mock.calls.length).toBe(0);
+            instance.handleOpen();
+            expect(mockFns.onOpen.mock.calls.length).toBe(0);
+        });
+    });
+
+    describe('onClose callback', () => {
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
+        it("should be called if the captcha is ready and the callback is provided as a prop", () => {
+            jest.spyOn(instance, 'isReady').mockImplementation(() => true);
+
+            expect(mockFns.onClose.mock.calls.length).toBe(0);
+            instance.handleClose();
+            expect(mockFns.onClose.mock.calls.length).toBe(1);
+        });
+
+        it("should not be called if the captcha is not ready", () => {
+            jest.spyOn(instance, 'isReady').mockImplementation(() => false);
+
+            expect(mockFns.onClose.mock.calls.length).toBe(0);
+            instance.handleClose();
+            expect(mockFns.onClose.mock.calls.length).toBe(0);
+        });
+
+        it("should not be called if not provided as a prop", () => {
+            instance = ReactTestUtils.renderIntoDocument(
+                <HCaptcha
+                    sitekey={TEST_PROPS.sitekey}
+                    sentry={false}
+                />,
+            );
+            jest.spyOn(instance, 'isReady').mockImplementation(() => true);
+
+            expect(mockFns.onClose.mock.calls.length).toBe(0);
+            instance.handleClose();
+            expect(mockFns.onClose.mock.calls.length).toBe(0);
+        });
+    });
+
+    describe('onChalExpired callback', () => {
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
+        it("should be called if the captcha is ready and the callback is provided as a prop", () => {
+            jest.spyOn(instance, 'isReady').mockImplementation(() => true);
+
+            expect(mockFns.onChalExpired.mock.calls.length).toBe(0);
+            instance.handleChallengeExpired();
+            expect(mockFns.onChalExpired.mock.calls.length).toBe(1);
+        });
+
+        it("should not be called if the captcha is not ready", () => {
+            jest.spyOn(instance, 'isReady').mockImplementation(() => false);
+
+            expect(mockFns.onClose.mock.calls.length).toBe(0);
+            instance.handleClose();
+            expect(mockFns.onClose.mock.calls.length).toBe(0);
+        });
+
+        it("should not be called if not provided as a prop", () => {
+            instance = ReactTestUtils.renderIntoDocument(
+                <HCaptcha
+                    sitekey={TEST_PROPS.sitekey}
+                    sentry={false}
+                />,
+            );
+            jest.spyOn(instance, 'isReady').mockImplementation(() => true);
+
+            expect(mockFns.onChalExpired.mock.calls.length).toBe(0);
+            instance.handleChallengeExpired();
+            expect(mockFns.onChalExpired.mock.calls.length).toBe(0);
+        });
     });
 });

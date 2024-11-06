@@ -74,6 +74,7 @@ export class ClassExample extends React.Component {
           onClose={this.handleClose}
           onError={this.handleError}
           onChalExpired={this.handleChallengeExpired}
+          sentry={false}
         />
         {isVerified &&
           <div>

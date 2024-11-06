@@ -1,51 +1,8 @@
 import * as React from 'react';
-import { generateQuery, getFrame, getMountElement } from './utils.js';
+import { hCaptchaLoader, initSentry } from '@hcaptcha/loader';
 
-const SCRIPT_ID = 'hcaptcha-api-script-id';
-const HCAPTCHA_LOAD_FN_NAME = 'hcaptchaOnLoad';
-
-// Prevent loading API script multiple times
-const scripts = [];
-
-// Generate hCaptcha API script
-const mountCaptchaScript = (params = {}) => {
-  const element = getMountElement(params.scriptLocation);
-  delete params.scriptLocation;
-
-  const frame = getFrame(element);
-  const script = scripts.find(({ scope }) => scope === frame.window);
-
-  if (frame.document.getElementById(SCRIPT_ID) && script) {
-    // API was already requested
-    return script.promise;
-  }
-
-  const promise = new Promise((resolve, reject) => {
-    // Create global onload callback
-    frame.window[HCAPTCHA_LOAD_FN_NAME] = resolve;
-
-    const domain = params.apihost || "https://js.hcaptcha.com";
-    delete params.apihost;
-
-    const script = frame.document.createElement("script");
-    script.id = SCRIPT_ID;
-    script.src = `${domain}/1/api.js?render=explicit&onload=${HCAPTCHA_LOAD_FN_NAME}`;
-
-    script.async = params.loadAsync !== undefined? params.loadAsync : true;
-    delete params.loadAsync;
-
-    script.onerror = (event) => reject('script-error');
-
-    const query = generateQuery(params);
-    script.src += query !== ""? `&${query}` : "";
-
-    element.appendChild(script);
-  });
-
-  scripts.push({ promise, scope: frame.window });
-
-  return promise;
-};
+import { getFrame, getMountElement } from './utils.js';
+import { breadcrumbMessages, scopeTag } from "./constants";
 
 
 class HCaptcha extends React.Component {
@@ -65,6 +22,7 @@ class HCaptcha extends React.Component {
       this.resetCaptcha  = this.resetCaptcha.bind(this);
       this.removeCaptcha = this.removeCaptcha.bind(this);
       this.isReady = this.isReady.bind(this);
+      this._onReady = null;
 
       // Event Handlers
       this.loadCaptcha = this.loadCaptcha.bind(this);
@@ -78,6 +36,7 @@ class HCaptcha extends React.Component {
 
       this.ref = React.createRef();
       this.apiScriptRequested = false;
+      this.sentryHub = null;
 
       this.state = {
         isApiReady: false,
@@ -93,6 +52,13 @@ class HCaptcha extends React.Component {
       this._hcaptcha = frame.window.hcaptcha || undefined;
 
       const isApiReady = typeof this._hcaptcha !== 'undefined';
+
+      this.sentryHub = initSentry(this.props.sentry, scopeTag);
+
+      this.sentryHub.addBreadcrumb({
+        category: scopeTag.value,
+        message: breadcrumbMessages.mounted,
+      });
 
       /*
        * Check if hCaptcha has already been loaded,
@@ -126,6 +92,11 @@ class HCaptcha extends React.Component {
       // Reset any stored variables / timers when unmounting
       hcaptcha.reset(captchaId);
       hcaptcha.remove(captchaId);
+
+      this.sentryHub.addBreadcrumb({
+        category: scopeTag.value,
+        message: breadcrumbMessages.unmounted,
+      });
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -168,26 +139,34 @@ class HCaptcha extends React.Component {
         sentry,
         custom,
         loadAsync,
-        scriptLocation
+        scriptLocation,
+        scriptSource,
+        secureApi,
+        cleanup = true,
       } = this.props;
       const mountParams = {
+        render: 'explicit',
         apihost,
         assethost,
         endpoint,
         hl,
         host,
         imghost,
-        recaptchacompat: reCaptchaCompat === false? "off" : null,
+        recaptchacompat: reCaptchaCompat === false? 'off' : null,
         reportapi,
         sentry,
         custom,
         loadAsync,
         scriptLocation,
+        scriptSource,
+        secureApi,
+        cleanup
       };
 
-      mountCaptchaScript(mountParams)
-        .then(this.handleOnLoad)
-        .catch(this.handleError);
+      hCaptchaLoader(mountParams)
+          .then(this.handleOnLoad, this.handleError)
+          .catch(this.handleError);
+
       this.apiScriptRequested = true;
     }
 
@@ -218,7 +197,8 @@ class HCaptcha extends React.Component {
 
       this.setState({ isRemoved: false, captchaId: id }, () => {
         onRender && onRender();
-        onReady  && onReady();
+        onReady && onReady();
+        this._onReady && this._onReady(id);
       });
     }
 
@@ -231,6 +211,11 @@ class HCaptcha extends React.Component {
       }
       // Reset captcha state, removes stored token and unticks checkbox
       hcaptcha.reset(captchaId)
+
+      this.sentryHub.addBreadcrumb({
+        category: scopeTag.value,
+        message: breadcrumbMessages.reset,
+      });
     }
 
     removeCaptcha(callback) {
@@ -245,21 +230,33 @@ class HCaptcha extends React.Component {
         hcaptcha.remove(captchaId);
         callback && callback()
       });
+
+
+      this.sentryHub.addBreadcrumb({
+        category: scopeTag.value,
+        message: breadcrumbMessages.removed,
+      });
     }
 
     handleOnLoad () {
       this.setState({ isApiReady: true }, () => {
-        const element = getMountElement(this.props.scriptLocation);
-        const frame = getFrame(element);
+        try {
+          const element = getMountElement(this.props.scriptLocation);
+          const frame = getFrame(element);
 
-        this._hcaptcha = frame.window.hcaptcha;
+          this._hcaptcha = frame.window.hcaptcha;
 
-        // render captcha and wait for captcha id
-        this.renderCaptcha(() => {
+
+          // render captcha and wait for captcha id
+          this.renderCaptcha(() => {
             // trigger onLoad if it exists
+
             const { onLoad } = this.props;
             if (onLoad) onLoad();
-        });
+          });
+        } catch (error) {
+          this.sentryHub.captureException(error);
+        }
       });
     }
 
@@ -287,6 +284,11 @@ class HCaptcha extends React.Component {
       hcaptcha.reset(captchaId) // If hCaptcha runs into error, reset captcha - hCaptcha
 
       if (onExpire) onExpire();
+
+      this.sentryHub.addBreadcrumb({
+        category: scopeTag.value,
+        message: breadcrumbMessages.expired,
+      });
     }
 
     handleError (event) {
@@ -333,18 +335,42 @@ class HCaptcha extends React.Component {
     }
 
     execute (opts = null) {
-      const { captchaId } = this.state;
-      const hcaptcha = this._hcaptcha;
 
-      if (!this.isReady()) {
-        return;
+      opts = typeof opts === 'object' ? opts : null;
+
+      try {
+        const { captchaId } = this.state;
+        const hcaptcha = this._hcaptcha;
+        
+        if (!this.isReady()) {
+          const onReady = new Promise((resolve, reject) => {
+            
+            this._onReady = (id) => {
+              try {
+                const hcaptcha = this._hcaptcha;
+                
+                if (opts && opts.async) {
+                  hcaptcha.execute(id, opts).then(resolve).catch(reject);
+                } else {
+                  resolve(hcaptcha.execute(id, opts));
+                }
+              } catch (e) {
+                reject(e);
+              }
+            };
+          });
+    
+          return opts?.async ? onReady : null;
+        }
+        
+        return hcaptcha.execute(captchaId, opts);
+      } catch (error) {
+        this.sentryHub.captureException(error);
+        if (opts && opts.async) {
+          return Promise.reject(error);
+        }
+        return null;
       }
-
-      if (opts && typeof opts !== "object") {
-        opts = null;
-      }
-
-      return hcaptcha.execute(captchaId, opts);
     }
 
     close() {

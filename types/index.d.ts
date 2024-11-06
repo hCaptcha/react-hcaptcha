@@ -24,12 +24,17 @@ interface HCaptchaProps {
   languageOverride?: string;
   sitekey: string;
   size?: "normal" | "compact" | "invisible";
-  theme?: "light" | "dark";
+  theme?: "light" | "dark" | "contrast" | Object;
   tabIndex?: number;
   id?: string;
   reCaptchaCompat?: boolean;
   loadAsync?: boolean;
   scriptLocation?: HTMLElement | null;
+  sentry?: boolean;
+  cleanup?: boolean;
+  custom?: boolean;
+  secureApi?: boolean;
+  scriptSource?: string;
 }
 
 interface ExecuteResponse {
@@ -44,9 +49,10 @@ declare class HCaptcha extends React.Component<HCaptchaProps, HCaptchaState> {
   getRespKey(): string;
   getResponse(): string;
   setData(data: object): void;
-  execute(opts: { async: true }): Promise<ExecuteResponse>;
-  execute(opts?: { async: false }): void;
-  execute(opts?: { async: boolean }): Promise<ExecuteResponse> | void;
+  isReady(): boolean;
+  execute(opts: { async: true, rqdata?: string }): Promise<ExecuteResponse>;
+  execute(opts?: { async: false, rqdata?: string }): void;
+  execute(opts?: { async?: boolean, rqdata?: string }): Promise<ExecuteResponse> | void;
 }
 
 export = HCaptcha;

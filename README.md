@@ -126,7 +126,7 @@ return <HCaptcha ref={captchaRef} onLoad={onLoad} sitekey={sitekey} {...props} /
 |---|---|---|---|---|
 |`sitekey`|String|**Yes**|`-`|This is your sitekey, this allows you to load captcha. If you need a sitekey, please visit [hCaptcha](https://www.hcaptcha.com), and sign up to get your sitekey.|
 |`size`|String (normal, compact, invisible)|No|`normal`|This specifies the "size" of the component. hCaptcha allows you to decide how big the component will appear on render, this always defaults to normal.|
-|`theme`|String (light, dark)|No|`light`|hCaptcha supports both a light and dark theme. If no theme is inherently set, the captcha will always default to light.|
+|`theme`|String (light, dark, contrast) or Object|No|`light`|hCaptcha supports both a light and dark theme. Defaults to light. Takes Object if custom theme is used.|
 |`tabindex`|Integer|No|`0`|Set the tabindex of the widget and popup. When appropriate, this can make navigation of your site more intuitive.|
 |`languageOverride`|String (ISO 639-2 code)|No|`auto`|hCaptcha auto-detects language via the user's browser. This overrides that to set a default UI language. See [language codes](https://hcaptcha.com/docs/languages).|
 |`reCaptchaCompat`|Boolean|No|`true`|Disable drop-in replacement for reCAPTCHA with `false` to prevent hCaptcha from injecting into `window.grecaptcha`.|
@@ -138,7 +138,10 @@ return <HCaptcha ref={captchaRef} onLoad={onLoad} sitekey={sitekey} {...props} /
 |`imghost`|String|No|`-`|See enterprise docs.|
 |`reportapi`|String|No|`-`|See enterprise docs.|
 |`sentry`|String|No|`-`|See enterprise docs.|
-|`custom`|Boolean|No|`-`|See enterprise docs.|
+|`secureApi`|Boolean|No|`-`|See enterprise docs.|
+|`scriptSource`|String|No|`-`|See enterprise docs.|
+| `cleanup`         | Boolean     | No       | `true`          | Remove script tag after setup.|
+|`custom`|Boolean|No|`-`|Custom theme: see enterprise docs.|
 |`loadAsync`|Boolean|No|`true`|Set if the script should be loaded asynchronously.|
 |`scriptLocation`|Element|No|`document.head`| Location of where to append the script tag. Make sure to add it to an area that will persist to prevent loading multiple times in the same document view. Note: If `null` is provided, the `document.head` will be used.|
 
@@ -188,6 +191,10 @@ Please note that "invisible" simply means that no hCaptcha button will be render
 
 3. #### Make sure you are using `reCaptchaCompat=false` if you have the reCAPTCHA JS loaded on the same page.
     The hCaptcha "compatibility mode" will interfere with reCAPTCHA, as it adds properties with the same name. If for any reason you are running both hCaptcha and reCAPTCHA in parallel (we recommend only running hCaptcha) then please disable our compatibility mode.
+
+4. #### Avoid conflicts with legacy Sentry package usage on react-hcaptcha 1.9.0+
+    If you are using Sentry 7.x in your React app, this can conflict with the upstream `hcaptcha-loader` package's Sentry error tracing. You can avoid this issue by setting the `sentry` prop to `false`.
+
 
 
 ---
