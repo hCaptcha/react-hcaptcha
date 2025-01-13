@@ -189,11 +189,18 @@ describe("hCaptcha", () => {
         expect(window.hcaptcha.setData.mock.calls[0][1]).toBe(dataObj);
     });
 
-    it("emits onLoad event", () => {
+    it("should emit onLoad event if no hCaptcha ID is stored", () => {
+        instance.state.captchaId = '';
         expect(mockFns.onLoad.mock.calls.length).toBe(0);
         instance.handleOnLoad();
         expect(mockFns.onLoad.mock.calls.length).toBe(1);
     });
+
+    it("should not emit onLoad event if hCapthcha ID is found", () => {
+        instance.handleOnLoad();
+        expect(mockFns.onLoad.mock.calls.length).toBe(0);
+    });
+
 
     it("emits verify with token and eKey", () => {
         expect(mockFns.onVerify.mock.calls.length).toBe(0);
@@ -257,7 +264,7 @@ describe("hCaptcha", () => {
 
     it("should not set id if no id prop is passed", (done) => {
 
-        const onLoad = jest.fn(() => {
+        const onReady = jest.fn(() => {
             expect(instance.state.captchaId).toBe(MOCK_WIDGET_ID);
             done();
         });
@@ -265,12 +272,10 @@ describe("hCaptcha", () => {
         instance = ReactTestUtils.renderIntoDocument(
             <HCaptcha
                 sitekey={TEST_PROPS.sitekey}
-                onLoad={onLoad}
+                onReady={onReady}
                 sentry={false}
             />,
         );
-
-        instance.handleOnLoad();
     });
 
 
