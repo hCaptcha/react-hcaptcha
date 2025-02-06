@@ -47,6 +47,10 @@ class HCaptcha extends React.Component {
     }
 
     componentDidMount () { // Once captcha is mounted intialize hCaptcha - hCaptcha
+      if (this._hcaptcha) {
+        return;
+      }
+
       const element = getMountElement(this.props.scriptLocation);
       const frame = getFrame(element);
       this._hcaptcha = frame.window.hcaptcha || undefined;
