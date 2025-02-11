@@ -37,12 +37,12 @@ class HCaptcha extends React.Component {
       this.ref = React.createRef();
       this.apiScriptRequested = false;
       this.sentryHub = null;
+      this.captchaId = '';
 
       this.state = {
         isApiReady: false,
         isRemoved: false,
         elementId: props.id,
-        captchaId: ''
       }
     }
 
@@ -82,8 +82,8 @@ class HCaptcha extends React.Component {
     }
 
     componentWillUnmount() {
-      const { captchaId } = this.state;
       const hcaptcha = this._hcaptcha;
+      const captchaId = this.captchaId;
 
       if (!this.isReady()) {
         return;
@@ -171,8 +171,9 @@ class HCaptcha extends React.Component {
     }
 
     renderCaptcha(onRender) {
-      const { isApiReady, captchaId } = this.state;
       const { onReady } = this.props;
+      const { isApiReady } = this.state;
+      const captchaId = this.captchaId;
 
       // Prevent calling hCaptcha render on two conditions:
       // • API is not ready
@@ -194,8 +195,9 @@ class HCaptcha extends React.Component {
       const hcaptcha = this._hcaptcha;
       //Render hCaptcha widget and provide necessary callbacks - hCaptcha
       const id = hcaptcha.render(this.ref.current, renderParams);
+      this.captchaId = id;
 
-      this.setState({ isRemoved: false, captchaId: id }, () => {
+      this.setState({ isRemoved: false }, () => {
         onRender && onRender();
         onReady && onReady();
         this._onReady && this._onReady(id);
@@ -203,8 +205,8 @@ class HCaptcha extends React.Component {
     }
 
     resetCaptcha() {
-      const { captchaId } = this.state;
       const hcaptcha = this._hcaptcha;
+      const captchaId = this.captchaId;
 
       if (!this.isReady()) {
         return;
@@ -219,8 +221,8 @@ class HCaptcha extends React.Component {
     }
 
     removeCaptcha(callback) {
-      const { captchaId } = this.state;
       const hcaptcha = this._hcaptcha;
+      const captchaId = this.captchaId;
 
       if (!this.isReady()) {
         return;
@@ -262,8 +264,9 @@ class HCaptcha extends React.Component {
 
     handleSubmit (event) {
       const { onVerify } = this.props;
-      const { isRemoved, captchaId } = this.state;
+      const { isRemoved } = this.state;
       const hcaptcha = this._hcaptcha;
+      const captchaId = this.captchaId;
 
       if (typeof hcaptcha === 'undefined' || isRemoved) return
 
@@ -274,8 +277,8 @@ class HCaptcha extends React.Component {
 
     handleExpire () {
       const { onExpire } = this.props;
-      const { captchaId } = this.state;
       const hcaptcha = this._hcaptcha;
+      const captchaId = this.captchaId;
 
       if (!this.isReady()) {
         return;
@@ -293,8 +296,8 @@ class HCaptcha extends React.Component {
 
     handleError (event) {
       const { onError } = this.props;
-      const { captchaId } = this.state;
       const hcaptcha = this._hcaptcha;
+      const captchaId = this.captchaId;
 
       if (this.isReady()) {
         // If hCaptcha runs into error, reset captcha - hCaptcha
@@ -339,8 +342,8 @@ class HCaptcha extends React.Component {
       opts = typeof opts === 'object' ? opts : null;
 
       try {
-        const { captchaId } = this.state;
         const hcaptcha = this._hcaptcha;
+        const captchaId = this.captchaId;
         
         if (!this.isReady()) {
           const onReady = new Promise((resolve, reject) => {
@@ -374,8 +377,8 @@ class HCaptcha extends React.Component {
     }
 
     close() {
-      const { captchaId } = this.state;
       const hcaptcha = this._hcaptcha;
+      const captchaId = this.captchaId;
 
       if (!this.isReady()) {
         return;
@@ -385,8 +388,8 @@ class HCaptcha extends React.Component {
     }
 
     setData (data) {
-      const { captchaId } = this.state;
       const hcaptcha = this._hcaptcha;
+      const captchaId = this.captchaId;
 
       if (!this.isReady()) {
         return;
@@ -401,12 +404,12 @@ class HCaptcha extends React.Component {
 
     getResponse() {
       const hcaptcha = this._hcaptcha;
-      return hcaptcha.getResponse(this.state.captchaId);
+      return hcaptcha.getResponse(this.captchaId);
     }
 
     getRespKey() {
       const hcaptcha = this._hcaptcha;
-      return hcaptcha.getRespKey(this.state.captchaId)
+      return hcaptcha.getRespKey(this.captchaId)
     }
 
     render () {

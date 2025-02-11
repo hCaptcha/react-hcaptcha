@@ -101,7 +101,7 @@ describe("hCaptcha", () => {
         jest.spyOn(instance, 'isReady').mockReturnValueOnce(false);
 
         const onLoad = jest.fn(() => {
-            expect(instance.state.captchaId).toBe(MOCK_WIDGET_ID);
+            expect(instance.captchaId).toBe(MOCK_WIDGET_ID);
         });
 
         instance = ReactTestUtils.renderIntoDocument(
@@ -190,7 +190,7 @@ describe("hCaptcha", () => {
     });
 
     it("should emit onLoad event if no hCaptcha ID is stored", () => {
-        instance.state.captchaId = '';
+        instance.captchaId = '';
         expect(mockFns.onLoad.mock.calls.length).toBe(0);
         instance.handleOnLoad();
         expect(mockFns.onLoad.mock.calls.length).toBe(1);
@@ -228,7 +228,7 @@ describe("hCaptcha", () => {
 
 
     it("el renders after api loads and a widget id is set", () => {
-        expect(instance.state.captchaId).toBe(MOCK_WIDGET_ID);
+        expect(instance.captchaId).toBe(MOCK_WIDGET_ID);
         expect(window.hcaptcha.render.mock.calls.length).toBe(1);
         expect(window.hcaptcha.render.mock.calls[0][1]).toMatchObject({
             sitekey: TEST_PROPS.sitekey,
@@ -265,7 +265,7 @@ describe("hCaptcha", () => {
     it("should not set id if no id prop is passed", (done) => {
 
         const onReady = jest.fn(() => {
-            expect(instance.state.captchaId).toBe(MOCK_WIDGET_ID);
+            expect(instance.captchaId).toBe(MOCK_WIDGET_ID);
             done();
         });
 
