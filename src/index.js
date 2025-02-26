@@ -211,6 +211,8 @@ class HCaptcha extends React.Component {
       }
 
       this.setState({ isRemoved: true }, () => {
+        this.captchaId = '';
+
         hcaptcha.remove(captchaId);
         callback && callback()
       });

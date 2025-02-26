@@ -70,9 +70,11 @@ export function AsyncExample() {
         onChalExpired={handleChallengeExpired}
         sentry={false}
       />
-      <button onClick={executeCaptcha}>Execute asynchronously</button>
-      <button onClick={getRespKey}>Get Response Key</button>
-      <button onClick={getResponse}>Get Response</button>
+      <div style={{ display: 'flex', paddingTop: '8px', gap: '8px' }}>
+        <button onClick={executeCaptcha}>Execute asynchronously</button>
+        <button onClick={getRespKey}>Get Response Key</button>
+        <button onClick={getResponse}>Get Response</button>
+      </div>
     </div>
   );
 }
