@@ -204,6 +204,12 @@ To resolve this, update the version of the Sentry client you are including on yo
 You can avoid this issue by setting the `sentry` prop to `false`.
 
 
+### Handling SDK Errors
+
+If the JS SDK fails to load, the `onError` callback will be invoked with `script-error` argument.
+
+This will be rare, but could happen in the event you are testing offline, or have enabled a firewall that does not allow outbound connections to the asset hosts hCaptcha uses.
+
 ---
 ### Contributing
 
