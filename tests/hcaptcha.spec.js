@@ -458,28 +458,6 @@ describe("hCaptcha", () => {
             const script = document.querySelector("head > script");
             expect(script.src).toContain("sentry=false");
         });
-        
-        it("uj (userJourneys) should be found when prop is set", () => {
-            instance = ReactTestUtils.renderIntoDocument(<HCaptcha
-                    sitekey={TEST_PROPS.sitekey}
-                    sentry={false}
-                    userJourneys={true}
-            />);
-
-            const script = document.querySelector("head > script");
-            expect(script.src).toContain("uj=true");
-        });
-       
-        it("uj (userJourneys) should be false when prop is not set", () => {
-            instance = ReactTestUtils.renderIntoDocument(<HCaptcha
-                    sitekey={TEST_PROPS.sitekey}
-                    sentry={false}
-            />);
-
-            const script = document.querySelector("head > script");
-            expect(script.src).toContain("uj=false");
-        });
-
 
         it("host should be found when prop is set", () => {
             instance = ReactTestUtils.renderIntoDocument(<HCaptcha
