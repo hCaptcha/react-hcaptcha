@@ -172,7 +172,7 @@ class HCaptcha extends React.Component {
       // It is needed to pass only the props that hCaptcha supports
       // React are able to receive userJourneys as prop but hCaptcha not
       // hcaptcha expects to have only "uj" parameter to enable user journeys
-      const { userJourneys, ...propsWithoutUserJourneys } = this.props;
+      const { userJourneys, ...basicProps } = this.props;
       
       const renderParams = Object.assign({
         "open-callback"       : this.handleOpen,
@@ -181,7 +181,7 @@ class HCaptcha extends React.Component {
         "chalexpired-callback": this.handleChallengeExpired,
         "expired-callback"    : this.handleExpire,
         "callback"            : this.handleSubmit,
-      }, propsWithoutUserJourneys, {
+      }, basicProps, {
         hl: this.props.hl || this.props.languageOverride,
         languageOverride: undefined,
         uj: userJourneys !== undefined ? userJourneys : false,

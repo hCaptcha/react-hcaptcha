@@ -138,7 +138,7 @@ return <HCaptcha ref={captchaRef} onLoad={onLoad} sitekey={sitekey} {...props} /
 |`imghost`|String|No|`-`|See enterprise docs.|
 |`reportapi`|String|No|`-`|See enterprise docs.|
 |`sentry`|Boolean|No|`true`|See enterprise docs.|
-|`userJourneys`|Boolean|No|`true`|See enterprise docs.|
+|`userJourneys`|Boolean|No|`false`|See enterprise docs.|
 |`secureApi`|Boolean|No|`-`|See enterprise docs.|
 |`scriptSource`|String|No|`-`|See enterprise docs.|
 | `cleanup`         | Boolean     | No       | `true`          | Remove script tag after setup.|
