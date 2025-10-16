@@ -86,6 +86,7 @@ export class ClassExample extends React.Component {
           onError={this.handleError}
           onChalExpired={this.handleChallengeExpired}
           sentry={false}
+          userJourneys={true}
         />
         <div style={{ display: 'flex', paddingTop: '8px', gap: '8px' }}>
           <button onClick={this.handleThemeChange}>Change theme</button>
