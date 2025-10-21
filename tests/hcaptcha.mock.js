@@ -19,5 +19,6 @@ export function getMockedHcaptcha() {
           }
         }),
         remove: jest.fn(),
+        close: jest.fn(),
     };
 }
