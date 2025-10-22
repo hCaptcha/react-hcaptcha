@@ -290,8 +290,6 @@ class HCaptcha extends React.Component {
       const hcaptcha = this._hcaptcha;
       const captchaId = this.captchaId;
 
-      this._cancelPendingExecute('hcaptcha-error');
-
       if (this.isReady()) {
         // If hCaptcha runs into error, reset captcha - hCaptcha
         hcaptcha.reset(captchaId);
