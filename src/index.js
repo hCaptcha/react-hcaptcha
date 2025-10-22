@@ -212,13 +212,14 @@ class HCaptcha extends React.Component {
       const hcaptcha = this._hcaptcha;
       const captchaId = this.captchaId;
 
-      this._cancelPendingExecute('hcaptcha-reset');
-
       if (!this.isReady()) {
         return;
       }
+
       // Reset captcha state, removes stored token and unticks checkbox
       hcaptcha.reset(captchaId)
+
+      this._cancelPendingExecute('hcaptcha-reset');
     }
 
     removeCaptcha(callback) {
