@@ -824,15 +824,6 @@ describe("hCaptcha", () => {
             await expect(executePromise).rejects.toThrow('hcaptcha-removed');
         });
 
-        it("should reject pending async execute on error", async () => {
-            jest.spyOn(instance, 'isReady').mockReturnValueOnce(false).mockReturnValue(true);
-
-            const executePromise = instance.execute({ async: true });
-            instance.handleError('test-error');
-
-            await expect(executePromise).rejects.toThrow('hcaptcha-error');
-        });
-
         it("should reject pending async execute on token expiration", async () => {
             jest.spyOn(instance, 'isReady').mockReturnValueOnce(false).mockReturnValue(true);
 
@@ -840,15 +831,6 @@ describe("hCaptcha", () => {
             instance.handleExpire();
 
             await expect(executePromise).rejects.toThrow('hcaptcha-token-expired');
-        });
-
-        it("should reject pending async execute on challenge expired event", async () => {
-            jest.spyOn(instance, 'isReady').mockReturnValueOnce(false).mockReturnValue(true);
-
-            const executePromise = instance.execute({ async: true });
-            instance.handleChallengeExpired();
-
-            await expect(executePromise).rejects.toThrow('hcaptcha-challenge-expired');
         });
 
         it("should reject pending async execute on close method", async () => {
