@@ -83,15 +83,16 @@ class HCaptcha extends React.Component {
       const hcaptcha = this._hcaptcha;
       const captchaId = this.captchaId;
 
-      this._cancelPendingExecute('react-component-unmounted');
-
       if (!this.isReady()) {
+        this._cancelPendingExecute('react-component-unmounted');
         return;
       }
 
       // Reset any stored variables / timers when unmounting
       hcaptcha.reset(captchaId);
       hcaptcha.remove(captchaId);
+
+      this._cancelPendingExecute('react-component-unmounted');
     }
 
     shouldComponentUpdate(nextProps, nextState) {
