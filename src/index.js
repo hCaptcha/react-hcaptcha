@@ -132,6 +132,7 @@ class HCaptcha extends React.Component {
         cleanup = true,
         userJourneys,
       } = this.props;
+      
       const mountParams = {
         render: 'explicit',
         apihost,
@@ -149,9 +150,9 @@ class HCaptcha extends React.Component {
         scriptSource,
         secureApi,
         cleanup,
-        userJourneys
+        uj: userJourneys !== undefined ? userJourneys : false,
       };
-
+      
       hCaptchaLoader(mountParams)
           .then(this.handleOnLoad, this.handleError)
           .catch(this.handleError);
