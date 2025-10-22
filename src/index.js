@@ -141,6 +141,7 @@ class HCaptcha extends React.Component {
         cleanup = true,
         userJourneys,
       } = this.props;
+      
       const mountParams = {
         render: 'explicit',
         apihost,
@@ -158,9 +159,9 @@ class HCaptcha extends React.Component {
         scriptSource,
         secureApi,
         cleanup,
-        userJourneys
+        uj: userJourneys !== undefined ? userJourneys : false,
       };
-
+      
       hCaptchaLoader(mountParams)
           .then(this.handleOnLoad, this.handleError)
           .catch(this.handleError);
@@ -177,11 +178,6 @@ class HCaptcha extends React.Component {
       // • API is not ready
       // • Component has already been mounted
       if (!isApiReady || captchaId) return;
-
-      // It is needed to pass only the props that hCaptcha supports
-      // React are able to receive userJourneys as prop but hCaptcha not
-      // hcaptcha expects to have only "uj" parameter to enable user journeys
-      const { userJourneys, ...basicProps } = this.props;
       
       const renderParams = Object.assign({
         "open-callback"       : this.handleOpen,
@@ -190,10 +186,9 @@ class HCaptcha extends React.Component {
         "chalexpired-callback": this.handleChallengeExpired,
         "expired-callback"    : this.handleExpire,
         "callback"            : this.handleSubmit,
-      }, basicProps, {
+      }, this.props, {
         hl: this.props.hl || this.props.languageOverride,
-        languageOverride: undefined,
-        uj: userJourneys !== undefined ? userJourneys : false,
+        languageOverride: undefined
       });
 
       const hcaptcha = this._hcaptcha;

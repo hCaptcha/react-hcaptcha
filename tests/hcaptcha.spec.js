@@ -323,7 +323,7 @@ describe("hCaptcha", () => {
             />);
 
             const script = document.querySelector("head > script");
-            expect(script.src).toEqual("https://js.hcaptcha.com/1/api.js?onload=hCaptchaOnLoad&render=explicit&sentry=false");
+            expect(script.src).toEqual("https://js.hcaptcha.com/1/api.js?onload=hCaptchaOnLoad&render=explicit&sentry=false&uj=false");
         });
 
         it("validate src secureApi", () => {
@@ -335,7 +335,7 @@ describe("hCaptcha", () => {
             />);
 
             const script = document.querySelector("head > script");
-            expect(script.src).toEqual("https://js.hcaptcha.com/1/secure-api.js?onload=hCaptchaOnLoad&render=explicit&sentry=false");
+            expect(script.src).toEqual("https://js.hcaptcha.com/1/secure-api.js?onload=hCaptchaOnLoad&render=explicit&sentry=false&uj=false");
         });
 
         it("validate src scriptSource", () => {
@@ -347,7 +347,7 @@ describe("hCaptcha", () => {
             />);
 
             const script = document.querySelector("head > script");
-            expect(script.src).toEqual("https://hcaptcha.com/1/api.js?onload=hCaptchaOnLoad&render=explicit&sentry=false");
+            expect(script.src).toEqual("https://hcaptcha.com/1/api.js?onload=hCaptchaOnLoad&render=explicit&sentry=false&uj=false");
         });
 
         it("apihost should change script src, but not be added as query", () => {
