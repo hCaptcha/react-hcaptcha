@@ -339,8 +339,6 @@ class HCaptcha extends React.Component {
     }
 
     handleChallengeExpired () {
-      this._cancelPendingExecute('hcaptcha-challenge-expired');
-
       if (!this.isReady() || !this.props.onChalExpired) {
         return;
       }
