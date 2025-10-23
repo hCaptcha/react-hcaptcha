@@ -833,6 +833,13 @@ describe("hCaptcha", () => {
             await expect(executePromise).rejects.toThrow('hcaptcha-closed');
         });
 
+        it("should return hcaptcha.execute promise reject instead of react pending execute promise for user close action", async () => {
+            instance._hcaptcha.execute.mockRejectedValueOnce(new Error("user-closed"));
+
+            const executePromise = instance.execute({ async: true });
+            await expect(executePromise).rejects.toThrow('user-closed');
+        });
+
         it("should reject previous async execute when a new one is called", async () => {
             const firstPromise = instance.execute({ async: true });
             const secondPromise = instance.execute({ async: true });
