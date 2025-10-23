@@ -220,6 +220,8 @@ class HCaptcha extends React.Component {
       const hcaptcha = this._hcaptcha;
       const captchaId = this.captchaId;
 
+      this._cancelPendingExecute('hcaptcha-removed');
+
       if (!this.isReady()) {
         return;
       }
@@ -228,8 +230,6 @@ class HCaptcha extends React.Component {
         this.captchaId = '';
 
         hcaptcha.remove(captchaId);
-
-        this._cancelPendingExecute('hcaptcha-removed');
 
         callback && callback()
       });
