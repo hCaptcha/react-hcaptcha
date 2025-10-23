@@ -795,4 +795,57 @@ describe("hCaptcha", () => {
             expect(mockFns.onChalExpired.mock.calls.length).toBe(0);
         });
     });
+
+    describe('async execute promise rejection', () => {
+        it("should reject pending async execute on unmount", async () => {
+            jest.spyOn(instance, 'isReady').mockReturnValue(false);
+
+            const executePromise = instance.execute({ async: true });
+            ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(instance).parentNode);
+
+            await expect(executePromise).rejects.toThrow('react-component-unmounted');
+        });
+
+        it("should reject pending async execute on reset", async () => {
+            jest.spyOn(instance, 'isReady').mockReturnValueOnce(false).mockReturnValue(true);
+
+            const executePromise = instance.execute({ async: true });
+            instance.resetCaptcha();
+
+            await expect(executePromise).rejects.toThrow('hcaptcha-reset');
+        });
+
+        it("should reject pending async execute on remove", async () => {
+            jest.spyOn(instance, 'isReady').mockReturnValueOnce(false).mockReturnValue(true);
+
+            const executePromise = instance.execute({ async: true });
+            instance.removeCaptcha();
+
+            await expect(executePromise).rejects.toThrow('hcaptcha-removed');
+        });
+
+        it("should reject pending async execute on close method", async () => {
+            jest.spyOn(instance, 'isReady').mockReturnValueOnce(false).mockReturnValue(true);
+
+            const executePromise = instance.execute({ async: true });
+            instance.close();
+
+            await expect(executePromise).rejects.toThrow('hcaptcha-closed');
+        });
+
+        it("should return hcaptcha.execute promise reject instead of react pending execute promise for user close action", async () => {
+            instance._hcaptcha.execute.mockRejectedValueOnce(new Error("user-closed"));
+
+            const executePromise = instance.execute({ async: true });
+            await expect(executePromise).rejects.toThrow('user-closed');
+        });
+
+        it("should reject previous async execute when a new one is called", async () => {
+            const firstPromise = instance.execute({ async: true });
+            const secondPromise = instance.execute({ async: true });
+
+            await expect(firstPromise).rejects.toThrow('hcaptcha-execute-replaced');
+            await expect(secondPromise).resolves.toBeDefined();
+        });
+    });
 });

@@ -38,6 +38,12 @@ class HCaptcha extends React.Component {
       this.sentryHub = null;
       this.captchaId = '';
 
+      /**
+       * Tracks the currently pending async execute() promise.
+       * Stores { resolve, reject } so we can cancel on unmount/errors/etc.
+       */
+      this._pendingExecute = null;
+
       this.state = {
         isApiReady: false,
         isRemoved: false,
@@ -76,6 +82,8 @@ class HCaptcha extends React.Component {
     componentWillUnmount() {
       const hcaptcha = this._hcaptcha;
       const captchaId = this.captchaId;
+
+      this._cancelPendingExecute('react-component-unmounted');
 
       if (!this.isReady()) {
         return;
@@ -201,13 +209,18 @@ class HCaptcha extends React.Component {
       if (!this.isReady()) {
         return;
       }
+
       // Reset captcha state, removes stored token and unticks checkbox
       hcaptcha.reset(captchaId)
+
+      this._cancelPendingExecute('hcaptcha-reset');
     }
 
     removeCaptcha(callback) {
       const hcaptcha = this._hcaptcha;
       const captchaId = this.captchaId;
+
+      this._cancelPendingExecute('hcaptcha-removed');
 
       if (!this.isReady()) {
         return;
@@ -217,6 +230,7 @@ class HCaptcha extends React.Component {
         this.captchaId = '';
 
         hcaptcha.remove(captchaId);
+
         callback && callback()
       });
     }
@@ -285,6 +299,22 @@ class HCaptcha extends React.Component {
       return isApiReady && !isRemoved;
     }
 
+    /**
+     * Cancel any pending async execute() promise
+     * Called when the component unmounts, errors occur, resets, etc.
+     */
+    _cancelPendingExecute(reason) {
+      if (!this._pendingExecute) {
+        return;
+      }
+
+      const pending = this._pendingExecute;
+      this._pendingExecute = null;
+
+      const error = new Error(reason);
+      pending.reject(error);
+    }
+
     handleOpen () {
       if (!this.isReady() || !this.props.onOpen) {
         return;
@@ -309,7 +339,7 @@ class HCaptcha extends React.Component {
       this.props.onChalExpired();
     }
 
-    execute (opts = null) {
+    execute(opts = null) {
 
       opts = typeof opts === 'object' ? opts : null;
 
@@ -317,28 +347,75 @@ class HCaptcha extends React.Component {
         const hcaptcha = this._hcaptcha;
         const captchaId = this.captchaId;
 
-        if (!this.isReady()) {
-          const onReady = new Promise((resolve, reject) => {
-
-            this._onReady = (id) => {
-              try {
-                const hcaptcha = this._hcaptcha;
-
-                if (opts && opts.async) {
-                  hcaptcha.execute(id, opts).then(resolve).catch(reject);
-                } else {
-                  resolve(hcaptcha.execute(id, opts));
-                }
-              } catch (e) {
-                reject(e);
-              }
-            };
-          });
-
-          return opts?.async ? onReady : null;
+        // Is an async execute and there's already 1 pending, cancel the old one.
+        if (opts && opts.async && this._pendingExecute) {
+          this._cancelPendingExecute('hcaptcha-execute-replaced');
         }
 
-        return hcaptcha.execute(captchaId, opts);
+        if (!this.isReady()) {
+          if (opts && opts.async) {
+            return new Promise((resolve, reject) => {
+              this._pendingExecute = { resolve, reject };
+
+              this._onReady = (id) => {
+                if (!this._pendingExecute) {
+                  return;
+                }
+
+                try {
+                  const result = hcaptcha.execute(id, opts);
+
+                  if (result && typeof result.then === 'function') {
+                    result
+                      .then((val) => {
+                        this._pendingExecute = null;
+                        resolve(val);
+                      })
+                      .catch((err) => {
+                        this._pendingExecute = null;
+                        reject(err);
+                      });
+                  } else {
+                    this._pendingExecute = null;
+                    reject(new Error('hcaptcha-execute-no-promise'));
+                  }
+                } catch (e) {
+                  this._pendingExecute = null;
+                  reject(e);
+                }
+              };
+            });
+          } else {
+            // Non-async: don't return a promise.
+            this._onReady = (id) => {
+              hcaptcha.execute(id, opts);
+            };
+            
+            return null;
+          }
+        }
+
+        // hCaptcha is ready, execute directly.
+        const result = hcaptcha.execute(captchaId, opts);
+
+        // If it's async execute, track it.
+        if (opts && opts.async && result && typeof result.then === 'function') {
+          return new Promise((resolve, reject) => {
+            this._pendingExecute = { resolve, reject };
+
+            result
+              .then((val) => {
+                this._pendingExecute = null;
+                resolve(val);
+              })
+              .catch((err) => {
+                this._pendingExecute = null;
+                reject(err);
+              });
+          });
+        }
+
+        return result;
       } catch (error) {
         if (opts && opts.async) {
           return Promise.reject(error);
@@ -350,6 +427,8 @@ class HCaptcha extends React.Component {
     close() {
       const hcaptcha = this._hcaptcha;
       const captchaId = this.captchaId;
+
+      this._cancelPendingExecute('hcaptcha-closed');
 
       if (!this.isReady()) {
         return;
