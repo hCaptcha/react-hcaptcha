@@ -431,15 +431,13 @@ class HCaptcha extends React.Component {
       const hcaptcha = this._hcaptcha;
       const captchaId = this.captchaId;
 
+      this._cancelPendingExecute('hcaptcha-closed');
+
       if (!this.isReady()) {
         return;
       }
 
-      const result = hcaptcha.close(captchaId);
-
-      this._cancelPendingExecute('hcaptcha-closed');
-
-      return result;
+      return hcaptcha.close(captchaId);
     }
 
     setData (data) {
