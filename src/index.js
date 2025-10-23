@@ -277,8 +277,6 @@ class HCaptcha extends React.Component {
 
       hcaptcha.reset(captchaId) // If hCaptcha runs into error, reset captcha - hCaptcha
 
-      this._cancelPendingExecute('hcaptcha-token-expired');
-
       if (onExpire) onExpire();
     }
 
