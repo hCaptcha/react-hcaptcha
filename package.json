@@ -1,6 +1,6 @@
 {
   "name": "@hcaptcha/react-hcaptcha",
-  "version": "1.15.0",
+  "version": "1.16.0",
   "types": "types/index.d.ts",
   "main": "dist/index.js",
   "module": "dist/esm/index.js",
@@ -60,6 +60,6 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.17.9",
-    "@hcaptcha/loader": "^2.2.0"
+    "@hcaptcha/loader": "^2.3.0"
   }
 }
