@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { AsyncExample, ClassExample, FrameExample, HookExample } from './examples';
 import { CustomFrame } from './components';
 
-
 export function App() {
   const [frame, setFrame] = useState(null);
   const [frameDocument, setFrameDocument] = useState(frame);
