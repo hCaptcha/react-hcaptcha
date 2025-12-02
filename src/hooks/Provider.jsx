@@ -4,7 +4,7 @@ import { HCaptchaContext } from "./Context";
 
 export const HCaptchaProvider = ({
   sitekey = null,
-  invisible = false,
+  size = "normal",
   theme = "light",
   rqdata = null,
   languageOverride = null,
@@ -19,7 +19,6 @@ export const HCaptchaProvider = ({
   const [error, setError] = useState(null);
 
   const handleReady = () => {
-    console.log("hCaptcha loaded and ready");
     setReady(true);
   };
 
@@ -28,7 +27,6 @@ export const HCaptchaProvider = ({
   };
 
   const handleExpire = () => {
-    console.warn("hCaptcha token expired");
     setToken(null);
   };
 
@@ -86,7 +84,7 @@ export const HCaptchaProvider = ({
       {children}
       <HCaptcha
         sitekey={sitekey}
-        size={invisible ? "invisible" : "normal"}
+        size={size}
         theme={theme}
         languageOverride={languageOverride}
         onReady={handleReady}
