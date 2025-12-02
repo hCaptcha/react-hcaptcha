@@ -21,6 +21,7 @@ interface HCaptchaProps {
   onError?: (event: string) => any;
   onVerify?: (token: string, ekey: string) => any;
   onLoad?: () => any;
+  onReady?: () => any;
   languageOverride?: string;
   sitekey: string;
   size?: "normal" | "compact" | "invisible";
