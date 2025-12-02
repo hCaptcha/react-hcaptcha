@@ -469,3 +469,5 @@ class HCaptcha extends React.Component {
   }
 
 export default HCaptcha;
+
+export { HCaptchaProvider, useHCaptcha } from './hooks/index.jsx';
