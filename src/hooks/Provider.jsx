@@ -23,7 +23,8 @@ export const HCaptchaProvider = ({
   };
 
   const handleError = (error) => {
-    console.error("hCaptcha error: ", error);
+    setError(error);
+    onError && onError(error);
   };
 
   const handleExpire = () => {
