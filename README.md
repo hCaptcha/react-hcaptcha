@@ -138,8 +138,8 @@ Returns an object with:
 
 |Property|Type|Description|
 |---|---|---|
-|`executeInstance`|Function|Execute hCaptcha programmatically. Returns a Promise with the token.|
-|`resetInstance`|Function|Reset the hCaptcha widget.|
+|`executeInstance`|Function|Execute hCaptcha programmatically. Returns a Promise that resolve with a new token.|
+|`resetInstance`|Function|Reset the hCaptcha client instance.|
 |`ready`|Boolean|Whether hCaptcha is loaded and ready.|
 |`token`|String \| null|Current hCaptcha token (if verified).|
 |`error`|Error \| null|Any error that occurred.|
