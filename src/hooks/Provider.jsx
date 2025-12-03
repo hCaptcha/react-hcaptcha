@@ -65,7 +65,6 @@ export const HCaptchaProvider = ({
 
   useEffect(() => {
     if (rqdata) {
-      /* Note: rqdata must be unique per session */
       hcaptchaRef?.current?.setData(rqdata);
     }
   }, [rqdata]);
