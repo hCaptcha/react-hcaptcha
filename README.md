@@ -93,6 +93,58 @@ import { default as RenamedCaptcha } from '../utils/captcha';
 </FormComponent>
 ```
 
+#### Provider/Hook Pattern
+
+You can also use the Provider/Hook pattern:
+
+```js
+import { HCaptchaProvider, useHCaptcha } from '@hcaptcha/react-hcaptcha/hooks';
+
+function App() {
+  return (
+    <HCaptchaProvider sitekey="your-sitekey">
+      <Form />
+    </HCaptchaProvider>
+  );
+}
+
+function Form() {
+  const { ready, token, executeInstance } = useHCaptcha();
+
+  const onSubmit = async () => {
+    const response = await executeInstance();
+    console.log("Token:", response);
+  };
+
+  return <button onClick={onSubmit} disabled={!ready}>Submit</button>;
+}
+```
+
+##### Provider Props
+
+|Name|Values/Type|Required|Default|Description|
+|---|---|---|---|---|
+|`sitekey`|String|**Yes**|`-`|Your hCaptcha sitekey.|
+|`size`|String (normal, compact, invisible)|No|`normal`|The size of the hCaptcha widget.|
+|`theme`|String (light, dark)|No|`light`|The theme of the widget.|
+|`rqdata`|String|No|`-`|See enterprise docs.|
+|`languageOverride`|String|No|`-`|Language override (ISO 639-2 code).|
+|`onVerify`|Function|No|`-`|Callback when captcha is verified.|
+|`onError`|Function|No|`-`|Callback when an error occurs.|
+
+##### useHCaptcha Hook
+
+Returns an object with:
+
+|Property|Type|Description|
+|---|---|---|
+|`executeInstance`|Function|Execute hCaptcha programmatically. Returns a Promise that resolve with a new token.|
+|`resetInstance`|Function|Reset the hCaptcha client instance.|
+|`ready`|Boolean|Whether hCaptcha is loaded and ready.|
+|`token`|String \| null|Current hCaptcha token (if verified).|
+|`error`|Error \| null|Any error that occurred.|
+|`sitekey`|String|The hCaptcha sitekey.|
+
 #### Advanced
 
 In most real-world implementations, you'll probably be using a form library such as [Formik](https://github.com/jaredpalmer/formik) or [React Hook Form](https://github.com/react-hook-form/react-hook-form).

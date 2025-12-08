@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import { AsyncExample, ClassExample, FrameExample } from './examples';
+import { AsyncExample, ClassExample, FrameExample, HookExample } from './examples';
 import { CustomFrame } from './components';
-
 
 export function App() {
   const [frame, setFrame] = useState(null);
@@ -38,6 +37,10 @@ export function App() {
       <div style={{marginBottom: 48}}>
         <h3>Class Example</h3>
         <ClassExample />
+      </div>
+      <div style={{marginBottom: 48}}>
+        <h3>Hook Example (Provider/Context Pattern)</h3>
+        <HookExample />
       </div>
       <div>
         <h3>Frame Example</h3>

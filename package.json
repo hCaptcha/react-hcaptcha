@@ -1,9 +1,19 @@
 {
   "name": "@hcaptcha/react-hcaptcha",
-  "version": "1.16.0",
+  "version": "1.17.0",
   "types": "types/index.d.ts",
   "main": "dist/index.js",
   "module": "dist/esm/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/index.js"
+    },
+    "./hooks": {
+      "import": "./dist/esm/hooks/index.jsx",
+      "require": "./dist/hooks/index.jsx"
+    }
+  },
   "files": [
     "src",
     "dist",
