@@ -12,8 +12,8 @@
     },
     "./hooks": {
       "types": "./types/hooks/index.d.ts",
-      "import": "./dist/esm/hooks/index.jsx",
-      "require": "./dist/hooks/index.jsx"
+      "import": "./dist/esm/hooks/index.js",
+      "require": "./dist/hooks/index.js"
     }
   },
   "files": [
