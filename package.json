@@ -1,6 +1,6 @@
 {
   "name": "@hcaptcha/react-hcaptcha",
-  "version": "1.17.2",
+  "version": "1.17.3",
   "types": "types/index.d.ts",
   "main": "dist/index.js",
   "module": "dist/esm/index.js",
@@ -29,7 +29,7 @@
     "transpile": "babel src -d dist --copy-files",
     "prebuild": "rimraf dist",
     "build": "npm run transpile && npm run build:esm",
-    "build:esm": "cross-env BABEL_ENV=esm babel src -d dist/esm --copy-files",
+    "build:esm": "cross-env BABEL_ENV=esm babel src -d dist/esm --copy-files && echo '{\"type\":\"module\"}' > dist/esm/package.json",
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
