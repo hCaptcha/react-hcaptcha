@@ -23,9 +23,20 @@
         ],
         "@babel/preset-react"
       ],
-      "plugins": [["@babel/plugin-transform-runtime", {
-        "regenerator": true
-      }]]
+      "plugins": [
+        ["@babel/plugin-transform-runtime", {
+          "regenerator": true
+        }],
+        [
+          "babel-plugin-transform-rewrite-imports",
+          {
+            "replaceExtensions": {
+              ".jsx": ".js",
+              ".tsx": ".js"
+            }
+          }
+        ]
+      ]
     }
   }
 }
