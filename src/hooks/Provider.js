@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import HCaptcha from "../index";
-import { HCaptchaContext } from "./Context";
+import HCaptcha from "../index.js";
+import { HCaptchaContext } from "./Context.js";
 
 export const HCaptchaProvider = ({
   sitekey = null,
@@ -52,7 +52,7 @@ export const HCaptchaProvider = ({
       });
 
       setToken(response);
-      
+
       return response;
     } catch (error) {
       setError(error);
@@ -92,7 +92,7 @@ export const HCaptchaProvider = ({
         onExpire={handleExpire}
         onError={handleError}
         ref={hcaptchaRef}
-      ></HCaptcha>
+      />
     </HCaptchaContext.Provider>
   );
 };

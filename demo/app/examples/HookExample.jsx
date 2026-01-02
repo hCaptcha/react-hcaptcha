@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HCaptchaProvider, useHCaptcha } from '../../../src/hooks/index.jsx';
+import { HCaptchaProvider, useHCaptcha } from "../../../src/hooks/index.js";
 
 function Form() {
   const [email, setEmail] = useState("");
