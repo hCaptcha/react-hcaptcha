@@ -20,6 +20,24 @@ function findTsc() {
   return null;
 }
 
+function getTscVersion(tscPath) {
+  const result = spawnSync(tscPath, ["-v"], { encoding: "utf8" });
+  const text = `${result.stdout || ""}${result.stderr || ""}`.trim();
+  const match = text.match(/Version\s+(\d+)\.(\d+)\.(\d+)/i);
+  if (!match) return null;
+  return {
+    major: Number(match[1]),
+    minor: Number(match[2]),
+    patch: Number(match[3]),
+  };
+}
+
+function isAtLeastVersion(version, major, minor) {
+  if (!version) return false;
+  if (version.major !== major) return version.major > major;
+  return version.minor >= minor;
+}
+
 describe("TypeScript types are present and consumable", () => {
   it("package.json points to existing .d.ts files for exports", () => {
     const pkg = JSON.parse(
@@ -53,6 +71,13 @@ describe("TypeScript types are present and consumable", () => {
       return;
     }
 
+    const version = getTscVersion(tsc);
+    // TS needs to understand NodeNext + export maps to typecheck real consumers.
+    // If the only available tsc is too old (common on CI images), skip this check.
+    if (!isAtLeastVersion(version, 4, 7)) {
+      return;
+    }
+
     const tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), "react-hcaptcha-ts-"));
     const srcDir = path.join(tmpRoot, "src");
     fs.mkdirSync(srcDir, { recursive: true });
@@ -63,11 +88,10 @@ describe("TypeScript types are present and consumable", () => {
         {
           compilerOptions: {
             target: "ES2020",
-            module: "ESNext",
+            module: "NodeNext",
             moduleResolution: "NodeNext",
             strict: true,
             noEmit: true,
-            jsx: "react-jsx",
             types: [],
             skipLibCheck: true,
           },
@@ -97,7 +121,10 @@ describe("TypeScript types are present and consumable", () => {
       encoding: "utf8",
     });
 
-    expect(result.status).toBe(0);
+    if (result.status !== 0) {
+      throw new Error(
+        `TypeScript typecheck failed.\nstdout:\n${result.stdout}\nstderr:\n${result.stderr}`
+      );
+    }
   });
 });
-
