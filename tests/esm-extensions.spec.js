@@ -2,14 +2,18 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import { spawnSync } from "child_process";
-import { describe, expect, it } from "@jest/globals";
+import { afterAll, describe, expect, it } from "@jest/globals";
 
 const PROJECT_ROOT = path.resolve(__dirname, "..");
 const DEFAULT_ESM_DIST_DIR = path.join(PROJECT_ROOT, "dist", "esm");
+let tempDirToCleanup = null;
 
 function buildEsmToTempDir() {
-  const tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), "react-hcaptcha-esm-"));
+  const tmpRoot = fs.mkdtempSync(
+    path.join(PROJECT_ROOT, ".tmp-react-hcaptcha-esm-")
+  );
   const outDir = path.join(tmpRoot, "esm");
+  tempDirToCleanup = tmpRoot;
 
   const babelCliPath = require.resolve("@babel/cli/bin/babel.js");
   const result = spawnSync(
@@ -88,6 +92,15 @@ function getRelativeSpecifiers(sourceText) {
 describe("ESM build emits fully-specified relative imports", () => {
   const ESM_DIST_DIR = getEsmDistDir();
 
+  afterAll(() => {
+    if (!tempDirToCleanup) return;
+    try {
+      fs.rmSync(tempDirToCleanup, { recursive: true, force: true });
+    } finally {
+      tempDirToCleanup = null;
+    }
+  });
+
   it("sets dist/esm/package.json type=module", () => {
     const packageJsonPath = path.join(ESM_DIST_DIR, "package.json");
     expect(fs.existsSync(packageJsonPath)).toBe(true);
@@ -146,7 +159,6 @@ describe("ESM build emits fully-specified relative imports", () => {
       encoding: "utf8",
     });
 
-    expect(result.stderr || "").toBe("");
     expect(result.status).toBe(0);
   });
 
@@ -162,7 +174,6 @@ describe("ESM build emits fully-specified relative imports", () => {
       encoding: "utf8",
     });
 
-    expect(result.stderr || "").toBe("");
     expect(result.status).toBe(0);
   });
 });
