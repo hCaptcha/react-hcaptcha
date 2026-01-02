@@ -1,2 +1,2 @@
-export { useHCaptcha } from "./useHCaptcha";
-export { HCaptchaProvider } from "./Provider";
+export { useHCaptcha } from "./useHCaptcha.tsx";
+export { HCaptchaProvider } from "./Provider.jsx";
