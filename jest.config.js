@@ -12,5 +12,12 @@ module.exports = {
     // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
     testPathIgnorePatterns: ["/node_modules/", "webpack.config.test.js"],
 
-    testEnvironment: 'jsdom'
+    testEnvironment: 'jsdom',
+
+    // Map .js imports to .jsx files in src/hooks
+    moduleNameMapper: {
+        "^\\./useHCaptcha\\.js$": "./useHCaptcha.jsx",
+        "^\\./Provider\\.js$": "./Provider.jsx",
+        "^\\./Context\\.js$": "./Context.jsx"
+    }
 };

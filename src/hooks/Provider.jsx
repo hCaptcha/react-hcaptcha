@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import HCaptcha from "../index";
-import { HCaptchaContext } from "./Context";
+import HCaptcha from "../index.js";
+import { HCaptchaContext } from "./Context.js";
 
 export const HCaptchaProvider = ({
   sitekey = null,
