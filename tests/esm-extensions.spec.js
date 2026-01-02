@@ -1,10 +1,55 @@
 import fs from "fs";
+import os from "os";
 import path from "path";
 import { spawnSync } from "child_process";
 import { describe, expect, it } from "@jest/globals";
 
 const PROJECT_ROOT = path.resolve(__dirname, "..");
-const ESM_DIST_DIR = path.join(PROJECT_ROOT, "dist", "esm");
+const DEFAULT_ESM_DIST_DIR = path.join(PROJECT_ROOT, "dist", "esm");
+
+function buildEsmToTempDir() {
+  const tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), "react-hcaptcha-esm-"));
+  const outDir = path.join(tmpRoot, "esm");
+
+  const babelCliPath = require.resolve("@babel/cli/bin/babel.js");
+  const result = spawnSync(
+    process.execPath,
+    [babelCliPath, "src", "-d", outDir, "--copy-files"],
+    {
+      cwd: PROJECT_ROOT,
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        BABEL_ENV: "esm",
+      },
+    }
+  );
+
+  if (result.status !== 0) {
+    throw new Error(
+      `Failed to build ESM via Babel.\nstdout:\n${result.stdout}\nstderr:\n${result.stderr}`
+    );
+  }
+
+  fs.writeFileSync(
+    path.join(outDir, "package.json"),
+    JSON.stringify({ type: "module" }),
+    "utf8"
+  );
+
+  return outDir;
+}
+
+function getEsmDistDir() {
+  if (
+    fs.existsSync(DEFAULT_ESM_DIST_DIR) &&
+    fs.existsSync(path.join(DEFAULT_ESM_DIST_DIR, "index.js"))
+  ) {
+    return DEFAULT_ESM_DIST_DIR;
+  }
+
+  return buildEsmToTempDir();
+}
 
 function listFilesRecursive(dir) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -41,6 +86,8 @@ function getRelativeSpecifiers(sourceText) {
 }
 
 describe("ESM build emits fully-specified relative imports", () => {
+  const ESM_DIST_DIR = getEsmDistDir();
+
   it("sets dist/esm/package.json type=module", () => {
     const packageJsonPath = path.join(ESM_DIST_DIR, "package.json");
     expect(fs.existsSync(packageJsonPath)).toBe(true);
