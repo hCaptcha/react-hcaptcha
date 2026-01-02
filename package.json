@@ -24,7 +24,7 @@
   "description": "A React library for hCaptcha",
   "scripts": {
     "start": "webpack serve -c ./demo/webpack.config.mjs",
-    "test": "jest",
+    "test": "npm run build && jest",
     "watch": "babel src -d dist --copy-files --watch",
     "transpile": "babel src -d dist --copy-files",
     "prebuild": "rimraf dist",
