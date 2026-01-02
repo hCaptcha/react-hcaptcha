@@ -38,6 +38,21 @@ function isAtLeastVersion(version, major, minor) {
   return version.minor >= minor;
 }
 
+function tryLinkLocalPackage(tmpRoot) {
+  const scopeDir = path.join(tmpRoot, "node_modules", "@hcaptcha");
+  const linkPath = path.join(scopeDir, "react-hcaptcha");
+
+  fs.mkdirSync(scopeDir, { recursive: true });
+
+  try {
+    // "junction" is the most compatible option across platforms.
+    fs.symlinkSync(PROJECT_ROOT, linkPath, "junction");
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 describe("TypeScript types are present and consumable", () => {
   it("package.json points to existing .d.ts files for exports", () => {
     const pkg = JSON.parse(
@@ -82,6 +97,8 @@ describe("TypeScript types are present and consumable", () => {
     const srcDir = path.join(tmpRoot, "src");
     fs.mkdirSync(srcDir, { recursive: true });
 
+    const linked = tryLinkLocalPackage(tmpRoot);
+
     fs.writeFileSync(
       path.join(tmpRoot, "tsconfig.json"),
       JSON.stringify(
@@ -94,6 +111,19 @@ describe("TypeScript types are present and consumable", () => {
             noEmit: true,
             types: [],
             skipLibCheck: true,
+            ...(linked
+              ? {}
+              : {
+                  baseUrl: ".",
+                  paths: {
+                    "@hcaptcha/react-hcaptcha": [
+                      path.join(PROJECT_ROOT, "types", "index.d.ts"),
+                    ],
+                    "@hcaptcha/react-hcaptcha/hooks": [
+                      path.join(PROJECT_ROOT, "types", "hooks", "index.d.ts"),
+                    ],
+                  },
+                }),
           },
           include: ["src/**/*.ts"],
         },
