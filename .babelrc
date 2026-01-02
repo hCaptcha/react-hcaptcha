@@ -23,9 +23,12 @@
         ],
         "@babel/preset-react"
       ],
-      "plugins": [["@babel/plugin-transform-runtime", {
-        "regenerator": true
-      }]]
+      "plugins": [
+        "./scripts/babel-plugin-fully-specified-relative-imports.cjs",
+        ["@babel/plugin-transform-runtime", {
+          "regenerator": true
+        }]
+      ]
     }
   }
 }

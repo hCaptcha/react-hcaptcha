@@ -3,7 +3,7 @@ import ReactTestUtils, { act } from "react-dom/test-utils";
 import { describe, jest, it, expect, beforeEach } from "@jest/globals";
 
 import { getMockedHcaptcha, MOCK_TOKEN } from "./hcaptcha.mock";
-import { HCaptchaProvider, useHCaptcha } from "../src/hooks/index.js";
+import { HCaptchaProvider, useHCaptcha } from "../src/hooks/index.jsx";
 
 const TEST_SITEKEY = "10000000-ffff-ffff-ffff-000000000001";
 
