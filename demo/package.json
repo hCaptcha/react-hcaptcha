@@ -8,8 +8,8 @@
   },
   "dependencies": {
     "@hcaptcha-react/lib": "workspace:^",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0"
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
   },
   "devDependencies": {
     "@swc/core": "^1.15.8",

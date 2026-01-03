@@ -8,7 +8,7 @@ import { hCaptchaLoader } from '@hcaptcha/loader';
 
 import { getMockedHcaptcha, MOCK_EKEY, MOCK_TOKEN, MOCK_WIDGET_ID } from "../__mocks__/hcaptcha.mock.js";
 
-import HCaptcha from '../../src/index.js';
+import { HCaptcha } from '../../src/index.js';
 
 jest.mock('@hcaptcha/loader');
 

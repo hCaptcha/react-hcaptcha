@@ -4,7 +4,7 @@ import { act, renderHook } from '@testing-library/react';
 import HCaptcha from '../../src/index.js';
 
 import { getMockedHcaptcha, MOCK_TOKEN } from "../__mocks__/hcaptcha.mock.js";
-import { HCaptchaProvider, useHCaptcha } from "../../src/hook/index.jsx";
+import { HCaptchaProvider, useHCaptcha } from "../../src/index.js";
 
 const TEST_SITEKEY = "10000000-ffff-ffff-ffff-000000000001";
 
@@ -72,11 +72,8 @@ describe('useHCaptcha', () => {
 
     const context = result.current;
     await act(async () => {
-      console.log('ececut');
       await context.executeInstance();
     });
-
-    console.log(HCaptcha.mock)
 
     expect(context.token).toBe(MOCK_TOKEN);
 

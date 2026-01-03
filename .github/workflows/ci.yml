@@ -30,4 +30,4 @@ jobs:
         uses: ./.github/actions/dependencies
 
       - name: Run Tests
-        run: pnpm run test:unit
+        run: pnpm --filter=@hcaptcha-react/lib run test:unit
