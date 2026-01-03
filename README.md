@@ -98,7 +98,7 @@ import { default as RenamedCaptcha } from '../utils/captcha';
 You can also use the Provider/Hook pattern:
 
 ```js
-import { HCaptchaProvider, useHCaptcha } from '@hcaptcha/react-hcaptcha/hooks';
+import { HCaptchaProvider, useHCaptcha } from '@hcaptcha/react-hcaptcha/hook';
 
 function App() {
   return (

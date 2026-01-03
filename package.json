@@ -16,18 +16,18 @@
   ],
   "type": "module",
   "types": "types/index.d.ts",
-  "main": "dist/index.js",
+  "main": "dist/esm/index.js",
   "module": "dist/esm/index.js",
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
       "import": "./dist/esm/index.js",
-      "require": "./dist/index.js"
+      "require": "./dist/cjs/index.js"
     },
-    "./hooks": {
-      "types": "./types/hooks/index.d.ts",
-      "import": "./dist/esm/hooks/index.js",
-      "require": "./dist/hooks/index.js"
+    "./hook": {
+      "types": "./types/hook/index.d.ts",
+      "import": "./dist/esm/hook/index.js",
+      "require": "./dist/cjs/hook/index.js"
     }
   },
   "files": [
