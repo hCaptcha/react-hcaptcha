@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import HCaptcha from "../index";
-import { HCaptchaContext } from "./Context";
+import HCaptcha from "../index.js";
+import { HCaptchaContext } from "./Context.jsx";
 
-export const HCaptchaProvider = ({
+export function HCaptchaProvider({
   sitekey = null,
   size = "normal",
   theme = "light",
@@ -11,7 +11,7 @@ export const HCaptchaProvider = ({
   onVerify,
   onError,
   children,
-}) => {
+}) {
   const hcaptchaRef = useRef(null);
 
   const [ready, setReady] = useState(false);

@@ -13,7 +13,7 @@ export default {
   mode: 'development',
 
   entry: {
-    demo: resolve(__dirname, 'index.js'),
+    demo: resolve(__dirname, 'src', 'index.js'),
   },
 
   output: {

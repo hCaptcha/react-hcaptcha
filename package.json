@@ -1,6 +1,20 @@
 {
   "name": "@hcaptcha/react-hcaptcha",
-  "version": "1.17.4",
+  "description": "A React library for hCaptcha",
+  "version": "1.18.0",
+  "author": "hCaptcha team and contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hCaptcha/react-hcaptcha.git"
+  },
+  "keywords": [
+    "hcaptcha",
+    "hcaptcha-react",
+    "react",
+    "captcha"
+  ],
+  "type": "module",
   "types": "types/index.d.ts",
   "main": "dist/index.js",
   "module": "dist/esm/index.js",
@@ -17,11 +31,10 @@
     }
   },
   "files": [
-    "src",
+    "README.md",
     "dist",
-    "types"
+    "!**/*.tsbuildinfo"
   ],
-  "description": "A React library for hCaptcha",
   "scripts": {
     "start": "webpack serve -c ./demo/webpack.config.mjs",
     "test": "jest",
@@ -32,46 +45,7 @@
     "build:esm": "cross-env BABEL_ENV=esm babel src -d dist/esm --copy-files && echo '{\"type\":\"module\"}' > dist/esm/package.json",
     "prepublishOnly": "npm run build"
   },
-  "peerDependencies": {
-    "react": ">= 16.3.0",
-    "react-dom": ">= 16.3.0"
-  },
-  "keywords": [
-    "hcaptcha",
-    "hcaptcha-react",
-    "react",
-    "captcha"
-  ],
-  "author": "hCaptcha team and contributors",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/hCaptcha/react-hcaptcha.git"
-  },
-  "license": "MIT",
   "devDependencies": {
-    "@babel/cli": "^7.12.1",
-    "@babel/core": "^7.12.10",
-    "@babel/plugin-transform-runtime": "^7.14.5",
-    "@babel/preset-env": "^7.12.11",
-    "@babel/preset-react": "^7.12.10",
-    "@jest/globals": "^29.5.0",
-    "@types/react": "^16.0.0",
-    "babel-loader": "^8.2.2",
-    "babel-plugin-add-module-exports": "^1.0.4",
-    "cross-env": "^7.0.3",
-    "html-webpack-plugin": "^5.5.0",
-    "jest": "^29.5.0",
-    "jest-environment-jsdom": "^29.5.0",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
-    "rimraf": "^3.0.2",
-    "wait-for-expect": "^3.0.2",
-    "webpack": "^5.76.3",
-    "webpack-cli": "^5.0.1",
-    "webpack-dev-server": "^5.2.1"
-  },
-  "dependencies": {
-    "@babel/runtime": "^7.17.9",
-    "@hcaptcha/loader": "^2.3.0"
+    "@types/node": "^18.11.18"
   }
 }

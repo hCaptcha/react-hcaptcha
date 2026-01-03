@@ -1,0 +1,17 @@
+{
+  "name": "@hcaptcha-react/demo",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "fix:lint": "eslint -c .eslintrc.json --fix --ext .html,.js ./src",
+    "test:lint": "eslint -c .eslintrc.json --ext .html,.js ./src"
+  },
+  "devDependencies": {
+    "@hcaptcha/types": "^1.0.3",
+    "@types/node": "^18.11.18",
+    "eslint": "^8.51.0",
+    "eslint-plugin-html": "^7.1.0",
+    "webpack": "^5.104.1"
+  }
+}

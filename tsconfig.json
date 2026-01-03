@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+
+    "composite": true,
+    "declaration": true,
+    "strict": false,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "incremental": true,
+
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "resolveJsonModule": true,
+
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ]
+
+  },
+
+  "exclude": [
+    "node_modules",
+    "build",
+    "dist",
+    "scripts"
+  ]
+}
