@@ -1,1 +1,1 @@
-export { CustomFrame } from './CustomFrame';
+export { CustomFrame } from './CustomFrame.jsx';

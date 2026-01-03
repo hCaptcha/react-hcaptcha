@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 
-import HCaptcha from '../../../src/index.js';
+import HCaptcha from '@hcaptcha-react/lib';
 
 export function AsyncExample() {
   const captchaRef = useRef();

@@ -12,7 +12,7 @@
   "types": [
     "node",
     "jest",
-    "@hcaptcha/types"
+    "@hcaptcha/types",
     "@testing-library/jest-dom"
   ],
 

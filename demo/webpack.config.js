@@ -13,7 +13,7 @@ export default {
   mode: 'development',
 
   entry: {
-    demo: resolve(__dirname, 'src', 'index.js'),
+    demo: resolve(__dirname, 'src', 'index.jsx'),
   },
 
   output: {
@@ -28,21 +28,23 @@ export default {
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.(ts|tsx|js|jsx)$/,
         exclude: /node_modules/,
-        use: ['babel-loader']
+        use: {
+          loader: 'swc-loader',
+        }
       }
-    ]
+    ],
   },
 
   plugins: [
     new HtmlWebpackPlugin({
-      template: resolve(__dirname, 'index.html'),
+      template: resolve(__dirname, 'src', 'index.html'),
       inject: true
     }),
     new HtmlWebpackPlugin({
       filename: 'frame.html',
-      template: resolve(__dirname, 'frame.html'),
+      template: resolve(__dirname, 'src', 'frame.html'),
       inject: false
     })
   ],

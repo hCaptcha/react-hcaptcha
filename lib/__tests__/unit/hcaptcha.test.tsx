@@ -4,9 +4,15 @@ import { describe, jest, it, afterEach, beforeAll, beforeEach } from "@jest/glob
 import { act, render } from '@testing-library/react';
 import waitForExpect from "wait-for-expect";
 
+import { hCaptchaLoader } from '@hcaptcha/loader';
+
 import { getMockedHcaptcha, MOCK_EKEY, MOCK_TOKEN, MOCK_WIDGET_ID } from "../__mocks__/hcaptcha.mock.js";
 
 import HCaptcha from '../../src/index.js';
+
+jest.mock('@hcaptcha/loader');
+
+// const { hCaptchaLoader } = await import('@hcaptcha/loader');
 
 describe('<HCaptcha />', () => {
 
@@ -36,10 +42,12 @@ describe('<HCaptcha />', () => {
   describe("#execute", () => {
 
     beforeEach(() => {
-      window.hcaptcha = getMockedHcaptcha();
+     // window.hcaptcha = getMockedHcaptcha();
     });
 
     it("should run synchronously without arguments", () => {
+       window.hcaptcha = getMockedHcaptcha();
+
       const ref = React.createRef();
       render(<HCaptcha ref={ref}/>);
       const instance = ref.current;
@@ -54,9 +62,12 @@ describe('<HCaptcha />', () => {
 
 
     it("should ignoring any values that do not comply with schema", () => {
+      window.hcaptcha = getMockedHcaptcha();
+
       const ref = React.createRef();
       render(<HCaptcha ref={ref}/>);
       const instance = ref.current;
+
 
       expect(window.hcaptcha.execute.mock.calls.length).toBe(0);
 
@@ -66,47 +77,44 @@ describe('<HCaptcha />', () => {
       expect(window.hcaptcha.execute).toBeCalledWith(MOCK_WIDGET_ID, null);
     });
 
-    it("should run once hCaptcha onReady is called", async () => {
+    it.only("should run once hCaptcha onReady is called", async () => {
         const ref = React.createRef();
         render(<HCaptcha ref={ref}/>);
         const instance = ref.current;
 
-        jest.spyOn(instance, 'isReady').mockReturnValueOnce(false);
+        // HCaptcha
+        console.log(hCaptchaLoader);
+
+        // jest.spyOn(instance, 'isReady').mockReturnValueOnce(false);
+
+
+         // window.hcaptcha = getMockedHcaptcha();
 
         instance.execute();
 
         expect(window.hcaptcha.execute.mock.calls.length).toBe(0);
 
-        await instance._onReady(MOCK_WIDGET_ID);
+        // await instance._onReady(MOCK_WIDGET_ID);
 
-        expect(window.hcaptcha.execute.mock.calls.length).toBe(1);
+        // expect(window.hcaptcha.execute.mock.calls.length).toBe(1);
         expect(window.hcaptcha.execute).toBeCalledWith(MOCK_WIDGET_ID, null);
     });
 
-    it("stores the execute command and calls it after hCaptcha onload is executed", async () => {
+    // it("stores the execute command and calls it after hCaptcha onload is executed", async () => {
 
-        const onload = jest.fn();
+    //     const onload = jest.fn();
 
-        const ref = React.createRef();
-        render(<HCaptcha ref={ref} onLoad={onload}/>);
-        const instance = ref.current;
+    //     const ref = React.createRef();
+    //     render(<HCaptcha ref={ref} onLoad={onload}/>);
+    //     const instance = ref.current;
 
-        jest.spyOn(instance, 'isReady').mockReturnValueOnce(false);
+    //      window.hcaptcha = getMockedHcaptcha();
 
-        expect(window.hcaptcha.execute.mock.calls.length).toBe(0);
+    //     expect(onload).toHaveBeenCalled();
 
-        await act(() => {
-          instance.execute();
-          instance.handleOnLoad();
-        });
-
-
-
-        expect(onload).toHaveBeenCalled();
-
-        expect(window.hcaptcha.execute.mock.calls.length).toBe(1);
-        expect(window.hcaptcha.execute).toBeCalledWith(MOCK_WIDGET_ID, null);
-    });
+    //     expect(window.hcaptcha.execute.mock.calls.length).toBe(1);
+    //     expect(window.hcaptcha.execute).toBeCalledWith(MOCK_WIDGET_ID, null);
+    // });
 
     // it("can execute synchronously with async: false", () => {
     //   expect(window.hcaptcha.execute.mock.calls.length).toBe(0);

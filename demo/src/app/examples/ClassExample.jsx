@@ -1,6 +1,6 @@
 import React from 'react';
 
-import HCaptcha from '../../../src/index.js';
+import HCaptcha from '@hcaptcha-react/lib';
 
 
 export class ClassExample extends React.Component {

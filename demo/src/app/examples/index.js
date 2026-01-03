@@ -1,4 +1,4 @@
-export { AsyncExample } from './AsyncExample';
-export { ClassExample } from './ClassExample';
-export { FrameExample } from './FrameExample';
-export { HookExample } from './HookExample';
+export { AsyncExample } from './AsyncExample.jsx';
+export { ClassExample } from './ClassExample.jsx';
+export { FrameExample } from './FrameExample.jsx';
+export { HookExample } from './HookExample.jsx';

@@ -16,34 +16,27 @@
   ],
   "type": "module",
   "types": "types/index.d.ts",
-  "main": "dist/esm/index.js",
-  "module": "dist/esm/index.js",
+  "main": "lib/dist/esm/index.js",
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
+      "import": "./lib/dist/esm/index.js",
+      "require": "./lib/dist/cjs/index.js"
     },
     "./hook": {
       "types": "./types/hook/index.d.ts",
-      "import": "./dist/esm/hook/index.js",
-      "require": "./dist/cjs/hook/index.js"
+      "import": "./lib/dist/esm/hook/index.js",
+      "require": "./lib/dist/cjs/hook/index.js"
     }
   },
   "files": [
     "README.md",
-    "dist",
+    "lib/dist",
     "!**/*.tsbuildinfo"
   ],
   "scripts": {
-    "start": "webpack serve -c ./demo/webpack.config.mjs",
-    "test": "jest",
-    "watch": "babel src -d dist --copy-files --watch",
-    "transpile": "babel src -d dist --copy-files",
-    "prebuild": "rimraf dist",
-    "build": "npm run transpile && npm run build:esm",
-    "build:esm": "cross-env BABEL_ENV=esm babel src -d dist/esm --copy-files && echo '{\"type\":\"module\"}' > dist/esm/package.json",
-    "prepublishOnly": "npm run build"
+    "setup": "pnpm install --frozen-lockfile --prefer-offline",
+    "postinstall": "pnpm --filter=@hcaptcha-react/lib run compile:build"
   },
   "devDependencies": {
     "@types/node": "^18.11.18"

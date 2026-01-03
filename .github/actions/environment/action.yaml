@@ -1,0 +1,22 @@
+name: Setup environment
+
+inputs:
+  GITHUB_AUTH_TOKEN:
+    required: true
+    description: 'Github Access Token used for Github NPM registry'
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: Setup pnpm
+      uses: pnpm/action-setup@e9540b3eafaf84907c087a645d3258bfaa861427 # v3.0.0
+      with:
+        version: 8.x
+        run_install: false
+
+    - name: Setup node
+      uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
+      with:
+        node-version-file: '.nvmrc'
+        cache: 'pnpm'

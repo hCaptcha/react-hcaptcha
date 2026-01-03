@@ -1,7 +1,8 @@
+
 import React, { useEffect, useState } from 'react';
 
-import { AsyncExample, ClassExample, FrameExample, HookExample } from './examples';
-import { CustomFrame } from './components';
+import { AsyncExample, ClassExample, FrameExample, HookExample } from './examples/index.js';
+import { CustomFrame } from './components/index.js';
 
 export function App() {
   const [frame, setFrame] = useState(null);

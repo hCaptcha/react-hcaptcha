@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 
-import HCaptcha from '../../../src/index.js';
+import HCaptcha from '@hcaptcha-react/lib';
 
 export function FrameExample({ document }) {
   const captchaRef = useRef();
