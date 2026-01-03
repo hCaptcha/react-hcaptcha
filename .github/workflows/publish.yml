@@ -1,10 +1,13 @@
 name: Publish NPM
+
 on:
   workflow_dispatch:
   release:
     types: [ created ]
+
 permissions:
   contents: read
+
 jobs:
   build:
     name: Build & Test & Publish
@@ -18,10 +21,21 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/environment
 
+      - name: Create .env file
+        uses: SpicyPizza/create-envfile@ace6d4f5d7802b600276c23ca417e669f1a06f6f # v2.0
+        with:
+          envkey_BUILD: production
+          envkey_DEBUG: false
+          file_name: .env
+
       - name: Install dependencies
         uses: ./.github/actions/dependencies
 
-      - run: pnpm run test
-      - run: npm publish
+      - name: Run Tests
+        run: pnpm run test
+
+      - name: Publish package
+        shell: bash
+        run: pnpm publish --no-git-checks --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN  }}

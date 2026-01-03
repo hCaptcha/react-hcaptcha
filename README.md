@@ -269,9 +269,9 @@ This will be rare, but could happen in the event you are testing offline, or hav
 
 #### Scripts
 
-* `npm run start` - will start the demo app with hot reload
-* `npm run test` - will test the library: unit tests
-* `npm run build` - will build the production version
+* `pnpm run start` - will start the demo app with hot reload
+* `pnpm run test` - will test the library: unit tests
+* `pnpm --filter @hcaptcha-react/lib run combile:build` - will build the production version
 
 
 #### Publishing

@@ -36,9 +36,11 @@
   ],
   "scripts": {
     "setup": "pnpm install --frozen-lockfile --prefer-offline",
+    "start":  "concurrently 'pnpm --filter=@hcaptcha-react/lib run compile:watch' 'pnpm --filter=@hcaptcha-react/demo run start'",
     "postinstall": "pnpm --filter=@hcaptcha-react/lib run compile:build"
   },
   "devDependencies": {
-    "@types/node": "^18.11.18"
+    "@types/node": "^18.11.18",
+    "concurrently": "^9.2.1"
   }
 }
