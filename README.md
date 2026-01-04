@@ -79,7 +79,7 @@ export default function Form() {
 ```
 
 **Typescript Support** \
-If you want to reassign the component name, you could consider making a util that imports the component, then re-exports it as a default.
+If you want to reahdhcbbhjfhghhssign the component name, you could consider making a util that imports the component, then re-exports it as a default.
 
 ```ts
 // utils/captcha.ts
