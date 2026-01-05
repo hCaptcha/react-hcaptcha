@@ -35,7 +35,7 @@
     "!**/*.tsbuildinfo"
   ],
   "scripts": {
-    "setup": "pnpm install --frozen-lockfile --prefer-offline",
+    "setup": "pnpm install --prefer-offline",
     "start": "concurrently 'pnpm --filter=@hcaptcha-react/lib run compile:watch' 'pnpm --filter=@hcaptcha-react/demo run start'",
     "postinstall": "pnpm --filter=@hcaptcha-react/lib run compile:build",
     "build": "pnpm --filter=@hcaptcha-react/lib run compile:build",
