@@ -14,7 +14,6 @@
     "react",
     "captcha"
   ],
-  "type": "module",
   "types": "types/index.d.ts",
   "main": "lib/dist/esm/index.js",
   "exports": {
@@ -23,10 +22,10 @@
       "import": "./lib/dist/esm/index.js",
       "require": "./lib/dist/cjs/index.js"
     },
-    "./hook": {
-      "types": "./types/hook/index.d.ts",
-      "import": "./lib/dist/esm/hook/index.js",
-      "require": "./lib/dist/cjs/hook/index.js"
+    "./hooks": {
+      "types": "./types/hooks/index.d.ts",
+      "import": "./lib/dist/esm/hooks/index.js",
+      "require": "./lib/dist/cjs/hooks/index.js"
     }
   },
   "files": [
