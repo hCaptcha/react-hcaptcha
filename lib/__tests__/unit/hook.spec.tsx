@@ -3,7 +3,7 @@ import { describe, jest, it, expect, afterEach, beforeEach } from '@jest/globals
 import { act, renderHook } from '@testing-library/react';
 
 import { getMockedHcaptcha, MOCK_TOKEN } from '../__mocks__/hcaptcha.mock.js';
-import { HCaptchaProvider, useHCaptcha } from '../../src/hook/index.js';
+import { HCaptchaProvider, useHCaptcha } from '../../src/hooks/index.js';
 
 const TEST_SITEKEY = '10000000-ffff-ffff-ffff-000000000001';
 

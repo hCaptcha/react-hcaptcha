@@ -9,8 +9,8 @@
       "require": "./dist/cjs/index.js"
     },
     "./hook": {
-      "import": "./dist/esm/hook/index.js",
-      "require": "./dist/cjs/hook/index.js"
+      "import": "./dist/esm/hooks/index.js",
+      "require": "./dist/cjs/hooks/index.js"
     }
   },
   "scripts": {
