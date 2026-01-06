@@ -42,6 +42,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.19.130",
+    "@types/react": "^18.0.0",
     "concurrently": "^9.2.1"
   }
 }
