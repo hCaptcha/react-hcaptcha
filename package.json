@@ -35,12 +35,14 @@
     "!**/*.tsbuildinfo"
   ],
   "scripts": {
-    "setup": "pnpm install --frozen-lockfile --prefer-offline",
-    "start":  "concurrently 'pnpm --filter=@hcaptcha-react/lib run compile:watch' 'pnpm --filter=@hcaptcha-react/demo run start'",
-    "postinstall": "pnpm --filter=@hcaptcha-react/lib run compile:build"
+    "setup": "pnpm install --prefer-offline",
+    "start": "concurrently 'pnpm --filter=@hcaptcha-react/lib run compile:watch' 'pnpm --filter=@hcaptcha-react/demo run start'",
+    "postinstall": "pnpm --filter=@hcaptcha-react/lib run compile:build",
+    "build": "pnpm --filter=@hcaptcha-react/lib run compile:build",
+    "test": "pnpm --filter=@hcaptcha-react/lib run test:unit"
   },
   "devDependencies": {
-    "@types/node": "^18.11.18",
+    "@types/node": "^18.19.130",
     "concurrently": "^9.2.1"
   }
 }
