@@ -1,13 +1,11 @@
 {
   "compilerOptions": {
     "jsx": "react",
-    "composite": true,
-    "declaration": true,
+    "noEmit": true,
     "strict": false,
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "incremental": true,
 
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
@@ -34,10 +32,7 @@
     "node_modules",
     "build",
     "dist",
-    "scripts"
-  ],
-
-  "paths": {
-    "react": ["./node_modules/@types/react"]
-  }
+    "scripts",
+    "demo"
+  ]
 }
