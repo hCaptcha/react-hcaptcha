@@ -1,7 +1,7 @@
+import webpack from 'webpack';
 import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 
-import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -22,7 +22,11 @@ export default {
   },
 
   resolve: {
-    extensions: ['.json', '.js', '.jsx', '.ts', '.tsx']
+    extensions: ['.json', '.js', '.jsx', '.ts', '.tsx'],
+    alias: {
+      'react': resolve(__dirname, 'node_modules', 'react'),
+      'react-dom': resolve(__dirname, 'node_modules', 'react-dom'),
+    }
   },
 
   module: {

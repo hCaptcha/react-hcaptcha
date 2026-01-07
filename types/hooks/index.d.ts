@@ -20,6 +20,5 @@ export interface HCaptchaProviderProps {
   children?: React.ReactNode;
 }
 
-export function useHCaptcha(): HCaptchaContextValue;
-
-export function HCaptchaProvider(props: HCaptchaProviderProps): React.JSX.Element;
+export declare function useHCaptcha(): HCaptchaContextValue;
+export declare function HCaptchaProvider(props: HCaptchaProviderProps): React.ReactElement | null;
