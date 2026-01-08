@@ -15,12 +15,9 @@
   },
   "scripts": {
     "compile:build": "rm -rf ./dist && node ./esbuild.config.js",
-    "compile:watch": "WATCH=true node ./esbuild.config.js",
-    "fix:lint": "eslint -c .eslintrc.json --fix ./src",
-    "test:lint": "eslint -c .eslintrc.json ./src",
+    "compile:watch": "WATCH=true rm -rf ./dist && node ./esbuild.config.js",
     "test:types": "tsc -p tsconfig.json",
-    "test:unit": "jest --selectProjects unit",
-    "test:integration": "jest --selectProjects integration"
+    "test:unit": "jest --selectProjects unit"
   },
   "dependencies": {
     "@hcaptcha/loader": "^2.3.0"

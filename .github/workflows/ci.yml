@@ -24,6 +24,7 @@ jobs:
         with:
           envkey_BUILD: production
           envkey_DEBUG: false
+          envkey_WATCH: false
           file_name: .env
 
       - name: Install dependencies

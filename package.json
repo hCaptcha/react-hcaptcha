@@ -51,9 +51,5 @@
     "@types/node": "^18.19.130",
     "@types/react": "^18.0.0",
     "concurrently": "^9.2.1"
-  },
-  "peerDependencies": {
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
   }
 }
