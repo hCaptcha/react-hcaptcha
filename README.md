@@ -274,8 +274,8 @@ This will be rare, but could happen in the event you are testing offline, or hav
 * `pnpm --filter @hcaptcha-react/lib run combile:build` - will build the production version
 
 
-#### Environment Variables
-Create a `.env` in the root directory, see `.env.example` for what variables can be set. If not file is found, variables will fallback to a production configuration.
+#### Environment Variables for Development
+For developing react-hcaptcha itself, create a `.env` in the root directory. `.env.example` shows the variables that can be set. If this file is not present, build variables default to a production configuration.
 
 
 #### Publishing
