@@ -1,0 +1,13 @@
+{
+  "jsc": {
+    "parser": {
+      "jsx": true,
+      "syntax": "ecmascript"
+    },
+    "transform": {
+      "react": {
+        "runtime": "automatic"
+      }
+    }
+  }
+}

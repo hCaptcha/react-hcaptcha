@@ -1,1 +1,0 @@
-export { CustomFrame } from './CustomFrame';

@@ -1,10 +1,13 @@
 name: Publish NPM
+
 on:
   workflow_dispatch:
   release:
     types: [ created ]
+
 permissions:
   contents: read
+
 jobs:
   build:
     name: Build & Test & Publish
@@ -14,13 +17,26 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           persist-credentials: false
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+
+      - name: Setup environment
+        uses: ./.github/actions/environment
+
+      - name: Create .env file
+        uses: SpicyPizza/create-envfile@ace6d4f5d7802b600276c23ca417e669f1a06f6f # v2.0
         with:
-          node-version: '18.x'
-          registry-url: 'https://registry.npmjs.org'
-      - run: npm ci
-      - run: npm run transpile
-      - run: npm run test
-      - run: npm publish
+          envkey_BUILD: production
+          envkey_DEBUG: false
+          envkey_WATCH: false
+          file_name: .env
+
+      - name: Install dependencies
+        uses: ./.github/actions/dependencies
+
+      - name: Run Tests
+        run: pnpm --filter=@hcaptcha-react/lib run test:unit
+
+      - name: Publish package
+        shell: bash
+        run: pnpm publish --no-git-checks --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN  }}

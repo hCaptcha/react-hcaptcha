@@ -98,7 +98,7 @@ import { default as RenamedCaptcha } from '../utils/captcha';
 You can also use the Provider/Hook pattern:
 
 ```js
-import { HCaptchaProvider, useHCaptcha } from '@hcaptcha/react-hcaptcha/hooks';
+import { HCaptchaProvider, useHCaptcha } from '@hcaptcha/react-hcaptcha';
 
 function App() {
   return (
@@ -269,9 +269,13 @@ This will be rare, but could happen in the event you are testing offline, or hav
 
 #### Scripts
 
-* `npm run start` - will start the demo app with hot reload
-* `npm run test` - will test the library: unit tests
-* `npm run build` - will build the production version
+* `pnpm run start` - will start the demo app with hot reload
+* `pnpm run test` - will test the library: unit tests
+* `pnpm --filter @hcaptcha-react/lib run combile:build` - will build the production version
+
+
+#### Environment Variables for Development
+For developing react-hcaptcha itself, create a `.env` in the root directory. `.env.example` shows the variables that can be set. If this file is not present, build variables default to a production configuration.
 
 
 #### Publishing

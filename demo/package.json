@@ -1,0 +1,22 @@
+{
+  "name": "@hcaptcha-react/demo",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/index.jsx",
+  "scripts": {
+    "start": "webpack serve -c ./webpack.config.js"
+  },
+  "dependencies": {
+    "@hcaptcha-react/lib": "workspace:^",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.15.8",
+    "html-webpack-plugin": "^5.6.5",
+    "swc-loader": "^0.2.6",
+    "webpack": "^5.104.1",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.2"
+  }
+}

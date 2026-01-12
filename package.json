@@ -1,40 +1,12 @@
 {
   "name": "@hcaptcha/react-hcaptcha",
-  "version": "1.17.4",
-  "types": "types/index.d.ts",
-  "main": "dist/index.js",
-  "module": "dist/esm/index.js",
-  "exports": {
-    ".": {
-      "types": "./types/index.d.ts",
-      "import": "./dist/esm/index.js",
-      "require": "./dist/index.js"
-    },
-    "./hooks": {
-      "types": "./types/hooks/index.d.ts",
-      "import": "./dist/esm/hooks/index.js",
-      "require": "./dist/hooks/index.js"
-    }
-  },
-  "files": [
-    "src",
-    "dist",
-    "types"
-  ],
   "description": "A React library for hCaptcha",
-  "scripts": {
-    "start": "webpack serve -c ./demo/webpack.config.mjs",
-    "test": "jest",
-    "watch": "babel src -d dist --copy-files --watch",
-    "transpile": "babel src -d dist --copy-files",
-    "prebuild": "rimraf dist",
-    "build": "npm run transpile && npm run build:esm",
-    "build:esm": "cross-env BABEL_ENV=esm babel src -d dist/esm --copy-files && echo '{\"type\":\"module\"}' > dist/esm/package.json",
-    "prepublishOnly": "npm run build"
-  },
-  "peerDependencies": {
-    "react": ">= 16.3.0",
-    "react-dom": ">= 16.3.0"
+  "version": "2.0.0",
+  "author": "hCaptcha team and contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hCaptcha/react-hcaptcha.git"
   },
   "keywords": [
     "hcaptcha",
@@ -42,36 +14,42 @@
     "react",
     "captcha"
   ],
-  "author": "hCaptcha team and contributors",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/hCaptcha/react-hcaptcha.git"
+  "types": "types/index.d.ts",
+  "main": "lib/dist/cjs/index.js",
+  "module": "lib/dist/esm/index.js",
+  "typesVersions": {
+    "*": {
+      "hooks": ["types/hooks/index.d.ts"]
+    }
   },
-  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./lib/dist/esm/index.js",
+      "require": "./lib/dist/cjs/index.js"
+    },
+    "./hooks": {
+      "types": "./types/hooks/index.d.ts",
+      "import": "./lib/dist/esm/hooks/index.js",
+      "require": "./lib/dist/cjs/hooks/index.js"
+    }
+  },
+  "files": [
+    "README.md",
+    "lib/dist",
+    "types",
+    "!**/*.tsbuildinfo"
+  ],
+  "scripts": {
+    "setup": "pnpm install --prefer-offline",
+    "start": "concurrently 'pnpm --filter=@hcaptcha-react/lib run compile:watch' 'pnpm --filter=@hcaptcha-react/demo run start'",
+    "postinstall": "pnpm --filter=@hcaptcha-react/lib run compile:build",
+    "build": "pnpm --filter=@hcaptcha-react/lib run compile:build",
+    "test": "pnpm --filter=@hcaptcha-react/lib run test:unit"
+  },
   "devDependencies": {
-    "@babel/cli": "^7.12.1",
-    "@babel/core": "^7.12.10",
-    "@babel/plugin-transform-runtime": "^7.14.5",
-    "@babel/preset-env": "^7.12.11",
-    "@babel/preset-react": "^7.12.10",
-    "@jest/globals": "^29.5.0",
-    "@types/react": "^16.0.0",
-    "babel-loader": "^8.2.2",
-    "babel-plugin-add-module-exports": "^1.0.4",
-    "cross-env": "^7.0.3",
-    "html-webpack-plugin": "^5.5.0",
-    "jest": "^29.5.0",
-    "jest-environment-jsdom": "^29.5.0",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
-    "rimraf": "^3.0.2",
-    "wait-for-expect": "^3.0.2",
-    "webpack": "^5.76.3",
-    "webpack-cli": "^5.0.1",
-    "webpack-dev-server": "^5.2.1"
-  },
-  "dependencies": {
-    "@babel/runtime": "^7.17.9",
-    "@hcaptcha/loader": "^2.3.0"
+    "@types/node": "^18.19.130",
+    "@types/react": "^18.0.0",
+    "concurrently": "^9.2.1"
   }
 }

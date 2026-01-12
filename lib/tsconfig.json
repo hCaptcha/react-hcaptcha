@@ -1,0 +1,28 @@
+{
+  "extends": "../tsconfig.json",
+
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react"
+  },
+  "types": [
+    "node",
+    "jest",
+    "@hcaptcha/types",
+    "@testing-library/jest-dom"
+  ],
+
+  "include": [
+    "./src/**/*",
+  ],
+
+  "ts-node": {
+    "transpileOnly": true,
+    "swc": true,
+    "esm": true
+  }
+}
