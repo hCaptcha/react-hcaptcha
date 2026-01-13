@@ -1,7 +1,7 @@
 {
   "name": "@hcaptcha/react-hcaptcha",
   "description": "A React library for hCaptcha",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": "hCaptcha team and contributors",
   "license": "MIT",
   "repository": {
@@ -41,9 +41,8 @@
     "!**/*.tsbuildinfo"
   ],
   "scripts": {
-    "setup": "pnpm install --prefer-offline",
+    "setup": "pnpm install --prefer-offline && pnpm --filter=@hcaptcha-react/lib run compile:build",
     "start": "concurrently 'pnpm --filter=@hcaptcha-react/lib run compile:watch' 'pnpm --filter=@hcaptcha-react/demo run start'",
-    "postinstall": "pnpm --filter=@hcaptcha-react/lib run compile:build",
     "build": "pnpm --filter=@hcaptcha-react/lib run compile:build",
     "test": "pnpm --filter=@hcaptcha-react/lib run test:unit"
   },
