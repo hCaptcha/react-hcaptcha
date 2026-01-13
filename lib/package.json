@@ -33,7 +33,7 @@
     "@types/node": "^18.11.18",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "dotenv": "^16.3.1",
-    "esbuild": "0.17.18",
+    "esbuild": "0.25.0",
     "expect": "^29.5.0",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
