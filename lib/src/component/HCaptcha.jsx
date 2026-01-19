@@ -89,9 +89,18 @@ export class HCaptcha extends React.Component {
         return;
       }
 
-      // Reset any stored variables / timers when unmounting
-      hcaptcha.reset(captchaId);
-      hcaptcha.remove(captchaId);
+      try {
+        // Reset any stored variables / timers when unmounting
+        hcaptcha.reset(captchaId);
+        hcaptcha.remove(captchaId);
+      } catch (error) {
+        // Silently handle errors (e.g., invalid captcha ID in React Strict Mode)
+        // This can happen when React double-invokes effects in development
+      } finally {
+        // Always clear state to prevent issues in React Strict Mode
+        this.captchaId = '';
+        this._onReady = null;
+      }
     }
 
     shouldComponentUpdate(nextProps, nextState) {
