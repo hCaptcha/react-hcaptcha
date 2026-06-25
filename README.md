@@ -198,6 +198,8 @@ return <HCaptcha ref={captchaRef} onLoad={onLoad} sitekey={sitekey} {...props} /
 |`loadAsync`|Boolean|No|`true`|Set if the script should be loaded asynchronously.|
 |`scriptLocation`|Element|No|`document.head`| Location of where to append the script tag. Make sure to add it to an area that will persist to prevent loading multiple times in the same document view. Note: If `null` is provided, the `document.head` will be used.|
 
+Security note: `scriptSource`, `apihost`, `assethost`, `endpoint`, `host`, `imghost`, and `reportapi` control where hCaptcha assets and API requests are loaded from. Avoid passing user-controlled config objects directly into `HCaptcha` props. If these values must come from user-controllable stored config, CMS data, tenant settings, or URL params, validate them against an explicit allowlist before rendering the component.
+
 #### Events
 
 |Event|Params|Description|
