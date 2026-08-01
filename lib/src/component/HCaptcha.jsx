@@ -170,9 +170,16 @@ export class HCaptcha extends React.Component {
         uj: userJourneys !== undefined ? userJourneys : false,
       };
 
-      hCaptchaLoader(mountParams)
-          .then(this.handleOnLoad, this.handleError)
-          .catch(this.handleError);
+      hCaptchaLoader(mountParams).then(
+        this.handleOnLoad,
+        () => {
+          try {
+            this.handleError('script-error');
+          } catch {
+            this.handleError('script-load-error-other');
+          }
+        }
+      );
 
       this.apiScriptRequested = true;
     }
