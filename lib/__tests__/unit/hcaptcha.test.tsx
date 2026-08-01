@@ -346,31 +346,6 @@ describe("hCaptcha", () => {
             jest.restoreAllMocks();
         });
 
-        // TODO: This test needs to be updated to work with @hcaptcha/loader
-        // The error callback is now triggered by loader rejection, not script onerror
-        it.skip("emits error when script is failed", async () => {
-            const onError = jest.fn();
-
-            // Make hCaptchaLoader reject to simulate script loading failure
-            const loader = require('@hcaptcha/loader');
-            loader.hCaptchaLoader.mockImplementationOnce(() => {
-                return Promise.reject(new Error("script-error"));
-            });
-
-            await act(async () => {
-              render(<HCaptcha
-                onError={onError}
-                sitekey={TEST_PROPS.sitekey}
-                sentry={false}
-              />);
-              // Wait for promise rejection to be handled
-              await new Promise(resolve => setTimeout(resolve, 0));
-            });
-
-            expect(onError.mock.calls.length).toBe(1);
-            expect((onError.mock.calls[0][0] as Error).message).toEqual("script-error");
-        });
-
         it("validate src without", () => {
             render(<HCaptcha
               sitekey={TEST_PROPS.sitekey}
