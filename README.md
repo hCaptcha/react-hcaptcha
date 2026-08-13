@@ -218,7 +218,7 @@ Security note: `scriptSource`, `apihost`, `assethost`, `endpoint`, `host`, `imgh
 |Method|Description|
 |---|---|
 |`execute()`|Programmatically trigger a challenge request. Additionally, this method can be run asynchronously and returns a promise with the `token` and `eKey` when the challenge is completed.|
-|`getRespKey()`|Get the current challenge reference ID|
+|`getRespKey()`|Get the most recent challenge reference ID. NOTE: may not match current token when multiple tokens are issued from same instance. |
 |`getResponse()`|Get the current challenge response token from completed challenge|
 |`resetCaptcha()`|Reset the current challenge|
 |`setData()`|See enterprise docs.|
