@@ -46,10 +46,6 @@
     "build": "pnpm --filter=@hcaptcha-react/lib run compile:build",
     "test": "pnpm --filter=@hcaptcha-react/lib run test:unit"
   },
-  "peerDependencies": {
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
-  },
   "devDependencies": {
     "@types/node": "^18.19.130",
     "@types/react": "^18.0.0",
