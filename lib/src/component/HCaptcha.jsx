@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { flushSync } from 'react-dom';
 import { hCaptchaLoader } from '@hcaptcha/loader';
 
 import { getFrame, getMountElement } from '../utils.js';
@@ -252,20 +253,21 @@ export class HCaptcha extends React.Component {
     }
 
     handleOnLoad () {
-      this.setState({ isApiReady: true }, () => {
-          const element = getMountElement(this.props.scriptLocation);
-          const frame = getFrame(element);
+      const element = getMountElement(this.props.scriptLocation);
+      const frame = getFrame(element);
 
-          this._hcaptcha = frame.window.hcaptcha;
+      this._hcaptcha = frame.window.hcaptcha;
 
+      flushSync(() => {
+        this.setState({ isApiReady: true });
+      });
 
-          // render captcha and wait for captcha id
-          this.renderCaptcha(() => {
-            // trigger onLoad if it exists
+      // render captcha and wait for captcha id
+      this.renderCaptcha(() => {
+        // trigger onLoad if it exists
 
-            const { onLoad } = this.props;
-            if (onLoad) onLoad();
-          });
+        const { onLoad } = this.props;
+        if (onLoad) onLoad();
       });
     }
 
