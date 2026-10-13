@@ -27,6 +27,7 @@ export interface HCaptchaProps {
   theme?: "light" | "dark" | "contrast" | object;
   tabIndex?: number;
   id?: string;
+  "challenge-container"?: HTMLElement | string;
   reCaptchaCompat?: boolean;
   loadAsync?: boolean;
   scriptLocation?: HTMLElement | null;

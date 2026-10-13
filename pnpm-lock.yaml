@@ -49,6 +49,43 @@ importers:
         specifier: ^5.2.2
         version: 5.2.4(webpack-cli@6.0.1)(webpack@5.104.1)
 
+  demo_cc:
+    dependencies:
+      '@hcaptcha-react/lib':
+        specifier: workspace:^
+        version: link:../lib
+      react:
+        specifier: ^19.0.0
+        version: 19.2.3
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.2.3(react@19.2.3)
+    devDependencies:
+      '@swc/core':
+        specifier: ^1.15.8
+        version: 1.15.8
+      '@types/react':
+        specifier: ^18.0.0
+        version: 18.3.27
+      html-webpack-plugin:
+        specifier: ^5.6.5
+        version: 5.6.5(webpack@5.104.1)
+      swc-loader:
+        specifier: ^0.2.6
+        version: 0.2.6(@swc/core@1.15.8)(webpack@5.104.1)
+      typescript:
+        specifier: ^4.9.5
+        version: 4.9.5
+      webpack:
+        specifier: ^5.104.1
+        version: 5.104.1(@swc/core@1.15.8)(webpack-cli@6.0.1)
+      webpack-cli:
+        specifier: ^6.0.1
+        version: 6.0.1(webpack-dev-server@5.2.4)(webpack@5.104.1)
+      webpack-dev-server:
+        specifier: ^5.2.2
+        version: 5.2.4(webpack-cli@6.0.1)(webpack@5.104.1)
+
   lib:
     dependencies:
       '@hcaptcha/loader':
