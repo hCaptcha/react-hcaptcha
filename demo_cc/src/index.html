@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>hCaptcha custom challenge container</title>
+    <style>
+      body { font: 16px sans-serif; margin: 32px; }
+      main { max-width: 640px; }
+      label { display: block; margin: 16px 0; }
+      .captcha-dialog {
+        border: 0;
+        padding: 0;
+        max-width: calc(100vw - 32px);
+        max-height: calc(100vh - 32px);
+      }
+      .captcha-dialog::backdrop { background: rgb(0 0 0 / 60%); }
+      .captcha-dialog-content { padding: 16px; }
+      .captcha-dialog-content h2 { margin: 0 0 16px; font-size: 18px; }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>

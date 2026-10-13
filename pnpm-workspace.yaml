@@ -1,3 +1,4 @@
 packages:
   - lib
   - demo
+  - demo_cc

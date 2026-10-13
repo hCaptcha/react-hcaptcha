@@ -170,6 +170,22 @@ const onLoad = () => {
 return <HCaptcha ref={captchaRef} onLoad={onLoad} sitekey={sitekey} {...props} />;
 ```
 
+#### Custom challenge containers
+
+Pass `challenge-container` with a container ID or DOM element to render the puzzle inline instead of using hCaptcha's popup/shim. Mount the container before hCaptcha renders. Outside clicks leave the inline puzzle open; `execute({ async: true })` keeps waiting for its result.
+
+```jsx
+<div id="captcha-challenge" />
+<HCaptcha
+  ref={captchaRef}
+  sitekey={sitekey}
+  size="invisible"
+  challenge-container="captcha-challenge"
+/>
+```
+
+You control placement and any surrounding modal/backdrop. See [`demo_cc`](./demo_cc) for a dimmed modal with configurable dismissal.
+
 ### References
 
 #### Props
@@ -183,6 +199,7 @@ return <HCaptcha ref={captchaRef} onLoad={onLoad} sitekey={sitekey} {...props} /
 |`languageOverride`|String (ISO 639-2 code)|No|`auto`|hCaptcha auto-detects language via the user's browser. This overrides that to set a default UI language. See [language codes](https://hcaptcha.com/docs/languages).|
 |`reCaptchaCompat`|Boolean|No|`true`|Disable drop-in replacement for reCAPTCHA with `false` to prevent hCaptcha from injecting into `window.grecaptcha`.|
 |`id`|String|No|`random id`|Manually set the ID of the hCaptcha component. Make sure each hCaptcha component generated on a single page has its own unique ID when using this prop.|
+|`challenge-container`|String (container ID) or HTMLElement|No|`-`|Render the puzzle inside this container instead of the default popup/shim.|
 |`apihost`|String|No|`-`|See enterprise docs.|
 |`assethost`|String|No|`-`|See enterprise docs.|
 |`endpoint`|String|No|`-`|See enterprise docs.|
