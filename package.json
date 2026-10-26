@@ -19,7 +19,9 @@
   "module": "lib/dist/esm/index.js",
   "typesVersions": {
     "*": {
-      "hooks": ["types/hooks/index.d.ts"]
+      "hooks": [
+        "types/hooks/index.d.ts"
+      ]
     }
   },
   "exports": {
@@ -47,8 +49,8 @@
     "test": "pnpm --filter=@hcaptcha-react/lib run test:unit"
   },
   "devDependencies": {
-    "@types/node": "^18.19.130",
-    "@types/react": "^18.0.0",
-    "concurrently": "^9.2.1"
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "concurrently": "^10.0.6"
   }
 }
